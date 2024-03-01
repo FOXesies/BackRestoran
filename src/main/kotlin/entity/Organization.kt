@@ -4,11 +4,6 @@ import jakarta.persistence.*
 import lombok.*
 
 @Entity
-@Getter
-@Setter
-@Table(name = "organizations")
-@AllArgsConstructor
-@NoArgsConstructor
 data class Organization(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

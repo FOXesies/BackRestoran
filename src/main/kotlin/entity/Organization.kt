@@ -7,7 +7,7 @@ import lombok.*
 data class Organization(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var idOrganization: Long? = null,
+    var idOrganization: Long? = null,
     var name: String,
     var address: String,
     var phoneForUser: String,

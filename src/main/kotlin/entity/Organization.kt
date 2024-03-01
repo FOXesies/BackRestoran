@@ -8,19 +8,13 @@ data class Organization(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var idOrganization: Long? = null,
-    @Column(unique = true, nullable = false)
-    private var name: String,
-    @Column(nullable = false)
-    private var address: String,
-    @Column(nullable = false)
-    private var phoneForUser: String,
-    @Column(nullable = false)
-    private var city: String,
-    @Column(nullable = true)
-    private var descriptions: String?,// жесть
+    var name: String,
+    var address: String,
+    var phoneForUser: String,
+    var city: String,
+    var descriptions: String?,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude // жесть
-    private var product: List<Product>,
-    @Column(columnDefinition = "bytea")
-    private var imageOrganization: ByteArray?
+    var product: List<Product>,
+    var imageOrganization: ByteArray?
 )

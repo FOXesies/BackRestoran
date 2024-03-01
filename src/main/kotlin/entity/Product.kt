@@ -4,12 +4,6 @@ import jakarta.persistence.*
 import lombok.*
 
 @Entity
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "products")
 data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

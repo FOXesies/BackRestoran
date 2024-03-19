@@ -13,12 +13,15 @@ class ServiceOrganization {
     @Autowired
     lateinit var repositoryOrganization: OrganizationRepository
 
-    fun getOrganizations(pageable: Pageable): Page<Organization> {
-        return repositoryOrganization.findAll(pageable)
+    fun getOrganizations(): List<Organization> {
+        return repositoryOrganization.findAll()
     }
-
 
     fun insertOrganization(organization: Organization){
         repositoryOrganization.save(organization)
+    }
+    fun insertOrganization(organizations: List<Organization>){
+        organizations.forEach{ organization -> repositoryOrganization.save(organization)}
+
     }
 }

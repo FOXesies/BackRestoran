@@ -1,7 +1,6 @@
-package org.example.DTO
+package org.example.DTO.Organization
 
-import org.example.entity.Product
-import java.io.InputStream
+import org.example.entity.Product.Product
 
 data class OrganizationIdDTO(
     var idOrganization: Long? = null,
@@ -9,10 +8,12 @@ data class OrganizationIdDTO(
     var address: String,
     var phoneForUser: String,
     var city: String,
+    var idImage: Long,
     var descriptions: String?,
     var category: List<String>,
     var products: Map<String, List<Product>>,
     var rating: Double?,
     var ratingCount: Int?,
-    var images: List<InputStream?>?
+    var isFavorite: Boolean = false,
+    var images: List<ByteArray?>?
 )

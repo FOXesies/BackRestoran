@@ -32,10 +32,15 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.2.2")
+
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation ("org.springframework.boot:spring-boot-starter-web")
     implementation("com.github.paulcwarren:content-jpa-spring-boot-starter:1.2.5")
+    implementation ("org.apache.commons:commons-lang3:3.14.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation ("org.springframework.boot:spring-boot-starter-test")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

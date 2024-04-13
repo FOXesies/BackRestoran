@@ -37,8 +37,15 @@ class Security {
             .authorizeHttpRequests { requests ->
                 requests.requestMatchers(
                     HttpMethod.GET,
-                    "/**"
+                    "api/v1/**"
                 ).permitAll()
+                requests.requestMatchers(
+                    HttpMethod.POST,
+                    "api/v1/**"
+                ).permitAll()
+                requests.requestMatchers(HttpMethod.GET,
+                    "api/v1/me/**"
+                ).authenticated()
             }
 /*            .sessionManagement { manager ->
                 manager.sessionCreationPolicy(

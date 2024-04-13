@@ -1,8 +1,8 @@
 package org.example.controller
 
 import jakarta.servlet.http.HttpServletResponse
-import org.example.DTO.OrganizationDTO
-import org.example.DTO.OrganizationIdDTO
+import org.example.DTO.Organization.OrganizationDTO
+import org.example.DTO.Organization.OrganizationIdDTO
 import org.example.service.ServiceOrganization
 import org.example.utils.MapperUtils.Companion.mapOrganizationIdInDTO
 import org.example.utils.MapperUtils.Companion.mapOrganizationInDTO
@@ -13,8 +13,6 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.*
-import java.io.IOException
-import java.util.*
 
 
 @RestController
@@ -25,14 +23,15 @@ class ControllerOrganizations {
     lateinit var serviceOrganization: ServiceOrganization
 
     @RequestMapping(path = ["/{id}"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.IMAGE_JPEG_VALUE])
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
     fun getOrganizationById(@PathVariable(value = "id") idOrganization: Long): OrganizationIdDTO {
         val organization = serviceOrganization.repositoryOrganization.findById(idOrganization)
         return mapOrganizationIdInDTO(organization.get())
     }
     @RequestMapping(path = ["/"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.IMAGE_JPEG_VALUE])
+        produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun getOrganizations(): List<OrganizationDTO> {
         val organizations = serviceOrganization.getOrganizations()
@@ -40,6 +39,17 @@ class ControllerOrganizations {
         return organizations.map { organization ->
             mapOrganizationInDTO(organization)
         }
+    }
+
+    @RequestMapping(path = ["organizations_images/{path}"], method = [RequestMethod.GET], produces = [MediaType.IMAGE_JPEG_VALUE])
+    fun uploadImageByPath(response: HttpServletResponse, @PathVariable(value = "path") pathImage: String): ResponseEntity<InputStreamResource> {
+        val imgFile = ClassPathResource("organizations_images/$pathImage")
+        StreamUtils.copy(imgFile.inputStream, response.outputStream)
+
+        return ResponseEntity
+            .ok()
+            .contentType(MediaType.IMAGE_JPEG)
+            .body(InputStreamResource(imgFile.getInputStream()));
     }
 
 /*    @RequestMapping(value = ["/iamge{id}"], method = [RequestMethod.GET], produces = [MediaType.IMAGE_JPEG_VALUE])

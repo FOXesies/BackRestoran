@@ -1,4 +1,4 @@
-package org.example.entity
+package org.example.entity.Product
 
 import jakarta.persistence.*
 import lombok.*

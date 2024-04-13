@@ -1,8 +1,7 @@
 package org.example.repository;
 
-import org.example.entity.Product
+import org.example.entity.Product.Product
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
 
 interface ProductRepository : JpaRepository<Product, Long> {
 }

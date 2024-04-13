@@ -1,16 +1,16 @@
-package org.example.entity
+package org.example.entity.Orders
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import org.example.entity.Product.Product
 
 @Entity
-data class Rating(
+data class ProductInOrder(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var idRating: Long? = null,
-    var rating: Int,
-    var context: String? = null,
-    var responseOrg: String? = null
+    var id: Long? = null,
+    var idProduct: Long,
+    var count: Int = 1,
 )

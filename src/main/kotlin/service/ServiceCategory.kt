@@ -1,6 +1,6 @@
 package org.example.service
 
-import org.example.entity.Category
+import org.example.entity.Category.Category
 import org.springframework.beans.factory.annotation.Autowired
 import repository.CategoryRepository
 

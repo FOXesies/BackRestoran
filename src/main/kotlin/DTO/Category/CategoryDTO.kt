@@ -1,4 +1,4 @@
-package org.example.DTO
+package org.example.DTO.Category
 
 import org.example.entity.OrganizationImagesProfile
 

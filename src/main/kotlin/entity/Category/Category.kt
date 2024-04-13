@@ -1,9 +1,9 @@
-package org.example.entity
+package org.example.entity.Category
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import lombok.*
-import java.io.InputStream
+import org.example.entity.OrganizationImagesProfile
+import org.example.entity.Product.Product
 
 @Entity
 data class Category(

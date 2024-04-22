@@ -4,8 +4,8 @@ import org.example.entity.Basket.BasketItem
 import org.example.entity.Category.Category
 import org.example.entity.Image
 import org.example.entity.Organization.*
-import org.example.entity.Users.Customer
 import org.example.entity.Product.Product
+import org.example.entity.Users_.Customer
 import org.example.order.repository.OrderRepository
 import org.example.repository.BasicUserRepository
 import org.example.repository.BasketRepository
@@ -32,9 +32,9 @@ class Main {
                           basketRepository: BasketRepository, userRepository: BasicUserRepository, orderRepository: OrderRepository): CommandLineRunner {
         return CommandLineRunner {
 
-            imageService.imageImpl.save(Image(id = 1, path = "C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\1.jpg"))
-            imageService.imageImpl.save(Image(id = 2, path = "C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\2.png"))
-            imageService.imageImpl.save(Image(id = 3, path = "C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\3.jpg"))
+            imageService.imageImpl.save(Image(id = 1, path = Main.javaClass.getResource("/organizations_images/1.jpg").path))//"C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\1.jpg"))
+            imageService.imageImpl.save(Image(id = 2, path = Main.javaClass.getResource("/organizations_images/2.png").path))
+            imageService.imageImpl.save(Image(id = 3, path = Main.javaClass.getResource("/organizations_images/3.jpg").path))
 
             userRepository.save(Customer(name = "Никитос"))
 
@@ -44,7 +44,30 @@ class Main {
                         phoneForUser = "+79008005522",
                         descriptions = "Лучший ресторан под названием \"Ромашка\"",
                         images = null,
-                        locationsAll = listOf(CityOrganization(nameCity = "Москва", locationInCity = listOf(LocationOrganization(address = "Москва улица 12", lat = 59.852081, lon = 30.238487)))),
+                        locationsAll = listOf(
+                            CityOrganization(
+                                nameCity = "Москва",
+                                locationInCity = listOf(
+                                LocationOrganization(
+                                    address = "Москва улица 12", lat = 59.852081, lon = 30.238487),
+                                LocationOrganization(
+                                    address = "Другая улица 10", lat = 59.652081, lon = 31.238487))),
+                            CityOrganization(
+                                nameCity = "Москва",
+                                locationInCity = listOf(
+                                    LocationOrganization(
+                                        address = "Москва улица 12", lat = 59.852081, lon = 30.238487),
+                                    LocationOrganization(
+                                        address = "Другая улица 10", lat = 59.652081, lon = 31.238487))
+                           ),
+                            CityOrganization(
+                                nameCity = "Владимир",
+                                locationInCity = listOf(
+                                    LocationOrganization(
+                                        address = "улица Узкая 2", lat = 59.852081, lon = 30.238487),
+                                    LocationOrganization(
+                                        address = "улица Длинная 1", lat = 59.652081, lon = 31.238487))
+                            )),
                         idImage = 1,/*listOf(
                             OrganizationImagesProfile(null,
                                 "1.jpg"))*/
@@ -91,14 +114,30 @@ class Main {
                             Rating(rating = 2),
                             Rating(rating = 5),
                             Rating(rating = 4),
-                        ),
-                        user = null
+                        )
                     ),
                     Organization(
                         name = "Бургер кинг",
                         phoneForUser = "+79205748652",
                         idImage = 3,
-                        locationsAll = listOf(CityOrganization(nameCity = "Санкт-Петербург", locationInCity = listOf(LocationOrganization(address = "проспект Ленина 40", lat = 59.852081, lon = 30.238487)))),
+                        locationsAll = listOf(
+                            CityOrganization(
+                                nameCity = "Санкт-Петербург",
+                                locationInCity = listOf(
+                                    LocationOrganization(
+                                        address = "проспект Ленина 40",
+                                        lat = 59.852081,
+                                        lon = 30.238487)
+                                )),
+                            CityOrganization(
+                                nameCity = "Москва",
+                                locationInCity = listOf(
+                                    LocationOrganization(
+                                        address = "проспект Проспекта 8",
+                                        lat = 59.852081,
+                                        lon = 30.238487)
+                                ))
+                        ),
                         descriptions = "Маркетнг - это не для нас",
                         images = null,
                         category = listOf(
@@ -131,13 +170,9 @@ class Main {
                                     )
                                 )
                             )
-                        ),
-
-                        user = null
+                        )
                     )
                 )
-
-            items[0].user = Test(1, items[0])
 
             basketRepository.save(BasketItem())
 

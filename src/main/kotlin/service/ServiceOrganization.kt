@@ -11,8 +11,11 @@ class ServiceOrganization {
     @Autowired
     lateinit var repositoryOrganization: OrganizationRepository
 
-    fun getOrganizations(): List<Organization> {
-        return repositoryOrganization.findAll()
+    fun getOrganizations(category: String): List<Organization> {
+        return repositoryOrganization.findByCategory(category)
+    }
+    fun getCities(): List<String> {
+        return repositoryOrganization.getCities()
     }
 
     fun insertOrganization(organization: Organization){

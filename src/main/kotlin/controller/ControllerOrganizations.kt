@@ -33,12 +33,19 @@ class ControllerOrganizations {
     @RequestMapping(path = ["/"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun getOrganizations(): List<OrganizationDTO> {
-        val organizations = serviceOrganization.getOrganizations()
+    fun getOrganizations(@RequestParam city: String): List<OrganizationDTO> {
+        val organizations = serviceOrganization.getOrganizations(city)
 
         return organizations.map { organization ->
             mapOrganizationInDTO(organization)
         }
+    }
+
+    @RequestMapping(path = ["/cities"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun getCities(): List<String> {
+        return serviceOrganization.getCities()
     }
 
     @RequestMapping(path = ["organizations_images/{path}"], method = [RequestMethod.GET], produces = [MediaType.IMAGE_JPEG_VALUE])

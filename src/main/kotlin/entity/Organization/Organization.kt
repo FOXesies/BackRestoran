@@ -1,5 +1,6 @@
 package org.example.entity.Organization
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import lombok.*
 import org.example.entity.Category.Category
@@ -9,6 +10,8 @@ import org.example.entity.OrganizationImagesProfile
 data class Organization(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_organization")
+    @JsonIgnore
     var idOrganization: Long? = null,
     var name: String,
     var phoneForUser: String,
@@ -29,8 +32,5 @@ data class Organization(
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var ratings: List<Rating> = listOf(),
-
-    @OneToOne(mappedBy = "organization")
-    var user: Test? // Foreign key referencing the User table
+    var ratings: List<Rating> = listOf()
 )

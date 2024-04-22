@@ -2,6 +2,7 @@ package org.example.order.model
 
 import jakarta.persistence.*
 import lombok.ToString
+import org.example.entity.Organization.LocationOrganization
 
 @Entity
 data class OrderCustomer(
@@ -15,6 +16,7 @@ data class OrderCustomer(
 
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,
+    var idLocation: Long? = null,
     var phoneUser: String? = null,
     var toTimeDelivery: String? = "now",
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])

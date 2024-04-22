@@ -1,6 +1,6 @@
 package org.example.service
 
-import org.example.entity.Users.Customer
+import org.example.entity.Users_.Customer
 import org.example.repository.BasicUserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

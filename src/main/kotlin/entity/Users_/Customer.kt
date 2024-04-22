@@ -1,4 +1,4 @@
-package org.example.entity.Users
+package org.example.entity.Users_
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

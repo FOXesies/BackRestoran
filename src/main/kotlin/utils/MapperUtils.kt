@@ -49,7 +49,7 @@ class MapperUtils {
                 organization.category.associateBy ({ it.name }, {it.product}),
                 if(organization.ratings.isNotEmpty()) organization.ratings.map { it.rating }.average() else 0.0,
                 organization.ratings.size ,
-                organization.user != null,
+                false,
                 organization.images?.map { ImageSearchUtils.getInputStream(it.data) } //organization.images?.map { ImageSearchUtils.getInputStream(it) }
             )
         }

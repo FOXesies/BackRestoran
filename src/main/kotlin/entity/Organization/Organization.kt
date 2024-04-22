@@ -11,15 +11,17 @@ data class Organization(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrganization: Long? = null,
     var name: String,
-    var address: String,
     var phoneForUser: String,
-    var city: String,
     var idImage: Long,
     var descriptions: String?,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
     var category: List<Category>,
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @ToString.Exclude
+    var locationsAll: List<CityOrganization>,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude

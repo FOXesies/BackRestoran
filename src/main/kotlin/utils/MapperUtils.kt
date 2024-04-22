@@ -1,10 +1,18 @@
 package org.example.utils
 
+import org.example.DTO.Basket.BasketItemDtom
+import org.example.DTO.Basket.ProductInBasket
 import org.example.DTO.Category.CategoryDTO
+import org.example.DTO.Organization.CityOrganization
 import org.example.DTO.Organization.OrganizationDTO
 import org.example.DTO.Organization.OrganizationIdDTO
+import org.example.DTO.Organization.Point
+import org.example.entity.Basket.BasketItem
+import org.example.entity.Basket.ProductBasket
 import org.example.entity.Category.Category
 import org.example.entity.Organization.Organization
+import org.example.order.model.ProductInOrder
+import org.example.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.springframework.stereotype.Service
 
@@ -15,9 +23,8 @@ class MapperUtils {
             return OrganizationDTO(
                 organization.idOrganization,
                 organization.name,
-                organization.address,
                 organization.phoneForUser,
-                organization.city,
+                organization.locationsAll.associate { it.nameCity to it.locationInCity.map { it.address }},
                 organization.idImage,
                 organization.descriptions,
                 organization.category.map{ mapCategoryDTO(it) },
@@ -30,17 +37,28 @@ class MapperUtils {
             return OrganizationIdDTO(
                 organization.idOrganization,
                 organization.name,
-                organization.address,
                 organization.phoneForUser,
-                organization.city,
                 organization.idImage,
                 organization.descriptions,
                 organization.category.map { it.name },
+                organization.locationsAll.associate { city ->
+                    city.nameCity!! to city.locationInCity
+                        .map {
+                            CityOrganization(it.address!!, Point(it.lat!!, it.lon!!))
+                        } },
                 organization.category.associateBy ({ it.name }, {it.product}),
                 if(organization.ratings.isNotEmpty()) organization.ratings.map { it.rating }.average() else 0.0,
                 organization.ratings.size ,
                 organization.user != null,
                 organization.images?.map { ImageSearchUtils.getInputStream(it.data) } //organization.images?.map { ImageSearchUtils.getInputStream(it) }
+            )
+        }
+        fun mapBasketInDTO(basket: BasketItem, productService: ProductRepository): BasketItemDtom {
+            val item = basket.productsPick.map { ProductInBasket(productService.findById(it.productId!!).get(), it.count) }.toMutableList()
+            return BasketItemDtom(
+                idRestoraunt = basket.idRestaurant,
+                summ = basket.summ,
+                productsPick = item
             )
         }
 
@@ -49,6 +67,12 @@ class MapperUtils {
                 category.name,
                 category.images
             )
+        }
+
+        fun mapProductBasketInOrder(productBasket: List<ProductBasket>): List<ProductInOrder> {
+            return productBasket.map { ProductInOrder(
+                idProduct = it.productId,
+                count = it.count) }
         }
     }
 

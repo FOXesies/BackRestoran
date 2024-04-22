@@ -6,8 +6,8 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer
+import org.springframework.security.core.session.SessionRegistry
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 
 
@@ -18,8 +18,11 @@ class Security {
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http.csrf { obj: AbstractHttpConfigurer<*, *> -> obj.disable() }
+
             .cors { cors ->
                 cors.configurationSource { request ->
+
+
                     val corsConfiguration = CorsConfiguration()
                     corsConfiguration.setAllowedOriginPatterns(listOf("*"))
                     corsConfiguration.allowedMethods = listOf(
@@ -47,11 +50,8 @@ class Security {
                     "api/v1/me/**"
                 ).authenticated()
             }
-/*            .sessionManagement { manager ->
-                manager.sessionCreationPolicy(
-                    STATELESS
-                )
-            }*/
+
             .build()
     }
+
 }

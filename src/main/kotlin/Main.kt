@@ -1,11 +1,14 @@
 package org.example
 
+import org.example.entity.Basket.BasketItem
 import org.example.entity.Category.Category
 import org.example.entity.Image
-import org.example.entity.Organization.Organization
-import org.example.entity.Organization.Rating
-import org.example.entity.Organization.Test
+import org.example.entity.Organization.*
+import org.example.entity.Users.Customer
 import org.example.entity.Product.Product
+import org.example.order.repository.OrderRepository
+import org.example.repository.BasicUserRepository
+import org.example.repository.BasketRepository
 import org.example.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.example.service.ServiceOrganization
@@ -25,22 +28,24 @@ class Main {
     }
 
     @Bean
-    fun commandLineRunner(serviceOrganization: ServiceOrganization, imageService: ImageSearchUtils, productRepository: ProductRepository): CommandLineRunner {
+    fun commandLineRunner(serviceOrganization: ServiceOrganization, imageService: ImageSearchUtils, productRepository: ProductRepository,
+                          basketRepository: BasketRepository, userRepository: BasicUserRepository, orderRepository: OrderRepository): CommandLineRunner {
         return CommandLineRunner {
 
-            imageService.imageImpl.save(Image(id = 1, path = "organizations_images\\1.jpg"))
-            imageService.imageImpl.save(Image(id = 2, path = "C:\\Users\\User\\Pictures\\2.png"))
-            imageService.imageImpl.save(Image(id = 3, path = "C:\\Users\\User\\Pictures\\11.png"))
+            imageService.imageImpl.save(Image(id = 1, path = "C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\1.jpg"))
+            imageService.imageImpl.save(Image(id = 2, path = "C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\2.png"))
+            imageService.imageImpl.save(Image(id = 3, path = "C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\3.jpg"))
+
+            userRepository.save(Customer(name = "Никитос"))
 
                 var items = listOf(
                     Organization(
                         name = "Ромашка",
-                        address = "улица Московская 33",
                         phoneForUser = "+79008005522",
-                        city = "Москва",
                         descriptions = "Лучший ресторан под названием \"Ромашка\"",
                         images = null,
-                        idImage = 3,/*listOf(
+                        locationsAll = listOf(CityOrganization(nameCity = "Москва", locationInCity = listOf(LocationOrganization(address = "Москва улица 12", lat = 59.852081, lon = 30.238487)))),
+                        idImage = 1,/*listOf(
                             OrganizationImagesProfile(null,
                                 "1.jpg"))*/
                         category = listOf(
@@ -91,13 +96,11 @@ class Main {
                     ),
                     Organization(
                         name = "Бургер кинг",
-                        address = "проспект Ленина 40",
                         phoneForUser = "+79205748652",
-                        city = "Санкт-Петербург",
-                        idImage = 2,
+                        idImage = 3,
+                        locationsAll = listOf(CityOrganization(nameCity = "Санкт-Петербург", locationInCity = listOf(LocationOrganization(address = "проспект Ленина 40", lat = 59.852081, lon = 30.238487)))),
                         descriptions = "Маркетнг - это не для нас",
-                        images = null/*listOf(OrganizationImagesProfile(null,
-                                "1.jpg"))*/,
+                        images = null,
                         category = listOf(
                             Category(
                                 null, name = "Пицца", product = listOf(
@@ -135,6 +138,8 @@ class Main {
                 )
 
             items[0].user = Test(1, items[0])
+
+            basketRepository.save(BasketItem())
 
             serviceOrganization.insertOrganization(items)
         }

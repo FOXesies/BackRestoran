@@ -1,16 +1,15 @@
-package org.example.entity.Orders
+package org.example.order.model
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import org.example.entity.Product.Product
 
 @Entity
-data class ProductInOrder(
+data class AddressUser(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-    var idProduct: Long,
-    var count: Int = 1,
-)
+    var idAddress: Long? = null,
+    var displayText: String?,
+    var lat: Double?,
+    var lon: Double?)

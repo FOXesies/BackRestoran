@@ -1,6 +1,7 @@
 package org.example.order.controller
 
 import org.example.order.model.OrderCustomer
+import org.example.order.model.OrderSelfDelivery
 import org.example.order.service.OrderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -29,4 +30,29 @@ class OrderController {
     fun getOrderById(@PathVariable(value = "id") idOrder: Long): OrderCustomer{
         return orderService.getOrderById(idOrder)
     }
+
+    @RequestMapping(path = ["/all_deliveri/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getOrder(@PathVariable(value = "id") userId: Long): List<OrderCustomer>{
+        return orderService.getOrders(userId)
+    }
+
+    @RequestMapping(path = ["/self_deliveri/add"], method = [RequestMethod.POST],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun addOrderSelf(@RequestBody order: OrderSelfDelivery){
+        return orderService.sendOrderSelf(order)
+    }
+
+    @RequestMapping(path = ["/self_deliveri/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getOrderSelfById(@PathVariable(value = "id") idOrder: Long): OrderSelfDelivery {
+        return orderService.getOrdeSelfrById(idOrder)
+    }
+
+    @RequestMapping(path = ["/all_self_deliveri/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getOrdersSelf(@PathVariable(value = "id") userId: Long): List<OrderSelfDelivery>{
+        return orderService.getOrdersSelf(userId)
+    }
+
 }

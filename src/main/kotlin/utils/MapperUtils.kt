@@ -11,7 +11,7 @@ import org.example.entity.Basket.BasketItem
 import org.example.entity.Basket.ProductBasket
 import org.example.entity.Category.Category
 import org.example.entity.Organization.Organization
-import org.example.order.model.ProductInOrder
+import org.example.order.model.*
 import org.example.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.springframework.stereotype.Service
@@ -73,6 +73,52 @@ class MapperUtils {
             return productBasket.map { ProductInOrder(
                 idProduct = it.productId,
                 count = it.count) }
+        }
+
+        fun mapOrderInComplete(order: OrderCustomer): CompleteOrder {
+            return CompleteOrder(
+                orderId = order.orderId,
+                idDriver = order.idDriver,
+                idUser = order.idUser,
+                idOrganization = order.idOrganization,
+                addressUser = order.addressUser,
+                idLocation = order.idLocation,
+                phoneUser = order.phoneUser,
+                toTimeDelivery = order.toTimeDelivery,
+                productOrder = order.productOrder.map {
+                    ProductInOrderComplete(
+                        it.idProductInOrder,
+                        it.idProduct,
+                        it.count
+                    )
+                },
+                podezd = order.podezd,
+                homephome = order.homephome,
+                appartamnet = order.appartamnet,
+                level = order.level,
+                summ = order.summ,
+                comment = order.comment
+            )
+        }
+
+        fun mapOrderInCompleteSelf(order: OrderSelfDelivery): CompleteOrderSelf {
+            return CompleteOrderSelf(
+                idOrderSelf = order.idOrderSelf,
+                idUser = order.idUser,
+                idOrganization = order.idOrganization,
+                idLocation = order.idLocation,
+                phoneUser = order.phoneUser,
+                toTimeCooling = order.toTimeCooling,
+                productOrder = order.productOrder.map {
+                    ProductInOrderComplete(
+                        it.idProductInOrder,
+                        it.idProduct,
+                        it.count
+                    )
+                },
+                summ = order.summ,
+                comment = order.comment
+            )
         }
     }
 

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("api/v1/favorite")
 class ControllerFavorite {
 
-    fun getFavoriteByUser(@RequestParam("id_user") idUser: Long): List<Product>{
+/*    fun getFavoriteByUser(@RequestParam("id_user") idUser: Long): List<Product>{
 
-    }
+    }*/
 
 }

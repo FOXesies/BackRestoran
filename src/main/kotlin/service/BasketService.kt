@@ -4,6 +4,7 @@ import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.SendBasketProduct
 import org.example.entity.Basket.BasketItem
 import org.example.entity.Basket.ProductBasket
+import org.example.entity.Product.ResponeInt
 import org.example.repository.BasketRepository
 import org.example.repository.ProductRepository
 import org.example.utils.MapperUtils
@@ -75,6 +76,12 @@ class BasketService {
         basket.summ += product.get().price!!
         basket.productsPick.find { it.productId == body.productId }!!.count++
         basketRepository.save(basket)
+    }
+
+    fun checkProductInBasket(idUser: Long, idProduct: Long): ResponeInt{
+        val basket = getBasketByUserId(idUser).get()
+        val productCount = basket.productsPick.find { it.productId == idProduct }?.count
+        return ResponeInt(productCount?: 0)
     }
 
 }

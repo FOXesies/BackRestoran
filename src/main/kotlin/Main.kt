@@ -6,7 +6,7 @@ import org.example.entity.Image
 import org.example.entity.Organization.*
 import org.example.entity.Product.Product
 import org.example.entity.Users_.Customer
-import org.example.order.repository.OrderRepository
+import org.example.order.repository.active.OrderRepository
 import org.example.repository.BasicUserRepository
 import org.example.repository.BasketRepository
 import org.example.repository.ProductRepository
@@ -29,7 +29,8 @@ class Main {
 
     @Bean
     fun commandLineRunner(serviceOrganization: ServiceOrganization, imageService: ImageSearchUtils, productRepository: ProductRepository,
-                          basketRepository: BasketRepository, userRepository: BasicUserRepository, orderRepository: OrderRepository): CommandLineRunner {
+                          basketRepository: BasketRepository, userRepository: BasicUserRepository, orderRepository: OrderRepository
+    ): CommandLineRunner {
         return CommandLineRunner {
 
             imageService.imageImpl.save(Image(id = 1, path = Main.javaClass.getResource("/organizations_images/1.jpg").path))//"C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\1.jpg"))

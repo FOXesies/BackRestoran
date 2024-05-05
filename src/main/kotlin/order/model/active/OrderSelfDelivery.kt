@@ -1,0 +1,27 @@
+package org.example.order.model.active
+
+import jakarta.persistence.*
+import lombok.ToString
+import org.example.order.model.StatusOrder
+
+@Entity
+data class OrderSelfDelivery (
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var idOrderSelf: Long? = null,
+    var idUser: Long = 1,
+    var idOrganization: String = "",
+
+    var idLocation: Long? = null,
+    var phoneUser: String? = null,
+    var toTimeCooling: String? = "now",
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @ToString.Exclude
+    var productOrder: List<ProductInOrder> = mutableListOf(),
+    val status: StatusOrder? = null,
+
+    var summ: Double? = null,
+    var comment: String = ""
+)

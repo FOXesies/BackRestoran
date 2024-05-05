@@ -1,7 +1,6 @@
-package org.example.order.repository
+package org.example.order.repository.completed
 
-import org.example.order.model.CompleteOrder
-import org.example.order.model.OrderSelfDelivery
+import org.example.order.model.completed.CompleteOrder
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface CompleteOrderRepository: JpaRepository<CompleteOrder, Long> {

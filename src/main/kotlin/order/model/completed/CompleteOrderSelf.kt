@@ -1,13 +1,12 @@
-package org.example.order.model
+package org.example.order.model.completed
 
 import jakarta.persistence.*
 import lombok.ToString
-import org.example.DTO.Organization.CityOrganization
-import org.example.entity.Organization.LocationOrganization
+import org.example.order.model.FeedBacks
+import org.example.order.model.StatusOrder
 
 @Entity
-data class OrderSelfDelivery (
-
+data class CompleteOrderSelf (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
@@ -20,9 +19,13 @@ data class OrderSelfDelivery (
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var productOrder: List<ProductInOrder> = mutableListOf(),
+    var productOrder: List<ProductInOrderComplete> = mutableListOf(),
     val status: StatusOrder? = null,
 
     var summ: Double? = null,
-    var comment: String = ""
-)
+    var comment: String = "",
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    var feedBacks: FeedBacks? = null,
+
+    )

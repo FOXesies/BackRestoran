@@ -1,11 +1,12 @@
-package org.example.order.model
+package org.example.order.model.active
 
 import jakarta.persistence.*
 import lombok.ToString
-import org.example.entity.Organization.Organization
+import org.example.order.model.AddressUser
+import org.example.order.model.StatusOrder
 
 @Entity
-data class CompleteOrder (
+data class OrderCustomer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val orderId: Long = 0,
@@ -19,13 +20,10 @@ data class CompleteOrder (
     var idLocation: Long? = null,
     var phoneUser: String? = null,
     var toTimeDelivery: String? = "now",
-
-    @OneToOne(cascade = [CascadeType.ALL])
-    var feedBacks: FeedBacks? = null,
-
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var productOrder: List<ProductInOrderComplete> = mutableListOf(),
+    var productOrder: List<ProductInOrder> = mutableListOf(),
+    val status: StatusOrder? = null,
 
     var podezd: String? = null,
     var homephome: String? = null,

@@ -1,19 +1,24 @@
-package org.example.order.model
+package org.example.order.model.canceled
 
 import jakarta.persistence.*
 import lombok.ToString
+import org.example.order.model.FeedBacks
+import org.example.order.model.completed.ProductInOrderComplete
+import org.example.order.model.StatusOrder
 
 @Entity
-data class CompleteOrderSelf (
+data class CanceledOrderSelf (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
     var idUser: Long = 1,
     var idOrganization: String = "",
+    var canceled_comment: String? = null,
 
     var idLocation: Long? = null,
     var phoneUser: String? = null,
     var toTimeCooling: String? = "now",
+    var CanceledTime: String? = "now",
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
@@ -23,7 +28,4 @@ data class CompleteOrderSelf (
     var summ: Double? = null,
     var comment: String = "",
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    var feedBacks: FeedBacks? = null,
-
-)
+    )

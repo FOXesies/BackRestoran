@@ -1,11 +1,8 @@
 package org.example.order.controller
 
-import org.example.order.model.CompleteOrder
-import org.example.order.model.CompleteOrderSelf
-import org.example.order.model.OrderCustomer
-import org.example.order.model.OrderSelfDelivery
+import org.example.order.model.completed.CompleteOrder
+import org.example.order.model.completed.CompleteOrderSelf
 import org.example.order.service.CompleteOrderService
-import org.example.order.service.OrderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*

@@ -1,5 +1,6 @@
 package org.example.utils
 
+import org.dom4j.Comment
 import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.ProductInBasket
 import org.example.DTO.Category.CategoryDTO
@@ -11,7 +12,14 @@ import org.example.entity.Basket.BasketItem
 import org.example.entity.Basket.ProductBasket
 import org.example.entity.Category.Category
 import org.example.entity.Organization.Organization
-import org.example.order.model.*
+import org.example.order.model.active.OrderCustomer
+import org.example.order.model.active.OrderSelfDelivery
+import org.example.order.model.active.ProductInOrder
+import org.example.order.model.canceled.CanceledOrder
+import org.example.order.model.canceled.CanceledOrderSelf
+import org.example.order.model.completed.CompleteOrder
+import org.example.order.model.completed.CompleteOrderSelf
+import org.example.order.model.completed.ProductInOrderComplete
 import org.example.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.springframework.stereotype.Service
@@ -109,6 +117,48 @@ class MapperUtils {
                 idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
                 toTimeCooling = order.toTimeCooling,
+                productOrder = order.productOrder.map {
+                    ProductInOrderComplete(
+                        it.idProductInOrder,
+                        it.idProduct,
+                        it.count
+                    )
+                },
+                summ = order.summ,
+                comment = order.comment
+            )
+        }
+
+        fun mapOrderSelfInCanceled(order: OrderSelfDelivery, comment: String): CanceledOrderSelf {
+            return CanceledOrderSelf(
+                idOrderSelf = order.idOrderSelf,
+                canceled_comment = comment,
+                idUser = order.idUser,
+                idOrganization = order.idOrganization,
+                idLocation = order.idLocation,
+                phoneUser = order.phoneUser,
+                toTimeCooling = order.toTimeCooling,
+                productOrder = order.productOrder.map {
+                    ProductInOrderComplete(
+                        it.idProductInOrder,
+                        it.idProduct,
+                        it.count
+                    )
+                },
+                summ = order.summ,
+                comment = order.comment
+            )
+        }
+
+        fun mapOrderInCanceled(order: OrderCustomer, comment: String?): CanceledOrder {
+            return CanceledOrder(
+                orderId = order.orderId,
+                canceled_comment = comment,
+                idUser = order.idUser,
+                idOrganization = order.idOrganization,
+                idLocation = order.idLocation,
+                phoneUser = order.phoneUser,
+                toTimeDelivery = order.toTimeDelivery,
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,

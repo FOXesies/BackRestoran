@@ -1,7 +1,7 @@
 package org.example.order.controller
 
-import org.example.order.model.OrderCustomer
-import org.example.order.model.OrderSelfDelivery
+import org.example.order.model.active.OrderCustomer
+import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.service.OrderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -27,7 +26,7 @@ class OrderController {
 
     @RequestMapping(path = ["/deliveri/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOrderById(@PathVariable(value = "id") idOrder: Long): OrderCustomer{
+    fun getOrderById(@PathVariable(value = "id") idOrder: Long): OrderCustomer {
         return orderService.getOrderById(idOrder)
     }
 

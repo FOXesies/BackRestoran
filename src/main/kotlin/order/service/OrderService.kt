@@ -1,13 +1,12 @@
 package org.example.order.service
 
-import org.example.order.model.OrderCustomer
-import org.example.order.model.OrderSelfDelivery
-import org.example.order.repository.OrderRepository
-import org.example.order.repository.OrderSelfRepository
+import org.example.order.model.active.OrderCustomer
+import org.example.order.model.active.OrderSelfDelivery
+import org.example.order.repository.active.OrderRepository
+import org.example.order.repository.active.OrderSelfRepository
 import org.example.service.BasketService
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Service
 
 @Service

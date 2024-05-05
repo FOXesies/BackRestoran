@@ -1,4 +1,4 @@
-package org.example.order.model
+package org.example.order.model.canceled
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -6,10 +6,11 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 
 @Entity
-data class ProductInOrderComplete(
+data class AddressUserCanceled(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val idProductInOrder: Long? = null,
-    var idProduct: Long? = null,
-    var count: Int? = null
+    var idAddress: Long? = null,
+    var displayText: String?,
+    var lat: Double?,
+    var lon: Double?
 )

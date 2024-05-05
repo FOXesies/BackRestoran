@@ -1,13 +1,11 @@
 package org.example.order.service
 
-import org.example.order.model.CompleteOrder
-import org.example.order.model.CompleteOrderSelf
-import org.example.order.model.OrderSelfDelivery
-import org.example.order.repository.CompleteOrderRepository
-import org.example.order.repository.CompleteOrderSelfRepository
-import org.example.order.repository.OrderRepository
-import org.example.order.repository.OrderSelfRepository
-import org.example.service.BasketService
+import org.example.order.model.completed.CompleteOrder
+import org.example.order.model.completed.CompleteOrderSelf
+import org.example.order.repository.completed.CompleteOrderRepository
+import org.example.order.repository.completed.CompleteOrderSelfRepository
+import org.example.order.repository.active.OrderRepository
+import org.example.order.repository.active.OrderSelfRepository
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

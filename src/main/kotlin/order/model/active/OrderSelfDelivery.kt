@@ -3,6 +3,7 @@ package org.example.order.model.active
 import jakarta.persistence.*
 import lombok.ToString
 import org.example.order.model.StatusOrder
+import org.example.uuid.model.UUIDCustom
 
 @Entity
 data class OrderSelfDelivery (
@@ -12,6 +13,9 @@ data class OrderSelfDelivery (
     var idOrderSelf: Long? = null,
     var idUser: Long = 1,
     var idOrganization: String = "",
+
+    @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
+    var uuid: UUIDCustom? = null,
 
     var idLocation: Long? = null,
     var phoneUser: String? = null,

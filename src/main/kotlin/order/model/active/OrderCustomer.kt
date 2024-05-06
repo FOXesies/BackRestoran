@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import lombok.ToString
 import org.example.order.model.AddressUser
 import org.example.order.model.StatusOrder
+import org.example.uuid.model.UUIDCustom
 
 @Entity
 data class OrderCustomer(
@@ -14,6 +15,9 @@ data class OrderCustomer(
     var idDriver: Long? = null,
     var idUser: Long? = null,
     var idOrganization: String? = null,
+
+    @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
+    var uuid: UUIDCustom? = null,
 
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,

@@ -18,7 +18,6 @@ class CanceledOrderService {
     private lateinit var repository: OrderRepository
     @Autowired
     private lateinit var repositorySelf: OrderSelfRepository
-
     @Autowired
     private lateinit var canceledOrderRepository: CanceledOrderRepository
     @Autowired
@@ -31,12 +30,16 @@ class CanceledOrderService {
         return canceledOrderSelfRepository.findAllByIdUser(idUser)
     }
     fun cancelOrder(orderInfo: ResponseCancel) {
+        val items = repository.findAllByIdUser(1)
         val order = repository.findById(orderInfo.idOrder!!).get()
         canceledOrderRepository.save(MapperUtils.mapOrderInCanceled(order, order.comment))
+        repository.deleteById(order.orderId)
     }
     fun cancelOrderSelf(orderInfo: ResponseCancel) {
+        val items = repositorySelf.findAllByIdUser(1)
         val order = repositorySelf.findById(orderInfo.idOrder!!).get()
         canceledOrderSelfRepository.save(MapperUtils.mapOrderSelfInCanceled(order, order.comment))
+        repositorySelf.deleteById(order.idOrderSelf!!)
     }
 
 }

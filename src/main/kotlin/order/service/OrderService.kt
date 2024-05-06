@@ -6,6 +6,8 @@ import org.example.order.repository.active.OrderRepository
 import org.example.order.repository.active.OrderSelfRepository
 import org.example.service.BasketService
 import org.example.utils.MapperUtils
+import org.example.uuid.model.UUIDCustom
+import org.example.uuid.repository.UUIDRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -17,6 +19,7 @@ class OrderService {
     fun sendOrder(order: OrderCustomer) {
         val products = MapperUtils.mapProductBasketInOrder(basketService.getBasketByUserId(order.idUser!!).get().productsPick)
         order.productOrder = products
+        order.uuid = UUIDCustom()
         repository.save(order)
     }
 
@@ -29,6 +32,7 @@ class OrderService {
     fun sendOrderSelf(order: OrderSelfDelivery) {
         val products = MapperUtils.mapProductBasketInOrder(basketService.getBasketByUserId(order.idUser).get().productsPick)
         order.productOrder = products
+        order.uuid = UUIDCustom()
         repositorySelf.save(order)
     }
 
@@ -45,5 +49,7 @@ class OrderService {
     private lateinit var repositorySelf: OrderSelfRepository
     @Autowired
     private lateinit var basketService: BasketService
+    @Autowired
+    private lateinit var repositoryUUID: UUIDRepository
 
 }

@@ -17,6 +17,8 @@ data class CanceledOrder(
     var idUser: Long? = null,
     var idOrganization: String? = null,
 
+    var uuid: Long? = null,
+
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUserCanceled? = null,
     var idLocation: Long? = null,

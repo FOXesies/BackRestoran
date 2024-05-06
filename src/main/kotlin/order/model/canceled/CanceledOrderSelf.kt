@@ -5,6 +5,7 @@ import lombok.ToString
 import org.example.order.model.FeedBacks
 import org.example.order.model.completed.ProductInOrderComplete
 import org.example.order.model.StatusOrder
+import org.example.uuid.model.UUIDCustom
 
 @Entity
 data class CanceledOrderSelf (
@@ -14,6 +15,8 @@ data class CanceledOrderSelf (
     var idUser: Long = 1,
     var idOrganization: String = "",
     var canceled_comment: String? = null,
+
+    var uuid: Long? = null,
 
     var idLocation: Long? = null,
     var phoneUser: String? = null,

@@ -1,4 +1,4 @@
-package org.example.DTO.Organization
+package org.example.organization.model.DTO
 
 import org.example.DTO.Category.CategoryDTO
 

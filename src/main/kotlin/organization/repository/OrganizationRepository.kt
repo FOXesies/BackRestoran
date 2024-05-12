@@ -1,6 +1,6 @@
-package org.example.repository;
+package org.example.organization.repository;
 
-import org.example.entity.Organization.Organization
+import org.example.organization.model.Organization
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

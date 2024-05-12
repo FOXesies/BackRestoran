@@ -1,9 +1,10 @@
-package org.example.controller
+package org.example.organization.controller
 
 import jakarta.servlet.http.HttpServletResponse
-import org.example.DTO.Organization.OrganizationDTO
-import org.example.DTO.Organization.OrganizationIdDTO
-import org.example.service.ServiceOrganization
+import org.example.organization.model.DTO.OrganizationDTO
+import org.example.organization.model.DTO.OrganizationForUpdate
+import org.example.organization.model.DTO.OrganizationIdDTO
+import org.example.organization.service.ServiceOrganization
 import org.example.utils.MapperUtils.Companion.mapOrganizationIdInDTO
 import org.example.utils.MapperUtils.Companion.mapOrganizationInDTO
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +23,8 @@ class ControllerOrganizations {
     @Autowired
     lateinit var serviceOrganization: ServiceOrganization
 
-    @RequestMapping(path = ["/{id}"], method = [RequestMethod.GET],
+    @RequestMapping(
+        path = ["/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
@@ -30,8 +32,11 @@ class ControllerOrganizations {
         val organization = serviceOrganization.repositoryOrganization.findById(idOrganization)
         return mapOrganizationIdInDTO(organization.get())
     }
-    @RequestMapping(path = ["/"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE])
+
+    @RequestMapping(
+        path = ["/"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
     fun getOrganizations(@RequestParam city: String): List<OrganizationDTO> {
         val organizations = serviceOrganization.getOrganizations(city)
@@ -41,15 +46,36 @@ class ControllerOrganizations {
         }
     }
 
-    @RequestMapping(path = ["/cities"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(
+        path = ["/cities"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
     fun getCities(): List<String> {
         return serviceOrganization.getCities()
     }
 
-    @RequestMapping(path = ["organizations_images/{path}"], method = [RequestMethod.GET], produces = [MediaType.IMAGE_JPEG_VALUE])
-    fun uploadImageByPath(response: HttpServletResponse, @PathVariable(value = "path") pathImage: String): ResponseEntity<InputStreamResource> {
+    //ADMIN FUNC
+    @RequestMapping(
+        path = ["/get_info/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getBasicInfo(@RequestParam(value = "id") idOrg: Long): OrganizationForUpdate {
+        return serviceOrganization.getBasicinfo(idOrg)
+    }
+
+
+
+    @RequestMapping(
+        path = ["organizations_images/{path}"],
+        method = [RequestMethod.GET],
+        produces = [MediaType.IMAGE_JPEG_VALUE]
+    )
+    fun uploadImageByPath(
+        response: HttpServletResponse,
+        @PathVariable(value = "path") pathImage: String
+    ): ResponseEntity<InputStreamResource> {
         val imgFile = ClassPathResource("organizations_images/$pathImage")
         StreamUtils.copy(imgFile.inputStream, response.outputStream)
 
@@ -58,18 +84,4 @@ class ControllerOrganizations {
             .contentType(MediaType.IMAGE_JPEG)
             .body(InputStreamResource(imgFile.getInputStream()));
     }
-
-/*    @RequestMapping(value = ["/iamge{id}"], method = [RequestMethod.GET], produces = [MediaType.IMAGE_JPEG_VALUE])
-    @Throws(
-        IOException::class
-    )
-    fun getImage(response: HttpServletResponse, @PathVariable(value = "id") idOrganization: Long): ResponseEntity<InputStreamResource> {
-
-        StreamUtils.copy(imgFile.inputStream, response.outputStream)
-
-        return ResponseEntity
-            .ok()
-            .contentType(MediaType.IMAGE_JPEG)
-            .body(InputStreamResource(imgFile.getInputStream()));
-    }*/
 }

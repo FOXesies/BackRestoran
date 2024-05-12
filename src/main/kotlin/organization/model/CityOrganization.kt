@@ -1,4 +1,4 @@
-package org.example.entity.Organization
+package org.example.organization.model
 
 import jakarta.persistence.*
 import lombok.ToString

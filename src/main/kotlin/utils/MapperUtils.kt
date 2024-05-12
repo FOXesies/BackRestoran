@@ -1,17 +1,11 @@
 package org.example.utils
 
-import org.dom4j.Comment
 import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.ProductInBasket
 import org.example.DTO.Category.CategoryDTO
-import org.example.DTO.Organization.CityOrganization
-import org.example.DTO.Organization.OrganizationDTO
-import org.example.DTO.Organization.OrganizationIdDTO
-import org.example.DTO.Organization.Point
 import org.example.entity.Basket.BasketItem
 import org.example.entity.Basket.ProductBasket
 import org.example.entity.Category.Category
-import org.example.entity.Organization.Organization
 import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.model.active.ProductInOrder
@@ -20,6 +14,8 @@ import org.example.order.model.canceled.CanceledOrderSelf
 import org.example.order.model.completed.CompleteOrder
 import org.example.order.model.completed.CompleteOrderSelf
 import org.example.order.model.completed.ProductInOrderComplete
+import org.example.organization.model.DTO.*
+import org.example.organization.model.Organization
 import org.example.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.springframework.stereotype.Service
@@ -170,6 +166,14 @@ class MapperUtils {
                 },
                 summ = order.summ,
                 comment = order.comment
+            )
+        }
+
+        fun mapOrgInBasicInfo(organization: Organization): OrganizationForUpdate {
+            return OrganizationForUpdate(
+                idorganization = organization.idOrganization,
+                idImage = organization.idImage,
+                name = organization.name,
             )
         }
     }

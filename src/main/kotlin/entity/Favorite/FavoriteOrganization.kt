@@ -4,7 +4,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
-import org.example.entity.Organization.Organization
+import org.example.organization.model.Organization
 import javax.persistence.Entity
 import javax.persistence.Id
 

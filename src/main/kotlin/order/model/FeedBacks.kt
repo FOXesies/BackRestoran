@@ -1,7 +1,6 @@
 package org.example.order.model
 
 import jakarta.persistence.*
-import org.example.entity.Organization.Organization
 
 @Entity
 data class FeedBacks(

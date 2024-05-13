@@ -2,7 +2,6 @@ package org.example.organization.controller
 
 import jakarta.servlet.http.HttpServletResponse
 import org.example.organization.model.DTO.OrganizationDTO
-import org.example.organization.model.DTO.OrganizationForUpdate
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.service.ServiceOrganization
 import org.example.utils.MapperUtils.Companion.mapOrganizationIdInDTO
@@ -61,8 +60,17 @@ class ControllerOrganizations {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    fun getBasicInfo(@RequestParam(value = "id") idOrg: Long): OrganizationForUpdate {
+    fun getBasicInfo(@PathVariable(value = "id") idOrg: Long): OrganizationIdDTO {
         return serviceOrganization.getBasicinfo(idOrg)
+    }
+
+    @RequestMapping(
+        path = ["/update_info/"], method = [RequestMethod.POST],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun updateBasicInfo(@RequestBody idOrg: OrganizationIdDTO) {
+        return serviceOrganization.updateBasicinfo(idOrg)
     }
 
 

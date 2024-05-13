@@ -2,8 +2,7 @@ package org.example.controller
 
 import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.SendBasketProduct
-import org.example.entity.Basket.BasketItem
-import org.example.entity.Product.ResponeInt
+import org.example.products.DTO.ResponeInt
 import org.example.service.BasketService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType

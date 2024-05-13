@@ -3,7 +3,7 @@ package org.example
 import org.example.entity.Basket.BasketItem
 import org.example.entity.Category.Category
 import org.example.entity.Image
-import org.example.entity.Product.Product
+import org.example.products.entity.Product
 import org.example.entity.Users_.Customer
 import org.example.order.repository.active.OrderRepository
 import org.example.organization.model.CityOrganization
@@ -12,7 +12,7 @@ import org.example.organization.model.Organization
 import org.example.organization.model.Rating
 import org.example.repository.BasicUserRepository
 import org.example.repository.BasketRepository
-import org.example.repository.ProductRepository
+import org.example.products.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.example.organization.service.ServiceOrganization
 import org.springframework.boot.CommandLineRunner
@@ -36,9 +36,9 @@ class Main {
     ): CommandLineRunner {
         return CommandLineRunner {
 
-            imageService.imageImpl.save(Image(id = 1, path = Main.javaClass.getResource("/organizations_images/1.jpg").path))//"C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\1.jpg"))
-            imageService.imageImpl.save(Image(id = 2, path = Main.javaClass.getResource("/organizations_images/2.png").path))
-            imageService.imageImpl.save(Image(id = 3, path = Main.javaClass.getResource("/organizations_images/3.jpg").path))
+            imageService.imageImpl.save(Image(id = 1, value = Main.javaClass.getResource("/organizations_images/1.jpg").readBytes()))//"C:\\Users\\frost\\IdeaProjects\\BackRestoran\\src\\main\\resources\\organizations_images\\1.jpg"))
+            imageService.imageImpl.save(Image(id = 2, value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()))
+            imageService.imageImpl.save(Image(id = 3, value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()))
 
             userRepository.save(Customer(name = "Никитос"))
 

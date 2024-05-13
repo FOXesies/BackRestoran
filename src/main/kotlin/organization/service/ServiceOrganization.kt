@@ -1,6 +1,6 @@
 package org.example.organization.service
 
-import org.example.organization.model.DTO.OrganizationForUpdate
+import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.model.Organization
 import org.example.organization.repository.OrganizationRepository
 import org.example.utils.MapperUtils
@@ -22,14 +22,20 @@ class ServiceOrganization {
 
 
     //FUNC ADMIN
-    fun getBasicinfo(idOrg: Long): OrganizationForUpdate{
+    fun getBasicinfo(idOrg: Long): OrganizationIdDTO {
         return MapperUtils.mapOrgInBasicInfo(repositoryOrganization.findById(idOrg).get())
     }
+    fun updateBasicinfo(orgUpdate: OrganizationIdDTO) {
+        val org = repositoryOrganization.findById(orgUpdate.idOrganization).get()
+        org.name = orgUpdate.name
+        repositoryOrganization.save(org)
+    }
+
+
     fun insertOrganization(organization: Organization){
         repositoryOrganization.save(organization)
     }
     fun insertOrganization(organizations: List<Organization>){
         organizations.forEach{ organization -> repositoryOrganization.save(organization)}
-
     }
 }

@@ -3,7 +3,7 @@ package org.example.entity.Category
 import jakarta.persistence.*
 import lombok.*
 import org.example.entity.OrganizationImagesProfile
-import org.example.entity.Product.Product
+import org.example.products.entity.Product
 
 @Entity
 data class Category(

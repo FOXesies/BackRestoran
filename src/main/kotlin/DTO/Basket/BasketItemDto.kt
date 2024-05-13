@@ -1,6 +1,6 @@
 package org.example.DTO.Basket
 
-import org.example.entity.Product.Product
+import org.example.products.entity.Product
 
 data class BasketItemDtom(
     var idRestoraunt: Long? = null,

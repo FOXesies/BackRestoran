@@ -4,9 +4,9 @@ import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.SendBasketProduct
 import org.example.entity.Basket.BasketItem
 import org.example.entity.Basket.ProductBasket
-import org.example.entity.Product.ResponeInt
+import org.example.products.DTO.ResponeInt
 import org.example.repository.BasketRepository
-import org.example.repository.ProductRepository
+import org.example.products.repository.ProductRepository
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -78,7 +78,7 @@ class BasketService {
         basketRepository.save(basket)
     }
 
-    fun checkProductInBasket(idUser: Long, idProduct: Long): ResponeInt{
+    fun checkProductInBasket(idUser: Long, idProduct: Long): ResponeInt {
         val basket = getBasketByUserId(idUser).get()
         val productCount = basket.productsPick.find { it.productId == idProduct }?.count
         return ResponeInt(productCount?: 0)

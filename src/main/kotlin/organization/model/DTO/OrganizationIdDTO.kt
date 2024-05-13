@@ -1,6 +1,6 @@
 package org.example.organization.model.DTO
 
-import org.example.entity.Product.Product
+import org.example.products.entity.Product
 
 data class OrganizationIdDTO(
     var idOrganization: Long? = null,

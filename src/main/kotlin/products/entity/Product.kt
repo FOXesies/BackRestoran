@@ -1,4 +1,4 @@
-package org.example.entity.Product
+package org.example.products.entity
 
 import jakarta.persistence.*
 import lombok.*
@@ -12,5 +12,5 @@ data class Product(
     var price: Double?,
     var weight: Float?,
     var description: String?,
-    var imageProduct: ByteArray?
+    var imageProduct: Long?
 )

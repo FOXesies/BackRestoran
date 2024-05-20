@@ -1,11 +1,14 @@
 package org.example.organization.service
 
+import org.example.organization.model.CityOrganization
 import org.example.organization.model.DTO.OrganizationIdDTO
+import org.example.organization.model.LocationOrganization
 import org.example.organization.model.Organization
 import org.example.organization.repository.OrganizationRepository
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import organization.model.DTO.BasicInfoResponse
 
 @Service
 class ServiceOrganization {
@@ -25,9 +28,26 @@ class ServiceOrganization {
     fun getBasicinfo(idOrg: Long): OrganizationIdDTO {
         return MapperUtils.mapOrganizationIdInDTO(repositoryOrganization.findById(idOrg).get())
     }
-    fun updateBasicinfo(orgUpdate: OrganizationIdDTO) {
-        val org = repositoryOrganization.findById(orgUpdate.idOrganization).get()
+    fun updateBasicinfo(orgUpdate: BasicInfoResponse) {
+        val org = repositoryOrganization.findById(orgUpdate.idOrg).get()
         org.name = orgUpdate.name
+        org.descriptions = orgUpdate.description
+
+        // Создаем новую изменяемую коллекцию для locationsAll
+        org.locationsAll = orgUpdate.locationAll.map { entry ->
+            CityOrganization(
+                nameCity = entry.key,
+                locationInCity = entry.value.map { location ->
+                    LocationOrganization(
+                        address = location.address,
+                        lat = location.points!!.latitude,
+                        lon = location.points.longitude
+                    )
+                }.toMutableList() // Преобразуем в изменяемую коллекцию
+            )
+        }.toMutableList() // Преобразуем в изменяемую коллекцию
+
+        org.phoneForUser = orgUpdate.phone
         repositoryOrganization.save(org)
     }
 

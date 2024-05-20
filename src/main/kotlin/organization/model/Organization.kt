@@ -20,17 +20,17 @@ data class Organization(
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var category: List<Category>,
+    var category: MutableList<Category>,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var locationsAll: List<CityOrganization>,
+    var locationsAll: MutableList<CityOrganization>,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var images: List<OrganizationImagesProfile>? = null,
+    var images: MutableList<OrganizationImagesProfile>? = null,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var ratings: List<Rating> = listOf()
+    var ratings: MutableList<Rating> = mutableListOf()
 )

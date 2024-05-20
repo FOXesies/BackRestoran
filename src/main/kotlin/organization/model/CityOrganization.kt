@@ -11,5 +11,5 @@ data class CityOrganization(
     var nameCity: String? = null,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var locationInCity: List<LocationOrganization> = listOf()
+    var locationInCity: MutableList<LocationOrganization> = mutableListOf()
 )

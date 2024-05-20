@@ -48,17 +48,17 @@ class Main {
                         phoneForUser = "+79008005522",
                         descriptions = "Лучший ресторан под названием \"Ромашка\"",
                         images = null,
-                        locationsAll = listOf(
+                        locationsAll = mutableListOf(
                             CityOrganization(
                                 nameCity = "Москва",
-                                locationInCity = listOf(
+                                locationInCity = mutableListOf(
                                 LocationOrganization(
                                     address = "Москва улица 12", lat = 59.852081, lon = 30.238487),
                                 LocationOrganization(
                                     address = "Другая улица 10", lat = 59.652081, lon = 31.238487))),
                             CityOrganization(
                                 nameCity = "Москва",
-                                locationInCity = listOf(
+                                locationInCity = mutableListOf(
                                     LocationOrganization(
                                         address = "Москва улица 12", lat = 59.852081, lon = 30.238487),
                                     LocationOrganization(
@@ -66,7 +66,7 @@ class Main {
                            ),
                             CityOrganization(
                                 nameCity = "Владимир",
-                                locationInCity = listOf(
+                                locationInCity = mutableListOf(
                                     LocationOrganization(
                                         address = "улица Узкая 2", lat = 59.852081, lon = 30.238487),
                                     LocationOrganization(
@@ -75,9 +75,9 @@ class Main {
                         idImage = 1,/*listOf(
                             OrganizationImagesProfile(null,
                                 "1.jpg"))*/
-                        category = listOf(
+                        category = mutableListOf(
                             Category(
-                                null, name = "Пицца", product = listOf(
+                                null, name = "Пицца", product = mutableListOf(
                                     Product(
                                         name = "Пицца с Кока-колой",
                                         price = 100.0,
@@ -113,7 +113,7 @@ class Main {
                                 )
                             )
                         ),
-                        ratings = listOf(
+                        ratings = mutableListOf(
                             Rating(rating = 4),
                             Rating(rating = 2),
                             Rating(rating = 5),
@@ -124,10 +124,10 @@ class Main {
                         name = "Бургер кинг",
                         phoneForUser = "+79205748652",
                         idImage = 3,
-                        locationsAll = listOf(
+                        locationsAll = mutableListOf(
                             CityOrganization(
                                 nameCity = "Санкт-Петербург",
-                                locationInCity = listOf(
+                                locationInCity = mutableListOf(
                                     LocationOrganization(
                                         address = "проспект Ленина 40",
                                         lat = 59.852081,
@@ -135,7 +135,7 @@ class Main {
                                 )),
                             CityOrganization(
                                 nameCity = "Москва",
-                                locationInCity = listOf(
+                                locationInCity = mutableListOf(
                                     LocationOrganization(
                                         address = "проспект Проспекта 8",
                                         lat = 59.852081,
@@ -144,7 +144,7 @@ class Main {
                         ),
                         descriptions = "Маркетнг - это не для нас",
                         images = null,
-                        category = listOf(
+                        category = mutableListOf(
                             Category(
                                 null, name = "Пицца", product = listOf(
                                     Product(

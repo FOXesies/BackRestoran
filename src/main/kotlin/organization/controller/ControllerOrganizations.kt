@@ -13,6 +13,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.*
+import organization.model.DTO.BasicInfoResponse
 
 
 @RestController
@@ -69,8 +70,8 @@ class ControllerOrganizations {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    fun updateBasicInfo(@RequestBody idOrg: OrganizationIdDTO) {
-        return serviceOrganization.updateBasicinfo(idOrg)
+    fun updateBasicInfo(@RequestBody order: BasicInfoResponse) {
+        return serviceOrganization.updateBasicinfo(order)
     }
 
 

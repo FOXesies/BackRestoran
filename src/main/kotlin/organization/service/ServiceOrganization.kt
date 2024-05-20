@@ -23,7 +23,7 @@ class ServiceOrganization {
 
     //FUNC ADMIN
     fun getBasicinfo(idOrg: Long): OrganizationIdDTO {
-        return MapperUtils.mapOrgInBasicInfo(repositoryOrganization.findById(idOrg).get())
+        return MapperUtils.mapOrganizationIdInDTO(repositoryOrganization.findById(idOrg).get())
     }
     fun updateBasicinfo(orgUpdate: OrganizationIdDTO) {
         val org = repositoryOrganization.findById(orgUpdate.idOrganization).get()

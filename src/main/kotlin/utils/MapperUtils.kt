@@ -170,15 +170,6 @@ class MapperUtils {
                 comment = order.comment
             )
         }
-
-        fun mapOrgInBasicInfo(organization: Organization): OrganizationForUpdate {
-            return OrganizationForUpdate(
-                idorganization = organization.idOrganization,
-                idImage = organization.idImage,
-                nameOrganization = organization.name,
-            )
-        }
-
         fun mapProductInBasicInfo(product: Product): ProductResponse {
             return ProductResponse(
                 idProduct = product.idProduct,

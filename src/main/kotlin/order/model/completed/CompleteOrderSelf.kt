@@ -11,7 +11,7 @@ data class CompleteOrderSelf (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
     var idUser: Long = 1,
-    var idOrganization: String = "",
+    var idOrganization: Long = 1,
 
     var idLocation: Long? = null,
     var phoneUser: String? = null,

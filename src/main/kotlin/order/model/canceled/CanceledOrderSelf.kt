@@ -13,7 +13,7 @@ data class CanceledOrderSelf (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
     var idUser: Long = 1,
-    var idOrganization: String = "",
+    var idOrganization: Long = 1,
     var canceled_comment: String? = null,
 
     var uuid: Long? = null,

@@ -6,5 +6,6 @@ import org.example.order.model.active.OrderSelfDelivery
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface OrderSelfRepository: JpaRepository<OrderSelfDelivery, Long> {
+    fun findAllByIdOrganization(idOrganization: Long): List<OrderSelfDelivery>
     fun findAllByIdUser(idUser: Long): List<OrderSelfDelivery>
 }

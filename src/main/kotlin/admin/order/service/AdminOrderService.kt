@@ -1,6 +1,8 @@
 package org.example.admin.order.service
 
 import org.example.admin.order.model.AdminStatusResponse
+import org.example.order.model.active.OrderCustomer
+import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.repository.active.OrderRepository
 import org.example.order.repository.active.OrderSelfRepository
 import org.example.order.repository.canceled.CanceledOrderRepository
@@ -25,6 +27,13 @@ class AdminOrderService {
         val order = orderRepository.findById(statusRespone.id).get()
         order.status = statusRespone.status
         orderRepository.save(order)
+    }
+
+    fun getOrders(idOrg: Long): List<OrderCustomer>{
+        return orderRepository.findAllByIdUser(idOrg)
+    }
+    fun getOrdersSelf(idOrg: Long): List<OrderSelfDelivery>{
+        return orderSelfRepository.findAllByIdUser(idOrg)
     }
 
 }

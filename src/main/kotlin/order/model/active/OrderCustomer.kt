@@ -14,7 +14,7 @@ data class OrderCustomer(
 
     var idDriver: Long? = null,
     var idUser: Long? = null,
-    var idOrganization: String? = null,
+    var idOrganization: Long? = null,
 
     @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     var uuid: UUIDCustom? = null,

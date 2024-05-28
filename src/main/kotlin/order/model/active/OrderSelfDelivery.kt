@@ -12,7 +12,7 @@ data class OrderSelfDelivery (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
     var idUser: Long = 1,
-    var idOrganization: String = "",
+    var idOrganization: Long = 1,
 
     @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     var uuid: UUIDCustom? = null,

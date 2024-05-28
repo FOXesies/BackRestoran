@@ -1,9 +1,11 @@
 package org.example.organization.controller
 
 import jakarta.servlet.http.HttpServletResponse
+import org.example.organization.model.DTO.CityOrganization
 import org.example.organization.model.DTO.OrganizationDTO
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.service.ServiceOrganization
+import org.example.products.entity.Product
 import org.example.utils.MapperUtils.Companion.mapOrganizationIdInDTO
 import org.example.utils.MapperUtils.Companion.mapOrganizationInDTO
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,6 +34,16 @@ class ControllerOrganizations {
         val organization = serviceOrganization.repositoryOrganization.findById(idOrganization)
         return mapOrganizationIdInDTO(organization.get())
     }
+
+    @RequestMapping(path = ["/all_products/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getAllProductsByOrg(@PathVariable(value = "id") idOrganization: Long): Map<String, List<Product>>{
+        val organization = serviceOrganization.repositoryOrganization.findById(idOrganization)
+        return mapOrganizationIdInDTO(organization.get()).products
+    }
+
 
     @RequestMapping(
         path = ["/"], method = [RequestMethod.GET],

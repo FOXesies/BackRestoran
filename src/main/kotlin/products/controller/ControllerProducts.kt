@@ -1,5 +1,6 @@
 package org.example.products.controller
 
+import org.example.organization.model.DTO.CityOrganization
 import org.example.products.entity.Product
 import org.example.products.entity.ResponseProduct
 import org.example.products.service.ServiceProduct
@@ -27,7 +28,6 @@ class ControllerProducts {
         val product = serviseProduct.getProduct(idOrganization)
         return product
     }
-
 
     @RequestMapping(
         path = ["/get_info/{id}"], method = [RequestMethod.GET],

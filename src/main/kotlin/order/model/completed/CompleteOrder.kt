@@ -13,7 +13,7 @@ data class CompleteOrder (
 
     var idDriver: Long? = null,
     var idUser: Long? = null,
-    var idOrganization: String? = null,
+    var idOrganization: Long? = null,
 
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,

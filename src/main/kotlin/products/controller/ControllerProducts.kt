@@ -1,11 +1,16 @@
 package org.example.products.controller
 
 import org.example.products.entity.Product
-import org.example.products.DTO.ProductResponse
+import org.example.products.entity.ResponseProduct
 import org.example.products.service.ServiceProduct
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import java.io.IOException
+
 
 @RestController
 @RequestMapping("api/v1/products")
@@ -32,12 +37,32 @@ class ControllerProducts {
     fun getBasicInfo(@PathVariable(value = "id") idProduct: Long): Product {
         return serviseProduct.getBasicinfo(idProduct)
     }
-    @RequestMapping(
-        path = ["/update_info/"], method = [RequestMethod.POST],
-        produces = [MediaType.APPLICATION_JSON_VALUE]
-    )
-    @ResponseBody
-    fun updateBasicInfo(@RequestBody product: Product) {
-        return serviseProduct.updateBasicinfo(product)
+
+
+/*    @PostMapping("/add_product/")
+    fun updateProduct(@RequestParam("image") file: MultipartFile,
+                      @RequestParam("product") product: ResponseProduct
+    ): ResponseEntity<Any> {
+        try {
+            serviseProduct.addproduct(product, file)
+            return ResponseEntity.ok().build()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        }
+    }*/
+
+    @PostMapping("/add_product/")
+    fun updateProduct(
+        @RequestPart("image") file: MultipartFile,
+        @RequestPart("product") product: ResponseProduct
+    ): ResponseEntity<Void> {
+        try {
+            serviseProduct.addProduct(product, file)
+            return ResponseEntity.ok().build()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        }
     }
 }

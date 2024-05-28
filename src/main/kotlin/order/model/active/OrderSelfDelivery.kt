@@ -24,7 +24,7 @@ data class OrderSelfDelivery (
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
     var productOrder: List<ProductInOrder> = mutableListOf(),
-    val status: StatusOrder? = null,
+    var status: StatusOrder? = null,
 
     var summ: Double? = null,
     var comment: String = ""

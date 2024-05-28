@@ -55,20 +55,6 @@ class ControllerImage {
         }
     }
 
-    @PostMapping("/upload_product/")
-    fun updateproductImage(@RequestParam("image") file: MultipartFile,
-                         @RequestParam("productId") orgId: Long): ResponseEntity<Any> {
-        // Обработка полученного файла
-        try {
-            // Сохранение файла на сервере, например
-            imageService.insertForOrg(orgId, file)
-            return ResponseEntity.ok().build()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
-        }
-    }
-
     @RequestMapping(path = ["/"], method = [RequestMethod.GET], produces = [MediaType.IMAGE_JPEG_VALUE] )
     @Throws(IOException::class)
     fun getImages(response: HttpServletResponse, @RequestParam("ids") ids: List<Long>): ResponseEntity<List<ByteArrayResource>> {

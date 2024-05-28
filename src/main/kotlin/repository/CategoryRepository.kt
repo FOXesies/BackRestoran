@@ -1,4 +1,4 @@
-package repository;
+package org.example.repository;
 
 import org.example.entity.Category.Category
 import org.springframework.data.jpa.repository.JpaRepository

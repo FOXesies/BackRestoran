@@ -73,7 +73,14 @@ class ControllerOrganizations {
     fun updateBasicInfo(@RequestBody order: BasicInfoResponse) {
         return serviceOrganization.updateBasicinfo(order)
     }
-
+    @RequestMapping(
+        path = ["/categories"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getCategories(): List<String> {
+        return serviceOrganization.getCategories()
+    }
 
 
     @RequestMapping(

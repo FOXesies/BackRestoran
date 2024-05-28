@@ -27,7 +27,7 @@ data class OrderCustomer(
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
     var productOrder: List<ProductInOrder> = mutableListOf(),
-    val status: StatusOrder? = null,
+    var status: StatusOrder? = null,
 
     var podezd: String? = null,
     var homephome: String? = null,

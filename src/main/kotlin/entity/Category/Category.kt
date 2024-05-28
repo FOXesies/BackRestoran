@@ -15,6 +15,6 @@ data class Category(
     @ToString.Exclude // жесть
     var images: List<OrganizationImagesProfile>? = null,
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var product: List<Product>
+    var product: MutableList<Product>
 ) {
 }

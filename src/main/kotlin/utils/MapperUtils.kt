@@ -16,8 +16,8 @@ import org.example.order.model.completed.CompleteOrderSelf
 import org.example.order.model.completed.ProductInOrderComplete
 import org.example.organization.model.DTO.*
 import org.example.organization.model.Organization
-import org.example.products.DTO.ProductResponse
 import org.example.products.entity.Product
+import org.example.products.entity.ResponseProduct
 import org.example.products.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.springframework.stereotype.Service
@@ -170,13 +170,14 @@ class MapperUtils {
                 comment = order.comment
             )
         }
-        fun mapProductInBasicInfo(product: Product): ProductResponse {
-            return ProductResponse(
-                idProduct = product.idProduct,
-                name = product.name,
-                idImage = product.imageProduct,
-                price = product.price,
-                description = product.description,
+
+        fun mapResponseProductInProduct(product: ResponseProduct): Product {
+            return Product(
+                name = product.product.name,
+                description = product.product.description,
+                price = product.product.price,
+                weight = product.product.weight,
+                imageProduct = null
             )
         }
     }

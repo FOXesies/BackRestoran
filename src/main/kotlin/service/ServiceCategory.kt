@@ -1,8 +1,8 @@
 package org.example.service
 
 import org.example.entity.Category.Category
+import org.example.repository.CategoryRepository
 import org.springframework.beans.factory.annotation.Autowired
-import repository.CategoryRepository
 
 class ServiceCategory {
 

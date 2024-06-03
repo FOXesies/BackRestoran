@@ -4,7 +4,8 @@ import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.repository.active.OrderRepository
 import org.example.order.repository.active.OrderSelfRepository
-import org.example.service.BasketService
+import org.example.basket.service.BasketService
+import org.example.repository.BasicUserRepository
 import org.example.utils.MapperUtils
 import org.example.uuid.model.UUIDCustom
 import org.example.uuid.repository.UUIDRepository
@@ -17,7 +18,7 @@ class OrderService {
         return repository.findById(idOrder).get()
     }
     fun sendOrder(order: OrderCustomer) {
-        val products = MapperUtils.mapProductBasketInOrder(basketService.getBasketByUserId(order.idUser!!).get().productsPick)
+        val products = MapperUtils.mapProductBasketInOrder(basketService.getBasketByUserId(order.user.profileUUID!!).get().productsPick)
         order.productOrder = products
         order.uuid = UUIDCustom()
         repository.save(order)
@@ -27,10 +28,11 @@ class OrderService {
         return repository.findById(idOrder).get()
     }
     fun getOrders(userId: Long): List<OrderCustomer> {
-        return repository.findAllByIdUser(userId)
+        val user = userRepository.findById(userId).get()
+        return repository.findAllByUser(user)
     }
     fun sendOrderSelf(order: OrderSelfDelivery) {
-        val products = MapperUtils.mapProductBasketInOrder(basketService.getBasketByUserId(order.idUser).get().productsPick)
+        val products = MapperUtils.mapProductBasketInOrder(basketService.getBasketByUserId(order.user.profileUUID!!).get().productsPick)
         order.productOrder = products
         order.uuid = UUIDCustom()
         repositorySelf.save(order)
@@ -40,9 +42,12 @@ class OrderService {
         return repositorySelf.findById(idOrder).get()
     }
     fun getOrdersSelf(userId: Long): List<OrderSelfDelivery> {
-        return repositorySelf.findAllByIdUser(userId)
+        val user = userRepository.findById(userId).get()
+        return repositorySelf.findAllByUser(user)
     }
 
+    @Autowired
+    private lateinit var userRepository: BasicUserRepository
     @Autowired
     private lateinit var repository: OrderRepository
     @Autowired

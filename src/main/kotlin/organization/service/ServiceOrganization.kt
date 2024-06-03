@@ -1,6 +1,7 @@
 package org.example.organization.service
 
 import org.example.entity.Category.Category
+import org.example.feedbacks.service.FeedBacksService
 import org.example.organization.model.CityOrganization
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.model.LocationOrganization
@@ -22,6 +23,9 @@ class ServiceOrganization {
     @Autowired
     lateinit var categoryRepository: CategoryRepository
 
+    @Autowired
+    lateinit var feedBacksService: FeedBacksService
+
     fun getOrganizations(category: String): List<Organization> {
         return repositoryOrganization.findByCategory(category)
     }
@@ -31,7 +35,9 @@ class ServiceOrganization {
 
     //FUNC ADMIN
     fun getBasicinfo(idOrg: Long): OrganizationIdDTO {
-        return MapperUtils.mapOrganizationIdInDTO(repositoryOrganization.findById(idOrg).get())
+        return MapperUtils.mapOrganizationIdInDTO(
+            repositoryOrganization.findById(idOrg).get(), feedBacksService.getMiddleStar(idOrg)
+        )
     }
     fun updateBasicinfo(orgUpdate: BasicInfoResponse) {
         val org = repositoryOrganization.findById(orgUpdate.idOrg).get()

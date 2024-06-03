@@ -1,12 +1,13 @@
-package org.example.service
+package org.example.basket.service
 
 import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.SendBasketProduct
-import org.example.entity.Basket.BasketItem
-import org.example.entity.Basket.ProductBasket
+import org.example.basket.entity.BasketItem
+import org.example.basket.entity.ProductBasket
 import org.example.products.DTO.ResponeInt
-import org.example.repository.BasketRepository
+import org.example.basket.repository.BasketRepository
 import org.example.products.repository.ProductRepository
+import org.example.repository.BasicUserRepository
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -21,6 +22,9 @@ class BasketService {
     @Autowired
     lateinit var productRepository: ProductRepository
 
+    @Autowired
+    lateinit var userRepository: BasicUserRepository
+
     fun getBasketByUserId(userId: Long): Optional<BasketItem> {
         return basketRepository.findById(userId)
     }
@@ -34,7 +38,7 @@ class BasketService {
         val curBasket_ = curBasket.get()
 
         var listProduct = curBasket_.productsPick.toMutableList()
-        val newProduct = ProductBasket(productId = product.productId!!, count = 1)
+        val newProduct = ProductBasket(product = productRepository.findById(product.productId!!).get(), count = 1)
         listProduct.add(newProduct)
         curBasket_.productsPick = listProduct
 
@@ -43,17 +47,17 @@ class BasketService {
     }
 
     private fun mathSumm(math: MutableList<ProductBasket>): Double{
-        return math.sumOf { it.count * productRepository.findById(it.productId).get().price!! }
+        return math.sumOf { it.count * it.product.price!! }
     }
 
     fun deleteProduct(body: SendBasketProduct){
         var curBasket = basketRepository.findById(body.UserId!!).get()
         if(curBasket.productsPick.size == 1){
-            val curBasket_ = BasketItem(idUser = body.UserId, productsPick = mutableListOf(), summ = 0.0)
+            val curBasket_ = BasketItem(productsPick = mutableListOf(), summ = 0.0)
             basketRepository.save(curBasket_)
             return
         }
-        var item = curBasket.productsPick.find { it.productId == body.productId }
+        var item = curBasket.productsPick.find { it.product.idProduct == body.productId }
 
         var listProduct = curBasket.productsPick.toMutableList()
         listProduct.remove(item)
@@ -66,7 +70,7 @@ class BasketService {
         var basket = getBasketByUserId(body.UserId!!).get()
         val product = productRepository.findById(body.productId!!)
         basket.summ -= product.get().price!!
-        basket.productsPick.find { it.productId == body.productId }!!.count--
+        basket.productsPick.find { it.product.idProduct == body.productId }!!.count--
         basketRepository.save(basket)
     }
 
@@ -74,13 +78,13 @@ class BasketService {
         var basket = getBasketByUserId(body.UserId!!).get()
         val product = productRepository.findById(body.productId!!)
         basket.summ += product.get().price!!
-        basket.productsPick.find { it.productId == body.productId }!!.count++
+        basket.productsPick.find { it.product.idProduct == body.productId }!!.count++
         basketRepository.save(basket)
     }
 
     fun checkProductInBasket(idUser: Long, idProduct: Long): ResponeInt {
         val basket = getBasketByUserId(idUser).get()
-        val productCount = basket.productsPick.find { it.productId == idProduct }?.count
+        val productCount = basket.productsPick.find { it.product.idProduct == idProduct }?.count
         return ResponeInt(productCount?: 0)
     }
 

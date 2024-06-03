@@ -6,12 +6,15 @@ import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.repository.active.OrderRepository
 import org.example.order.repository.active.OrderSelfRepository
 import org.example.order.repository.canceled.CanceledOrderRepository
+import org.example.organization.repository.OrganizationRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class AdminOrderService {
 
+    @Autowired
+    private lateinit var organizationRepository: OrganizationRepository
     @Autowired
     private lateinit var orderRepository: OrderRepository
     @Autowired
@@ -30,10 +33,12 @@ class AdminOrderService {
     }
 
     fun getOrders(idOrg: Long): List<OrderCustomer>{
-        return orderRepository.findAllByIdUser(idOrg)
+        val organization = organizationRepository.findById(idOrg).get()
+        return orderRepository.findAllByOrganization(organization)
     }
     fun getOrdersSelf(idOrg: Long): List<OrderSelfDelivery>{
-        return orderSelfRepository.findAllByIdUser(idOrg)
+        val organization = organizationRepository.findById(idOrg).get()
+        return orderSelfRepository.findAllByOrganization(organization)
     }
 
 }

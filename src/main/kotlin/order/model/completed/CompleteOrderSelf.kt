@@ -2,16 +2,20 @@ package org.example.order.model.completed
 
 import jakarta.persistence.*
 import lombok.ToString
-import org.example.order.model.FeedBacks
+import org.example.entity.Users_.Users
+import org.example.feedbacks.entity.FeedBacks
 import org.example.order.model.StatusOrder
+import org.example.organization.model.Organization
 
 @Entity
 data class CompleteOrderSelf (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
-    var idUser: Long = 1,
-    var idOrganization: Long = 1,
+    @OneToOne
+    var user: Users,
+    @OneToOne
+    var organization: Organization,
 
     var idLocation: Long? = null,
     var phoneUser: String? = null,

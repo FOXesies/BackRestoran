@@ -7,6 +7,7 @@ import org.example.order.repository.active.OrderRepository
 import org.example.order.repository.active.OrderSelfRepository
 import org.example.order.repository.canceled.CanceledOrderSelfRepository
 import org.example.order.util.ResponseCancel
+import org.example.repository.BasicUserRepository
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service
 @Service
 class CanceledOrderService {
 
+    @Autowired
+    private lateinit var userRepository: BasicUserRepository
     @Autowired
     private lateinit var repository: OrderRepository
     @Autowired
@@ -24,10 +27,12 @@ class CanceledOrderService {
     private lateinit var canceledOrderSelfRepository: CanceledOrderSelfRepository
 
     fun getCanceledOrders(idUser: Long): List<CanceledOrder> {
-        return canceledOrderRepository.findAllByIdUser(idUser)
+        val user = userRepository.findById(idUser).get()
+        return canceledOrderRepository.findAllByUser(user)
     }
     fun getCanceledSelfOrders(idUser: Long): List<CanceledOrderSelf> {
-        return canceledOrderSelfRepository.findAllByIdUser(idUser)
+        val user = userRepository.findById(idUser).get()
+        return canceledOrderSelfRepository.findAllByUser(user)
     }
     fun cancelOrder(orderInfo: ResponseCancel) {
         val order = repository.findById(orderInfo.idOrder!!).get()

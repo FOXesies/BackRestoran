@@ -2,9 +2,10 @@ package org.example.order.model.canceled
 
 import jakarta.persistence.*
 import lombok.ToString
+import org.example.entity.Users_.Users
 import org.example.order.model.AddressUser
-import org.example.order.model.FeedBacks
 import org.example.order.model.completed.ProductInOrderComplete
+import org.example.organization.model.Organization
 
 @Entity
 data class CanceledOrder(
@@ -14,8 +15,10 @@ data class CanceledOrder(
     var canceled_comment: String? = null,
 
     var idDriver: Long? = null,
-    var idUser: Long? = null,
-    var idOrganization: Long? = null,
+    @OneToOne
+    var user: Users,
+    @OneToOne
+    var organization: Organization,
 
     var uuid: Long? = null,
 

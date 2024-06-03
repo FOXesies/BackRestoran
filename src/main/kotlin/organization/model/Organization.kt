@@ -28,8 +28,4 @@ data class Organization(
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     @ToString.Exclude
     var idImages: MutableList<Image> = mutableListOf(),
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    @ToString.Exclude
-    var ratings: MutableList<Rating> = mutableListOf()
 )

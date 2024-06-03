@@ -2,7 +2,9 @@ package org.example.order.model.active
 
 import jakarta.persistence.*
 import lombok.ToString
+import org.example.entity.Users_.Users
 import org.example.order.model.StatusOrder
+import org.example.organization.model.Organization
 import org.example.uuid.model.UUIDCustom
 
 @Entity
@@ -11,8 +13,10 @@ data class OrderSelfDelivery (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
-    var idUser: Long = 1,
-    var idOrganization: Long = 1,
+    @OneToOne
+    var user: Users,
+    @OneToOne
+    var organization: Organization,
 
     @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     var uuid: UUIDCustom? = null,

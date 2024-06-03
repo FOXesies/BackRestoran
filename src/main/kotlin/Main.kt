@@ -1,18 +1,17 @@
 package org.example
 
-import org.example.entity.Basket.BasketItem
+import org.example.auth.repository.ERoleCustomerRepository
+import org.example.basket.entity.BasketItem
 import org.example.entity.Category.Category
 import org.example.entity.Image
 import org.example.products.entity.Product
-import org.example.entity.Users_.Customer
-import org.example.order.model.active.OrderCustomer
 import org.example.order.repository.active.OrderRepository
 import org.example.organization.model.CityOrganization
 import org.example.organization.model.LocationOrganization
 import org.example.organization.model.Organization
-import org.example.organization.model.Rating
 import org.example.repository.BasicUserRepository
-import org.example.repository.BasketRepository
+import org.example.basket.repository.BasketRepository
+import org.example.entity.Users.ERole
 import org.example.products.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.example.organization.service.ServiceOrganization
@@ -33,9 +32,11 @@ class Main {
 
     @Bean
     fun commandLineRunner(serviceOrganization: ServiceOrganization, imageService: ImageSearchUtils, productRepository: ProductRepository,
-                          basketRepository: BasketRepository, userRepository: BasicUserRepository, orderRepository: OrderRepository
+                          basketRepository: BasketRepository, userRepository: BasicUserRepository, orderRepository: OrderRepository, roleRepository: ERoleCustomerRepository
     ): CommandLineRunner {
         return CommandLineRunner {
+            roleRepository.save(ERole(nameRole = "CUSTOMER"))
+            roleRepository.save(ERole(nameRole = "ORGANIZATION"))
 
             imageService.imageImpl.save(
                 Image(
@@ -55,8 +56,6 @@ class Main {
                     value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()
                 )
             )
-
-            userRepository.save(Customer(name = "Никитос"))
 
             val items = listOf(
                 Organization(
@@ -133,12 +132,6 @@ class Main {
                             )
                         )
                     ),
-                    ratings = mutableListOf(
-                        Rating(rating = 4),
-                        Rating(rating = 2),
-                        Rating(rating = 5),
-                        Rating(rating = 4),
-                    )
                 ),
                 Organization(
                     name = "Бургер кинг",
@@ -199,8 +192,6 @@ class Main {
                     )
                 )
             )
-
-            basketRepository.save(BasketItem())
 
             serviceOrganization.insertOrganization(items)
         }

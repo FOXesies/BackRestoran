@@ -1,12 +1,10 @@
 package org.example.organization.controller
 
 import jakarta.servlet.http.HttpServletResponse
-import org.example.organization.model.DTO.CityOrganization
+import org.example.feedbacks.service.FeedBacksService
 import org.example.organization.model.DTO.OrganizationDTO
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.service.ServiceOrganization
-import org.example.products.DTO.ResponseProduct
-import org.example.products.entity.Product
 import org.example.utils.MapperUtils.Companion.mapOrganizationIdInDTO
 import org.example.utils.MapperUtils.Companion.mapOrganizationInDTO
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,6 +24,9 @@ class ControllerOrganizations {
     @Autowired
     lateinit var serviceOrganization: ServiceOrganization
 
+    @Autowired
+    lateinit var feedBacksService: FeedBacksService
+
     @RequestMapping(
         path = ["/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE]
@@ -33,18 +34,8 @@ class ControllerOrganizations {
     @ResponseBody
     fun getOrganizationById(@PathVariable(value = "id") idOrganization: Long): OrganizationIdDTO {
         val organization = serviceOrganization.repositoryOrganization.findById(idOrganization)
-        return mapOrganizationIdInDTO(organization.get())
+        return mapOrganizationIdInDTO(organization.get(), feedBacksService.getMiddleStar(idOrganization))
     }
-
-    @RequestMapping(path = ["/all_products/{id}"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE]
-    )
-    @ResponseBody
-    fun getAllProductsByOrg(@PathVariable(value = "id") idOrganization: Long): Map<String, List<ResponseProduct>>{
-        val organization = serviceOrganization.repositoryOrganization.findById(idOrganization)
-        return mapOrganizationIdInDTO(organization.get()).products
-    }
-
 
     @RequestMapping(
         path = ["/"], method = [RequestMethod.GET],
@@ -55,7 +46,7 @@ class ControllerOrganizations {
         val organizations = serviceOrganization.getOrganizations(city)
 
         return organizations.map { organization ->
-            mapOrganizationInDTO(organization)
+            mapOrganizationInDTO(organization, feedBacksService.getMiddleStar(organization.idOrganization!!))
         }
     }
 

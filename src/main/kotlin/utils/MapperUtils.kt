@@ -3,9 +3,11 @@ package org.example.utils
 import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.ProductInBasket
 import org.example.DTO.Category.CategoryDTO
-import org.example.entity.Basket.BasketItem
-import org.example.entity.Basket.ProductBasket
+import org.example.basket.entity.BasketItem
+import org.example.basket.entity.ProductBasket
 import org.example.entity.Category.Category
+import org.example.entity.Users_.Users
+import org.example.entity.Users_.DTO.UserResponse
 import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.model.active.ProductInOrder
@@ -23,7 +25,19 @@ import org.springframework.stereotype.Service
 @Service
 class MapperUtils {
     companion object {
-        fun mapOrganizationInDTO(organization: Organization): OrganizationDTO {
+
+        fun mapUserToDTO(customer: Users): UserResponse {
+            return UserResponse(
+                profileUUID = customer.profileUUID!!,
+                city = customer.city!!,
+                name = customer.name!!,
+                favoriteProducts = customer.favoriteProducts,
+                dateOfCreate = customer.dateOfCreate,
+                phone = customer.phone!!,
+                roles = customer.roles
+            )
+        }
+        fun mapOrganizationInDTO(organization: Organization, middleStar: List<Number?>): OrganizationDTO {
             return OrganizationDTO(
                 organization.idOrganization,
                 organization.name,
@@ -32,12 +46,12 @@ class MapperUtils {
                 organization.idImages,
                 organization.descriptions,
                 organization.category.map { mapCategoryDTO(it) },
-                if (organization.ratings.isEmpty()) -1.0 else organization.ratings.map { it.rating }.average(),
-                organization.ratings.size
+                middleStar[0]?.toDouble(),
+                middleStar[1]?.toInt()
             )
         }
 
-        fun mapOrganizationIdInDTO(organization: Organization): OrganizationIdDTO {
+        fun mapOrganizationIdInDTO(organization: Organization, middleStar: List<Number?>): OrganizationIdDTO {
             return OrganizationIdDTO(
                 organization.idOrganization,
                 organization.name,
@@ -51,15 +65,16 @@ class MapperUtils {
                             CityOrganization(it.address!!, Point(it.lat!!, it.lon!!))
                         } },
                 organization.category.associateBy ({ it.name }, {it.product.map { mapResponseProductInResponseProduct(it) }.toMutableList()}),
-                if(organization.ratings.isNotEmpty()) organization.ratings.map { it.rating }.average() else 0.0,
-                organization.ratings.size ,
-                false
+                middleStar[0]?.toDouble(),
+                middleStar[1]?.toInt()
+                /*if(organization.ratings.isNotEmpty()) organization.ratings.map { it.rating }.average() else 0.0,
+                organization.ratings.size */
             )
         }
         fun mapBasketInDTO(basket: BasketItem, productService: ProductRepository): BasketItemDtom {
-            val item = basket.productsPick.map { ProductInBasket(productService.findById(it.productId!!).get(), it.count) }.toMutableList()
+            val item = basket.productsPick.map { ProductInBasket(productService.findById(it.product.idProduct!!).get(), it.count) }.toMutableList()
             return BasketItemDtom(
-                idRestoraunt = basket.idRestaurant,
+                idRestoraunt = basket.organization?.idOrganization,
                 summ = basket.summ,
                 productsPick = item
             )
@@ -74,7 +89,7 @@ class MapperUtils {
 
         fun mapProductBasketInOrder(productBasket: List<ProductBasket>): List<ProductInOrder> {
             return productBasket.map { ProductInOrder(
-                idProduct = it.productId,
+                idProduct = it.product.idProduct,
                 count = it.count) }
         }
 
@@ -82,8 +97,8 @@ class MapperUtils {
             return CompleteOrder(
                 orderId = order.orderId,
                 idDriver = order.idDriver,
-                idUser = order.idUser,
-                idOrganization = order.idOrganization,
+                user = order.user,
+                organization = order.organization,
                 addressUser = order.addressUser,
                 idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
@@ -107,8 +122,8 @@ class MapperUtils {
         fun mapOrderInCompleteSelf(order: OrderSelfDelivery): CompleteOrderSelf {
             return CompleteOrderSelf(
                 idOrderSelf = order.idOrderSelf,
-                idUser = order.idUser,
-                idOrganization = order.idOrganization,
+                user = order.user,
+                organization = order.organization,
                 idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
                 toTimeCooling = order.toTimeCooling,
@@ -128,9 +143,9 @@ class MapperUtils {
             return CanceledOrderSelf(
                 idOrderSelf = order.idOrderSelf,
                 canceled_comment = comment,
-                idUser = order.idUser,
+                user = order.user,
+                organization = order.organization,
                 uuid = order.uuid!!.id,
-                idOrganization = order.idOrganization,
                 idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
                 toTimeCooling = order.toTimeCooling,
@@ -150,10 +165,10 @@ class MapperUtils {
             return CanceledOrder(
                 orderId = order.orderId,
                 canceled_comment = comment,
-                idUser = order.idUser,
+                user = order.user,
+                organization = order.organization,
                 uuid = order.uuid!!.id,
                 addressUser = order.addressUser,
-                idOrganization = order.idOrganization,
                 idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
                 toTimeDelivery = order.toTimeDelivery,

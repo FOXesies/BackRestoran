@@ -32,6 +32,10 @@ repositories {
 }
 
 dependencies {
+
+    // https://mavenlibs.com/maven/dependency/org.springframework.session/spring-session-core
+    implementation("org.springframework.session:spring-session-core:3.0.3")
+
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
     implementation("org.springframework.boot:spring-boot-starter-mail:3.2.2")
 

@@ -2,18 +2,20 @@ package org.example.order.model.canceled
 
 import jakarta.persistence.*
 import lombok.ToString
-import org.example.order.model.FeedBacks
+import org.example.entity.Users_.Users
 import org.example.order.model.completed.ProductInOrderComplete
 import org.example.order.model.StatusOrder
-import org.example.uuid.model.UUIDCustom
+import org.example.organization.model.Organization
 
 @Entity
 data class CanceledOrderSelf (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
-    var idUser: Long = 1,
-    var idOrganization: Long = 1,
+    @OneToOne
+    var user: Users,
+    @OneToOne
+    var organization: Organization,
     var canceled_comment: String? = null,
 
     var uuid: Long? = null,

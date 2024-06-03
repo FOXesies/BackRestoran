@@ -14,6 +14,5 @@ data class OrganizationIdDTO(
     var locationsAll: Map<String, List<CityOrganization>> = mutableMapOf(),
     var products: Map<String, MutableList<ResponseProduct>>,
     var rating: Double?,
-    var ratingCount: Int?,
-    var isFavorite: Boolean = false
+    var ratingCount: Int?
 )

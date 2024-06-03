@@ -2,8 +2,10 @@ package org.example.order.model.completed
 
 import jakarta.persistence.*
 import lombok.ToString
+import org.example.entity.Users_.Users
 import org.example.order.model.AddressUser
-import org.example.order.model.FeedBacks
+import org.example.feedbacks.entity.FeedBacks
+import org.example.organization.model.Organization
 
 @Entity
 data class CompleteOrder (
@@ -12,8 +14,10 @@ data class CompleteOrder (
     val orderId: Long = 0,
 
     var idDriver: Long? = null,
-    var idUser: Long? = null,
-    var idOrganization: Long? = null,
+    @OneToOne
+    var user: Users,
+    @OneToOne
+    var organization: Organization,
 
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,

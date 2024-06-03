@@ -1,15 +1,17 @@
-package org.example.entity.Basket
+package org.example.basket.entity
 
 import jakarta.persistence.*
 import lombok.ToString
+import org.example.entity.Users_.Users
+import org.example.organization.model.Organization
 
 @Entity
 data class BasketItem(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idBasket: Long? = null,
-    var idUser: Long? = 1,
-    var idRestaurant: Long? = null,
+    @OneToOne
+    var organization: Organization? = null,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
     var productsPick: List<ProductBasket> = listOf(),

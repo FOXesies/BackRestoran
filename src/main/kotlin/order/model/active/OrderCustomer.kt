@@ -2,8 +2,10 @@ package org.example.order.model.active
 
 import jakarta.persistence.*
 import lombok.ToString
+import org.example.entity.Users_.Users
 import org.example.order.model.AddressUser
 import org.example.order.model.StatusOrder
+import org.example.organization.model.Organization
 import org.example.uuid.model.UUIDCustom
 
 @Entity
@@ -13,8 +15,10 @@ data class OrderCustomer(
     val orderId: Long = 0,
 
     var idDriver: Long? = null,
-    var idUser: Long? = null,
-    var idOrganization: Long? = null,
+    @OneToOne
+    var user: Users,
+    @OneToOne
+    var organization: Organization,
 
     @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     var uuid: UUIDCustom? = null,

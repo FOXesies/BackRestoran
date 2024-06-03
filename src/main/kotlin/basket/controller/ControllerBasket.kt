@@ -1,9 +1,9 @@
-package org.example.controller
+package org.example.basket.controller
 
 import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.SendBasketProduct
 import org.example.products.DTO.ResponeInt
-import org.example.service.BasketService
+import org.example.basket.service.BasketService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*

@@ -1,18 +1,14 @@
 package org.example.entity.Users
 
-enum class ERole {
-        /**
-         * Customer e role.
-         */
-        CUSTOMER,
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 
-        /**
-         * Employee e role.
-         */
-        EMPLOYEE,
-
-        /**
-         * Super user e role.
-         */
-        SUPER_USER
-}
+@Entity
+data class ERole(
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var idRole: Long? = null,
+        var nameRole: String
+)

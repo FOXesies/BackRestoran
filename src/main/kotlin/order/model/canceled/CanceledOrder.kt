@@ -20,7 +20,7 @@ data class CanceledOrder(
     var uuid: Long? = null,
 
     @OneToOne(cascade = [CascadeType.ALL])
-    var addressUser: AddressUserCanceled? = null,
+    var addressUser: AddressUser? = null,
     var idLocation: Long? = null,
     var phoneUser: String? = null,
     var toTimeDelivery: String? = "now",

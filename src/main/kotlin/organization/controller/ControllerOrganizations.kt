@@ -5,6 +5,7 @@ import org.example.organization.model.DTO.CityOrganization
 import org.example.organization.model.DTO.OrganizationDTO
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.service.ServiceOrganization
+import org.example.products.DTO.ResponseProduct
 import org.example.products.entity.Product
 import org.example.utils.MapperUtils.Companion.mapOrganizationIdInDTO
 import org.example.utils.MapperUtils.Companion.mapOrganizationInDTO
@@ -39,7 +40,7 @@ class ControllerOrganizations {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    fun getAllProductsByOrg(@PathVariable(value = "id") idOrganization: Long): Map<String, List<Product>>{
+    fun getAllProductsByOrg(@PathVariable(value = "id") idOrganization: Long): Map<String, List<ResponseProduct>>{
         val organization = serviceOrganization.repositoryOrganization.findById(idOrganization)
         return mapOrganizationIdInDTO(organization.get()).products
     }

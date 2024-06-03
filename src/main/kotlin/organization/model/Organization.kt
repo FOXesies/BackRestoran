@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import lombok.*
 import org.example.entity.Category.Category
-import org.example.entity.OrganizationImagesProfile
+import org.example.entity.Image
 
 @Entity
 data class Organization(
@@ -15,7 +15,6 @@ data class Organization(
     var idOrganization: Long? = null,
     var name: String,
     var phoneForUser: String,
-    var idImage: Long,
     var descriptions: String?,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
@@ -26,9 +25,9 @@ data class Organization(
     @ToString.Exclude
     var locationsAll: MutableList<CityOrganization>,
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     @ToString.Exclude
-    var images: MutableList<OrganizationImagesProfile>? = null,
+    var idImages: MutableList<Image> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude

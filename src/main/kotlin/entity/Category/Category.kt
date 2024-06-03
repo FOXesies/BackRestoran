@@ -2,7 +2,7 @@ package org.example.entity.Category
 
 import jakarta.persistence.*
 import lombok.*
-import org.example.entity.OrganizationImagesProfile
+import org.example.entity.Image
 import org.example.products.entity.Product
 
 @Entity
@@ -13,7 +13,7 @@ data class Category(
     var name: String,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude // жесть
-    var images: List<OrganizationImagesProfile>? = null,
+    var images: List<Image>? = null,
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var product: MutableList<Product>
 ) {

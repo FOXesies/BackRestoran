@@ -26,22 +26,4 @@ class ServiceProduct {
         return productRepository.findById(id).get()
     }
 
-
-    //FUNC ADMIN
-    fun getBasicinfo(idProduct: Long): Product {
-        return productRepository.findById(idProduct).get()
-    }
-    fun updateBasicinfo(productUpdate: ResponseProduct, file: MultipartFile) {/*
-        val product = productRepository.findById(productUpdate.idProduct!!).get()
-        product.name = productUpdate.name
-        productRepository.save(product)*/
-    }
-    fun addProduct(productUpdate: ResponseProduct, file: MultipartFile) {
-        val product = MapperUtils.mapResponseProductInProduct(productUpdate)
-        val productEnd = productRepository.save(product)
-        imageService.insertImageProduct(productEnd.idProduct!!, file)
-
-        organizationService.insertProduct(productUpdate.idOrg, product, productUpdate.category)
-    }
-
 }

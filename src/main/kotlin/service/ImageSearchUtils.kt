@@ -34,7 +34,7 @@ class ImageSearchUtils {
         imageImpl.save(image)
 
         val organization = organizationImpl.findById(idOrg).get()
-        organization.idImage = image.id!!
+        organization.idImages.add(image)
         organizationImpl.save(organization)
     }
     private fun saveImageToResources(imageBytes: ByteArray, resourceName: String) {
@@ -47,7 +47,7 @@ class ImageSearchUtils {
         imageImpl.save(image)
 
         val product = productsImpl.findById(idProduct).get()
-        product.imageProduct = image.id!!
+        product.images.add(image)
         productsImpl.save(product)
     }
 

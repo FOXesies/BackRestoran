@@ -17,9 +17,7 @@ import org.example.order.model.completed.ProductInOrderComplete
 import org.example.organization.model.DTO.*
 import org.example.organization.model.Organization
 import org.example.products.entity.Product
-import org.example.products.entity.ResponseProduct
 import org.example.products.repository.ProductRepository
-import org.example.service.ImageSearchUtils
 import org.springframework.stereotype.Service
 
 @Service
@@ -30,21 +28,21 @@ class MapperUtils {
                 organization.idOrganization,
                 organization.name,
                 organization.phoneForUser,
-                organization.locationsAll.associate { it.nameCity to it.locationInCity.map { it.address }},
-                organization.idImage,
+                organization.locationsAll.associate { it.nameCity to it.locationInCity.map { it.address } },
+                organization.idImages,
                 organization.descriptions,
-                organization.category.map{ mapCategoryDTO(it) },
-                if(organization.ratings.isEmpty()) -1.0 else organization.ratings.map { it.rating }.average(),
-                organization.ratings.size ,
-                organization.images?.map { ImageSearchUtils.getInputStream(it.data) }
+                organization.category.map { mapCategoryDTO(it) },
+                if (organization.ratings.isEmpty()) -1.0 else organization.ratings.map { it.rating }.average(),
+                organization.ratings.size
             )
         }
+
         fun mapOrganizationIdInDTO(organization: Organization): OrganizationIdDTO {
             return OrganizationIdDTO(
                 organization.idOrganization,
                 organization.name,
                 organization.phoneForUser,
-                organization.idImage,
+                organization.idImages,
                 organization.descriptions,
                 organization.category.map { it.name },
                 organization.locationsAll.associate { city ->
@@ -52,11 +50,10 @@ class MapperUtils {
                         .map {
                             CityOrganization(it.address!!, Point(it.lat!!, it.lon!!))
                         } },
-                organization.category.associateBy ({ it.name }, {it.product}),
+                organization.category.associateBy ({ it.name }, {it.product.map { mapResponseProductInResponseProduct(it) }.toMutableList()}),
                 if(organization.ratings.isNotEmpty()) organization.ratings.map { it.rating }.average() else 0.0,
                 organization.ratings.size ,
-                false,
-                organization.images?.map { ImageSearchUtils.getInputStream(it.data) } //organization.images?.map { ImageSearchUtils.getInputStream(it) }
+                false
             )
         }
         fun mapBasketInDTO(basket: BasketItem, productService: ProductRepository): BasketItemDtom {
@@ -155,6 +152,7 @@ class MapperUtils {
                 canceled_comment = comment,
                 idUser = order.idUser,
                 uuid = order.uuid!!.id,
+                addressUser = order.addressUser,
                 idOrganization = order.idOrganization,
                 idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
@@ -171,13 +169,22 @@ class MapperUtils {
             )
         }
 
-        fun mapResponseProductInProduct(product: ResponseProduct): Product {
+        fun mapResponseProductInProduct(product: org.example.products.entity.ResponseProduct): Product {
             return Product(
                 name = product.product.name,
                 description = product.product.description,
                 price = product.product.price,
                 weight = product.product.weight,
-                imageProduct = null
+                images = product.image?.map { org.example.entity.Image(value = it) }?.toMutableList()?: mutableListOf()
+            )
+        }
+        fun mapResponseProductInResponseProduct(product: Product): org.example.products.DTO.ResponseProduct {
+            return org.example.products.DTO.ResponseProduct(
+                id = product.idProduct!!,
+                name = product.name,
+                description = product.description,
+                price = product.price,
+                image = if (product.images.size > 0) product.images[0] else null
             )
         }
     }

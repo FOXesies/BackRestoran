@@ -29,16 +29,6 @@ class ControllerProducts {
         return product
     }
 
-    @RequestMapping(
-        path = ["/get_info/{id}"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE]
-    )
-    @ResponseBody
-    fun getBasicInfo(@PathVariable(value = "id") idProduct: Long): Product {
-        return serviseProduct.getBasicinfo(idProduct)
-    }
-
-
 /*    @PostMapping("/add_product/")
     fun updateProduct(@RequestParam("image") file: MultipartFile,
                       @RequestParam("product") product: ResponseProduct
@@ -51,18 +41,4 @@ class ControllerProducts {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
         }
     }*/
-
-    @PostMapping("/add_product/")
-    fun updateProduct(
-        @RequestPart("image") file: MultipartFile,
-        @RequestPart("product") product: ResponseProduct
-    ): ResponseEntity<Void> {
-        try {
-            serviseProduct.addProduct(product, file)
-            return ResponseEntity.ok().build()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
-        }
-    }
 }

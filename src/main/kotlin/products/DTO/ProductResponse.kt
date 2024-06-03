@@ -1,9 +1,11 @@
 package org.example.products.DTO
 
-import org.example.products.entity.Product
+import org.example.entity.Image
 
 data class ResponseProduct (
-    var product: Product,
-    var image: ByteArray,
-    var category: String
+    var id: Long,
+    var name: String,
+    var price: Double?,
+    var image: Image? = null,
+    var description: String?,
 )

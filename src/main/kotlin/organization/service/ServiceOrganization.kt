@@ -71,12 +71,7 @@ class ServiceOrganization {
     fun insertProduct(idOrg: Long, product: Product, category: String){
         val organization = repositoryOrganization.findById(idOrg).get()
         organization.category.find { it.name == category }.let {
-            if(it != null){
-                it.product.add(product)
-            }
-            else{
-                categoryRepository.save(Category(name = category, product = mutableListOf(product)))
-            }
+            it?.product?.add(product) ?: categoryRepository.save(Category(name = category, product = mutableListOf(product)))
         }
         repositoryOrganization.save(organization)
     }

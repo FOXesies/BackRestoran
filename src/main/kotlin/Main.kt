@@ -58,12 +58,11 @@ class Main {
 
             userRepository.save(Customer(name = "Никитос"))
 
-            var items = listOf(
+            val items = listOf(
                 Organization(
                     name = "Ромашка",
                     phoneForUser = "+79008005522",
                     descriptions = "Лучший ресторан под названием \"Ромашка\"",
-                    images = null,
                     locationsAll = mutableListOf(
                         CityOrganization(
                             nameCity = "Москва",
@@ -99,7 +98,7 @@ class Main {
                             )
                         )
                     ),
-                    idImage = 1,
+                    idImages = mutableListOf(imageService.imageImpl.findById(1).get()),
                     category = mutableListOf(
                         Category(
                             null, name = "Пицца", product = mutableListOf(
@@ -108,14 +107,12 @@ class Main {
                                     price = 100.0,
                                     weight = 100f,
                                     description = "Сильногазированая",
-                                    imageProduct = null
                                 ),
                                 Product(
                                     name = "Пицца По-Царски",
                                     price = 450.0,
                                     weight = 400f,
                                     description = "20см диаметр",
-                                    imageProduct = null
                                 )
                             )
                         ),
@@ -126,14 +123,12 @@ class Main {
                                     price = 470.0,
                                     weight = 300f,
                                     description = "Со сливками",
-                                    imageProduct = null
                                 ),
                                 Product(
                                     name = "Фетучини",
                                     price = 600.0,
                                     weight = 400f,
                                     description = "Креветки и залень",
-                                    imageProduct = null
                                 )
                             )
                         )
@@ -148,7 +143,7 @@ class Main {
                 Organization(
                     name = "Бургер кинг",
                     phoneForUser = "+79205748652",
-                    idImage = 3,
+                    idImages = mutableListOf(imageService.imageImpl.findById(3).get()),
                     locationsAll = mutableListOf(
                         CityOrganization(
                             nameCity = "Санкт-Петербург",
@@ -172,7 +167,6 @@ class Main {
                         )
                     ),
                     descriptions = "Маркетнг - это не для нас",
-                    images = null,
                     category = mutableListOf(
                         Category(
                             null, name = "Пицца", product = mutableListOf(
@@ -181,14 +175,14 @@ class Main {
                                     price = 100.0,
                                     weight = 100f,
                                     description = "Сильногазированая",
-                                    imageProduct = null
+                                    images = mutableListOf(Image(value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()))
                                 ),
                                 Product(
                                     name = "Пицца По-Холопски",
                                     price = 450.0,
                                     weight = 400f,
                                     description = "20см диаметр",
-                                    imageProduct = null
+                                    images = mutableListOf(Image(value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()))
                                 )
                             )
                         ),
@@ -199,7 +193,6 @@ class Main {
                                     price = 100.0,
                                     weight = 100f,
                                     description = "со сметаной",
-                                    imageProduct = null
                                 )
                             )
                         )

@@ -1,4 +1,4 @@
-package org.example.organization.model
+package org.example.organization_city.model
 
 import jakarta.persistence.*
 import lombok.ToString
@@ -8,8 +8,6 @@ data class CityOrganization(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val idCity: Long? = null,
+    @Column(unique = true)
     var nameCity: String? = null,
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    @ToString.Exclude
-    var locationInCity: MutableList<LocationOrganization> = mutableListOf()
 )

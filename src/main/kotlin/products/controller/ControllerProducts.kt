@@ -1,16 +1,10 @@
 package org.example.products.controller
 
-import org.example.organization.model.DTO.CityOrganization
 import org.example.products.entity.Product
-import org.example.products.entity.ResponseProduct
 import org.example.products.service.ServiceProduct
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
-import java.io.IOException
 
 
 @RestController

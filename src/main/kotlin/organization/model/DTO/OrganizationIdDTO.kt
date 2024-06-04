@@ -1,8 +1,8 @@
 package org.example.organization.model.DTO
 
 import org.example.entity.Image
+import org.example.organization_city.model.DTO.CityOrganization
 import org.example.products.DTO.ResponseProduct
-import org.example.products.entity.Product
 
 data class OrganizationIdDTO(
     var idOrganization: Long? = null,

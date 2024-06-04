@@ -5,6 +5,8 @@ import jakarta.persistence.*
 import lombok.*
 import org.example.entity.Category.Category
 import org.example.entity.Image
+import org.example.organization_city.model.CityOrganization
+import org.example.organization_city.model.LocationOrganization
 
 @Entity
 data class Organization(
@@ -21,9 +23,9 @@ data class Organization(
     @ToString.Exclude
     var category: MutableList<Category>,
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     @ToString.Exclude
-    var locationsAll: MutableList<CityOrganization>,
+    var locationInCity: MutableList<LocationOrganization> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     @ToString.Exclude

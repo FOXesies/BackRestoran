@@ -1,13 +1,12 @@
 package org.example
 
 import org.example.auth.repository.ERoleCustomerRepository
-import org.example.basket.entity.BasketItem
 import org.example.entity.Category.Category
 import org.example.entity.Image
 import org.example.products.entity.Product
 import org.example.order.repository.active.OrderRepository
-import org.example.organization.model.CityOrganization
-import org.example.organization.model.LocationOrganization
+import org.example.organization_city.model.CityOrganization
+import org.example.organization_city.model.LocationOrganization
 import org.example.organization.model.Organization
 import org.example.repository.BasicUserRepository
 import org.example.basket.repository.BasketRepository
@@ -62,39 +61,22 @@ class Main {
                     name = "Ромашка",
                     phoneForUser = "+79008005522",
                     descriptions = "Лучший ресторан под названием \"Ромашка\"",
-                    locationsAll = mutableListOf(
-                        CityOrganization(
-                            nameCity = "Москва",
-                            locationInCity = mutableListOf(
-                                LocationOrganization(
-                                    address = "Москва улица 12", lat = 59.852081, lon = 30.238487
-                                ),
-                                LocationOrganization(
-                                    address = "Другая улица 10", lat = 59.652081, lon = 31.238487
-                                )
-                            )
+                    locationInCity = mutableListOf(
+                        LocationOrganization(
+                            city = CityOrganization(nameCity = "Москва"),
+                            address = "Москва улица 12", lat = 59.852081, lon = 30.238487
                         ),
-                        CityOrganization(
-                            nameCity = "Москва",
-                            locationInCity = mutableListOf(
-                                LocationOrganization(
-                                    address = "Москва улица 12", lat = 59.852081, lon = 30.238487
-                                ),
-                                LocationOrganization(
-                                    address = "Другая улица 10", lat = 59.652081, lon = 31.238487
-                                )
-                            )
+                        LocationOrganization(
+                            city = CityOrganization(nameCity = "Москва"),
+                            address = "Другая улица 10", lat = 59.652081, lon = 31.238487
                         ),
-                        CityOrganization(
-                            nameCity = "Владимир",
-                            locationInCity = mutableListOf(
-                                LocationOrganization(
-                                    address = "улица Узкая 2", lat = 59.852081, lon = 30.238487
-                                ),
-                                LocationOrganization(
-                                    address = "улица Длинная 1", lat = 59.652081, lon = 31.238487
-                                )
-                            )
+                        LocationOrganization(
+                            city = CityOrganization(nameCity = "Владимир"),
+                            address = "улица Узкая 2", lat = 59.852081, lon = 30.238487
+                        ),
+                        LocationOrganization(
+                            city = CityOrganization(nameCity = "Владимир"),
+                            address = "улица Длинная 1", lat = 59.652081, lon = 31.238487
                         )
                     ),
                     idImages = mutableListOf(imageService.imageImpl.findById(1).get()),
@@ -137,26 +119,14 @@ class Main {
                     name = "Бургер кинг",
                     phoneForUser = "+79205748652",
                     idImages = mutableListOf(imageService.imageImpl.findById(3).get()),
-                    locationsAll = mutableListOf(
-                        CityOrganization(
-                            nameCity = "Санкт-Петербург",
-                            locationInCity = mutableListOf(
-                                LocationOrganization(
-                                    address = "проспект Ленина 40",
-                                    lat = 59.852081,
-                                    lon = 30.238487
-                                )
-                            )
+                    locationInCity = mutableListOf(
+                        LocationOrganization(
+                            city = CityOrganization(nameCity = "Санкт-Петербург"),
+                            address = "проспект Ленина 40", lat = 59.852081, lon = 30.238487
                         ),
-                        CityOrganization(
-                            nameCity = "Москва",
-                            locationInCity = mutableListOf(
-                                LocationOrganization(
-                                    address = "проспект Проспекта 8",
-                                    lat = 59.852081,
-                                    lon = 30.238487
-                                )
-                            )
+                        LocationOrganization(
+                            city = CityOrganization(nameCity = "Москва"),
+                            address = "проспект Проспекта 8", lat = 59.852081, lon = 30.238487
                         )
                     ),
                     descriptions = "Маркетнг - это не для нас",

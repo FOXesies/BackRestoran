@@ -1,12 +1,15 @@
 package org.example.organization.service
 
+import jakarta.transaction.Transactional
 import org.example.entity.Category.Category
 import org.example.feedbacks.service.FeedBacksService
-import org.example.organization.model.CityOrganization
+import org.example.organization_city.model.CityOrganization
 import org.example.organization.model.DTO.OrganizationIdDTO
-import org.example.organization.model.LocationOrganization
+import org.example.organization_city.model.LocationOrganization
 import org.example.organization.model.Organization
 import org.example.organization.repository.OrganizationRepository
+import org.example.organization_city.service.CityOrganizationService
+import org.example.organization_city.service.LocationorganizationService
 import org.example.products.entity.Product
 import org.example.repository.CategoryRepository
 import org.example.utils.MapperUtils
@@ -26,6 +29,12 @@ class ServiceOrganization {
     @Autowired
     lateinit var feedBacksService: FeedBacksService
 
+    @Autowired
+    lateinit var locationService: LocationorganizationService
+
+    @Autowired
+    private lateinit var cityOrganizationService: CityOrganizationService
+
     fun getOrganizations(category: String): List<Organization> {
         return repositoryOrganization.findByCategory(category)
     }
@@ -44,8 +53,18 @@ class ServiceOrganization {
         org.name = orgUpdate.name
         org.descriptions = orgUpdate.description
 
+        org.locationInCity = orgUpdate.locationAll.flatMap { entry ->
+            entry.value.map { location ->
+                locationService.insert(LocationOrganization(
+                    city = CityOrganization(nameCity = entry.key),
+                    address = location.address,
+                    lat = location.points!!.latitude,
+                    lon = location.points.longitude
+                ))
+            }
+        }.toMutableList()
         // Создаем новую изменяемую коллекцию для locationsAll
-        org.locationsAll = orgUpdate.locationAll.map { entry ->
+        /*org.locationsAll = orgUpdate.locationAll.map { entry ->
             CityOrganization(
                 nameCity = entry.key,
                 locationInCity = entry.value.map { location ->
@@ -56,18 +75,22 @@ class ServiceOrganization {
                     )
                 }.toMutableList() // Преобразуем в изменяемую коллекцию
             )
-        }.toMutableList() // Преобразуем в изменяемую коллекцию
+        }.toMutableList() // Преобразуем в изменяемую коллекцию*/
 
         org.phoneForUser = orgUpdate.phone
         repositoryOrganization.save(org)
     }
 
-
-    fun insertOrganization(organization: Organization){
+    @Transactional
+    fun insertOrganization(organization: Organization) {
+        organization.locationInCity.forEach { locationOrganization ->
+            locationOrganization.city = cityOrganizationService.uniqueOrNew(locationOrganization.city.nameCity!!)
+            locationService.insert(locationOrganization)
+        }
         repositoryOrganization.save(organization)
     }
     fun insertOrganization(organizations: List<Organization>){
-        organizations.forEach{ organization -> repositoryOrganization.save(organization)}
+        organizations.forEach{ organization -> insertOrganization(organization)}
     }
 
     fun getCategories(): List<String> {

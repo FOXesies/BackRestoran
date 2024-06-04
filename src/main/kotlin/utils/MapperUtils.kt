@@ -18,6 +18,8 @@ import org.example.order.model.completed.CompleteOrderSelf
 import org.example.order.model.completed.ProductInOrderComplete
 import org.example.organization.model.DTO.*
 import org.example.organization.model.Organization
+import org.example.organization_city.model.DTO.CityOrganization
+import org.example.organization_city.model.DTO.Point
 import org.example.products.entity.Product
 import org.example.products.repository.ProductRepository
 import org.springframework.stereotype.Service
@@ -42,7 +44,10 @@ class MapperUtils {
                 organization.idOrganization,
                 organization.name,
                 organization.phoneForUser,
-                organization.locationsAll.associate { it.nameCity to it.locationInCity.map { it.address } },
+                organization.locationInCity.groupBy(
+                    keySelector = { it.city.nameCity },   // Получаем название города в качестве ключа
+                    valueTransform = { it.address }   // Получаем адрес в качестве значения
+                ).mapValues { entry -> entry.value.toMutableList() },
                 organization.idImages,
                 organization.descriptions,
                 organization.category.map { mapCategoryDTO(it) },
@@ -59,11 +64,10 @@ class MapperUtils {
                 organization.idImages,
                 organization.descriptions,
                 organization.category.map { it.name },
-                organization.locationsAll.associate { city ->
-                    city.nameCity!! to city.locationInCity
-                        .map {
-                            CityOrganization(it.address!!, Point(it.lat!!, it.lon!!))
-                        } },
+                organization.locationInCity.groupBy(
+                    keySelector = { it.city.nameCity!! },   // Получаем название города в качестве ключа
+                    valueTransform = { CityOrganization(address = it.address, points = Point(it.lat!!, it.lon!!)) }   // Получаем адрес в качестве значения
+                ).mapValues { entry -> entry.value.toMutableList() },
                 organization.category.associateBy ({ it.name }, {it.product.map { mapResponseProductInResponseProduct(it) }.toMutableList()}),
                 middleStar[0]?.toDouble(),
                 middleStar[1]?.toInt()

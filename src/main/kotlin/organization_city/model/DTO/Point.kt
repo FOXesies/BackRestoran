@@ -1,4 +1,4 @@
-package org.example.organization.model.DTO
+package org.example.organization_city.model.DTO
 
 data class Point(
     val latitude: Double,

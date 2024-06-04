@@ -33,8 +33,7 @@ class ControllerOrganizations {
     )
     @ResponseBody
     fun getOrganizationById(@PathVariable(value = "id") idOrganization: Long): OrganizationIdDTO {
-        val organization = serviceOrganization.repositoryOrganization.findById(idOrganization)
-        return mapOrganizationIdInDTO(organization.get(), feedBacksService.getMiddleStar(idOrganization))
+        return serviceOrganization.getBasicinfo(idOrganization)
     }
 
     @RequestMapping(

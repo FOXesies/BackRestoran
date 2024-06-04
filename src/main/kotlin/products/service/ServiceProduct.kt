@@ -19,9 +19,6 @@ class ServiceProduct {
     private lateinit var productRepository: ProductRepository
 
     @Autowired
-    private lateinit var organizationService: ServiceOrganization
-
-    @Autowired
     private lateinit var imageService: ImageSearchUtils
 
     fun getProduct(id: Long): Product {

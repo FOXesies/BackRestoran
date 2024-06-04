@@ -24,22 +24,19 @@ import organization.model.DTO.BasicInfoResponse
 class ServiceOrganization {
 
     @Autowired
-    lateinit var repositoryOrganization: OrganizationRepository
+    private lateinit var repositoryOrganization: OrganizationRepository
 
     @Autowired
-    lateinit var categoryRepository: CategoryRepository
+    private lateinit var productServiceCategory: ServiceCategory
 
     @Autowired
-    lateinit var productServiceCategory: ServiceCategory
+    private lateinit var feedBacksService: FeedBacksService
 
     @Autowired
-    lateinit var feedBacksService: FeedBacksService
+    private lateinit var productService: ServiceProduct
 
     @Autowired
-    lateinit var productService: ServiceProduct
-
-    @Autowired
-    lateinit var locationService: LocationorganizationService
+    private lateinit var locationService: LocationorganizationService
 
     @Autowired
     private lateinit var cityOrganizationService: CityOrganizationService

@@ -5,7 +5,9 @@ import org.example.organization_city.model.CityOrganization
 import org.example.products_category.entity.Category
 import org.example.products_category.repository.CategoryRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
+@Service
 class ServiceCategory {
 
     @Autowired

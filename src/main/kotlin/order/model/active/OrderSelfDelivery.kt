@@ -21,9 +21,9 @@ data class OrderSelfDelivery (
     @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     var uuid: UUIDCustom? = null,
 
-    var idLocation: Long? = null,
     var phoneUser: String? = null,
-    var toTimeCooling: String? = "now",
+    var fromTimeCooking: String? = "now",
+    var toTimeCooking: String? = "now",
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude

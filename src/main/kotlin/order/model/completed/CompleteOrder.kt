@@ -13,16 +13,18 @@ data class CompleteOrder (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val orderId: Long = 0,
 
-    var idDriver: Long? = null,
     @OneToOne
     var user: Users,
     @OneToOne
     var organization: Organization,
 
+    var uuid: Long? = null,
+
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,
     var idLocation: Long? = null,
     var phoneUser: String? = null,
+    var fromTimeDelivery: String? = "now",
     var toTimeDelivery: String? = "now",
 
     @OneToOne(cascade = [CascadeType.ALL])

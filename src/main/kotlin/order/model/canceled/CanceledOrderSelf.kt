@@ -12,6 +12,7 @@ data class CanceledOrderSelf (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
+
     @OneToOne
     var user: Users,
     @OneToOne
@@ -20,9 +21,9 @@ data class CanceledOrderSelf (
 
     var uuid: Long? = null,
 
-    var idLocation: Long? = null,
     var phoneUser: String? = null,
-    var toTimeCooling: String? = "now",
+    var fromTimeCooking: String? = "now",
+    var toTimeCooking: String? = "now",
     var CanceledTime: String? = "now",
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])

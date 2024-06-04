@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import lombok.ToString
 import org.example.entity.Users_.Users
 import org.example.order.model.AddressUser
+import org.example.order.model.StatusOrder
 import org.example.order.model.completed.ProductInOrderComplete
 import org.example.organization.model.Organization
 
@@ -14,18 +15,18 @@ data class CanceledOrder(
     val orderId: Long = 0,
     var canceled_comment: String? = null,
 
-    var idDriver: Long? = null,
     @OneToOne
     var user: Users,
     @OneToOne
     var organization: Organization,
+    var status: StatusOrder? = null,
 
     var uuid: Long? = null,
 
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,
-    var idLocation: Long? = null,
     var phoneUser: String? = null,
+    var fromTimeCooking: String? = "now",
     var toTimeDelivery: String? = "now",
     var CanceledTime: String? = "now",
 

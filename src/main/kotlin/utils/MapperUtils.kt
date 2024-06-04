@@ -96,24 +96,23 @@ class MapperUtils {
 
         fun mapProductBasketInOrder(productBasket: List<ProductBasket>): List<ProductInOrder> {
             return productBasket.map { ProductInOrder(
-                idProduct = it.product.idProduct,
+                product = it.product,
                 count = it.count) }
         }
 
         fun mapOrderInComplete(order: OrderCustomer): CompleteOrder {
             return CompleteOrder(
                 orderId = order.orderId,
-                idDriver = order.idDriver,
                 user = order.user,
                 organization = order.organization,
                 addressUser = order.addressUser,
-                idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
+                fromTimeDelivery = order.fromTimeDelivery,
                 toTimeDelivery = order.toTimeDelivery,
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,
-                        it.idProduct,
+                        it.product,
                         it.count
                     )
                 },
@@ -131,13 +130,13 @@ class MapperUtils {
                 idOrderSelf = order.idOrderSelf,
                 user = order.user,
                 organization = order.organization,
-                idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
-                toTimeCooling = order.toTimeCooling,
+                fromTimeCooking = order.fromTimeCooking!!,
+                toTimeCooking = order.toTimeCooking,
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,
-                        it.idProduct,
+                        it.product,
                         it.count
                     )
                 },
@@ -153,13 +152,13 @@ class MapperUtils {
                 user = order.user,
                 organization = order.organization,
                 uuid = order.uuid!!.id,
-                idLocation = order.idLocation,
                 phoneUser = order.phoneUser,
-                toTimeCooling = order.toTimeCooling,
+                fromTimeCooking =order.fromTimeCooking,
+                toTimeCooking = order.toTimeCooking,
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,
-                        it.idProduct,
+                        it.product,
                         it.count
                     )
                 },
@@ -176,13 +175,13 @@ class MapperUtils {
                 organization = order.organization,
                 uuid = order.uuid!!.id,
                 addressUser = order.addressUser,
-                idLocation = order.idLocation,
+                fromTimeCooking = order.fromTimeDelivery,
                 phoneUser = order.phoneUser,
                 toTimeDelivery = order.toTimeDelivery,
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,
-                        it.idProduct,
+                        it.product,
                         it.count
                     )
                 },

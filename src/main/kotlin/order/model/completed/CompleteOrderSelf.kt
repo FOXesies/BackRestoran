@@ -12,19 +12,21 @@ data class CompleteOrderSelf (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
+
     @OneToOne
     var user: Users,
     @OneToOne
     var organization: Organization,
 
-    var idLocation: Long? = null,
+    var uuid: Long? = null,
+
     var phoneUser: String? = null,
-    var toTimeCooling: String? = "now",
+    var fromTimeCooking: String = "now",
+    var toTimeCooking: String? = "now",
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
     var productOrder: List<ProductInOrderComplete> = mutableListOf(),
-    val status: StatusOrder? = null,
 
     var summ: Double? = null,
     var comment: String = "",

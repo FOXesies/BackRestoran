@@ -14,7 +14,6 @@ data class OrderCustomer(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val orderId: Long = 0,
 
-    var idDriver: Long? = null,
     @OneToOne
     var user: Users,
     @OneToOne
@@ -25,8 +24,8 @@ data class OrderCustomer(
 
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,
-    var idLocation: Long? = null,
     var phoneUser: String? = null,
+    var fromTimeDelivery: String? = "now",
     var toTimeDelivery: String? = "now",
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude

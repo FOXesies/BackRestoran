@@ -5,7 +5,7 @@ import org.example.DTO.Basket.ProductInBasket
 import org.example.DTO.Category.CategoryDTO
 import org.example.basket.entity.BasketItem
 import org.example.basket.entity.ProductBasket
-import org.example.entity.Category.Category
+import org.example.products_category.entity.Category
 import org.example.entity.Users_.Users
 import org.example.entity.Users_.DTO.UserResponse
 import org.example.order.model.active.OrderCustomer
@@ -22,6 +22,7 @@ import org.example.organization_city.model.DTO.CityOrganization
 import org.example.organization_city.model.DTO.Point
 import org.example.products.entity.Product
 import org.example.products.repository.ProductRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
@@ -50,7 +51,7 @@ class MapperUtils {
                 ).mapValues { entry -> entry.value.toMutableList() },
                 organization.idImages,
                 organization.descriptions,
-                organization.category.map { mapCategoryDTO(it) },
+                organization.products.map { mapCategoryDTO(it.category) }.toSet(),
                 middleStar[0]?.toDouble(),
                 middleStar[1]?.toInt()
             )
@@ -63,12 +64,15 @@ class MapperUtils {
                 organization.phoneForUser,
                 organization.idImages,
                 organization.descriptions,
-                organization.category.map { it.name },
+                organization.products.map { it.category.name }.toSet(),
                 organization.locationInCity.groupBy(
                     keySelector = { it.city.nameCity!! },   // Получаем название города в качестве ключа
                     valueTransform = { CityOrganization(address = it.address, points = Point(it.lat!!, it.lon!!)) }   // Получаем адрес в качестве значения
                 ).mapValues { entry -> entry.value.toMutableList() },
-                organization.category.associateBy ({ it.name }, {it.product.map { mapResponseProductInResponseProduct(it) }.toMutableList()}),
+                organization.products.groupBy(
+                    keySelector = { it.category.name },   // Получаем название города в качестве ключа
+                    valueTransform = { mapResponseProductInResponseProduct(it) }   // Получаем адрес в качестве значения
+                ).mapValues { entry -> entry.value.toMutableList() },
                 middleStar[0]?.toDouble(),
                 middleStar[1]?.toInt()
                 /*if(organization.ratings.isNotEmpty()) organization.ratings.map { it.rating }.average() else 0.0,
@@ -87,7 +91,6 @@ class MapperUtils {
         fun mapCategoryDTO(category: Category): CategoryDTO {
             return CategoryDTO(
                 category.name,
-                category.images
             )
         }
 
@@ -188,12 +191,13 @@ class MapperUtils {
             )
         }
 
-        fun mapResponseProductInProduct(product: org.example.products.entity.ResponseProduct): Product {
+        fun mapResponseProductInProduct(product: org.example.products.entity.ResponseProduct, category: Category): Product {
             return Product(
                 name = product.product.name,
                 description = product.product.description,
                 price = product.product.price,
                 weight = product.product.weight,
+                category = category,
                 images = product.image?.map { org.example.entity.Image(value = it) }?.toMutableList()?: mutableListOf()
             )
         }

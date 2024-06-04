@@ -10,7 +10,7 @@ data class OrganizationDTO(
     var cities: Map<String?, List<String?>>,
     var idImages: List<Image>,
     var descriptions: String?,
-    var category: List<CategoryDTO>,
+    var category: Set<CategoryDTO>,
     var rating: Double?,
     var ratingCount: Int?,
 )

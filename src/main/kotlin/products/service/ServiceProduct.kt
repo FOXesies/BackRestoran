@@ -1,6 +1,8 @@
 package org.example.products.service
 
+import jakarta.transaction.Transactional
 import org.example.organization.service.ServiceOrganization
+import org.example.organization_city.model.LocationOrganization
 import org.example.products.entity.Product
 import org.example.products.entity.ResponseProduct
 import org.example.products.repository.ProductRepository
@@ -24,6 +26,11 @@ class ServiceProduct {
 
     fun getProduct(id: Long): Product {
         return productRepository.findById(id).get()
+    }
+
+    @Transactional
+    fun insert(product: Product): Product {
+        return productRepository.save(product)
     }
 
 }

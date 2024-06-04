@@ -1,7 +1,7 @@
 package org.example.organization.service
 
 import jakarta.transaction.Transactional
-import org.example.entity.Category.Category
+import org.example.products_category.entity.Category
 import org.example.feedbacks.service.FeedBacksService
 import org.example.organization_city.model.CityOrganization
 import org.example.organization.model.DTO.OrganizationIdDTO
@@ -11,7 +11,10 @@ import org.example.organization.repository.OrganizationRepository
 import org.example.organization_city.service.CityOrganizationService
 import org.example.organization_city.service.LocationorganizationService
 import org.example.products.entity.Product
-import org.example.repository.CategoryRepository
+import org.example.products.repository.ProductRepository
+import org.example.products.service.ServiceProduct
+import org.example.products_category.repository.CategoryRepository
+import org.example.products_category.service.ServiceCategory
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -27,7 +30,13 @@ class ServiceOrganization {
     lateinit var categoryRepository: CategoryRepository
 
     @Autowired
+    lateinit var productServiceCategory: ServiceCategory
+
+    @Autowired
     lateinit var feedBacksService: FeedBacksService
+
+    @Autowired
+    lateinit var productService: ServiceProduct
 
     @Autowired
     lateinit var locationService: LocationorganizationService
@@ -87,6 +96,11 @@ class ServiceOrganization {
             locationOrganization.city = cityOrganizationService.uniqueOrNew(locationOrganization.city.nameCity!!)
             locationService.insert(locationOrganization)
         }
+        organization.products.forEach { product ->
+            product.category = productServiceCategory.uniqueOrNew(product.category.name)
+            productService.insert(product)
+        }
+
         repositoryOrganization.save(organization)
     }
     fun insertOrganization(organizations: List<Organization>){
@@ -99,9 +113,9 @@ class ServiceOrganization {
 
     fun insertProduct(idOrg: Long, product: Product, category: String){
         val organization = repositoryOrganization.findById(idOrg).get()
-        organization.category.find { it.name == category }.let {
-            it?.product?.add(product) ?: categoryRepository.save(Category(name = category, product = mutableListOf(product)))
-        }
+        product.category = productServiceCategory.uniqueOrNew(product.category.name)
+        organization.products.add(productService.insert(product))
+
         repositoryOrganization.save(organization)
     }
 }

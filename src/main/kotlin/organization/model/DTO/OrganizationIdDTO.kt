@@ -10,7 +10,7 @@ data class OrganizationIdDTO(
     var phoneForUser: String,
     var idImages: List<Image>,
     var descriptions: String?,
-    var category: List<String>,
+    var category: Set<String>,
     var locationsAll: Map<String, List<CityOrganization>> = mutableMapOf(),
     var products: Map<String, MutableList<ResponseProduct>>,
     var rating: Double?,

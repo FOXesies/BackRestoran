@@ -1,7 +1,7 @@
 package org.example
 
 import org.example.auth.repository.ERoleCustomerRepository
-import org.example.entity.Category.Category
+import org.example.products_category.entity.Category
 import org.example.entity.Image
 import org.example.products.entity.Product
 import org.example.order.repository.active.OrderRepository
@@ -80,39 +80,36 @@ class Main {
                         )
                     ),
                     idImages = mutableListOf(imageService.imageImpl.findById(1).get()),
-                    category = mutableListOf(
-                        Category(
-                            null, name = "Пицца", product = mutableListOf(
-                                Product(
-                                    name = "Пицца с Кока-колой",
-                                    price = 100.0,
-                                    weight = 100f,
-                                    description = "Сильногазированая",
-                                ),
-                                Product(
-                                    name = "Пицца По-Царски",
-                                    price = 450.0,
-                                    weight = 400f,
-                                    description = "20см диаметр",
-                                )
-                            )
+                    products = mutableListOf(
+                        Product(
+                            name = "Пицца с Кока-колой",
+                            price = 100.0,
+                            weight = 100f,
+                            description = "Сильногазированая",
+                            category = Category(name = "Пицца")
                         ),
-                        Category(
-                            null, name = "Паста", product = mutableListOf(
-                                Product(
-                                    name = "Карбонара",
-                                    price = 470.0,
-                                    weight = 300f,
-                                    description = "Со сливками",
-                                ),
-                                Product(
-                                    name = "Фетучини",
-                                    price = 600.0,
-                                    weight = 400f,
-                                    description = "Креветки и залень",
-                                )
-                            )
+                        Product(
+                            name = "Пицца По-Царски",
+                            price = 450.0,
+                            weight = 400f,
+                            description = "20см диаметр",
+                            category = Category(name = "Пицца")
+                        ),
+                        Product(
+                            name = "Карбонара",
+                            price = 470.0,
+                            weight = 300f,
+                            description = "Со сливками",
+                            category = Category(name = "Паста")
+                        ),
+                        Product(
+                            name = "Фетучини",
+                            price = 600.0,
+                            weight = 400f,
+                            description = "Креветки и залень",
+                            category = Category(name = "Паста")
                         )
+
                     ),
                 ),
                 Organization(
@@ -130,35 +127,39 @@ class Main {
                         )
                     ),
                     descriptions = "Маркетнг - это не для нас",
-                    category = mutableListOf(
-                        Category(
-                            null, name = "Пицца", product = mutableListOf(
-                                Product(
-                                    name = "Пицца без Кока-колой",
-                                    price = 100.0,
-                                    weight = 100f,
-                                    description = "Сильногазированая",
-                                    images = mutableListOf(Image(value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()))
-                                ),
-                                Product(
-                                    name = "Пицца По-Холопски",
-                                    price = 450.0,
-                                    weight = 400f,
-                                    description = "20см диаметр",
-                                    images = mutableListOf(Image(value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()))
+                    products = mutableListOf(
+                        Product(
+                            name = "Пицца без Кока-колой",
+                            price = 100.0,
+                            weight = 100f,
+                            description = "Сильногазированая",
+                            images = mutableListOf(
+                                Image(
+                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()
                                 )
-                            )
+                            ),
+                            category = Category(name = "Пицца")
                         ),
-                        Category(
-                            null, name = "Супы", product = mutableListOf(
-                                Product(
-                                    name = "Борщ",
-                                    price = 100.0,
-                                    weight = 100f,
-                                    description = "со сметаной",
+                        Product(
+                            name = "Пицца По-Холопски",
+                            price = 450.0,
+                            weight = 400f,
+                            description = "20см диаметр",
+                            images = mutableListOf(
+                                Image(
+                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()
                                 )
-                            )
+                            ),
+                            category = Category(name = "Пицца")
+                        ),
+                        Product(
+                            name = "Борщ",
+                            price = 100.0,
+                            weight = 100f,
+                            description = "со сметаной",
+                            category = Category(name = "Суп")
                         )
+
                     )
                 )
             )

@@ -3,6 +3,7 @@ package org.example.organization.service
 import jakarta.transaction.Transactional
 import org.example.products_category.entity.Category
 import org.example.feedbacks.service.FeedBacksService
+import org.example.organization.model.DTO.FiltercategoryOrg
 import org.example.organization_city.model.CityOrganization
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization_city.model.LocationOrganization
@@ -41,8 +42,11 @@ class ServiceOrganization {
     @Autowired
     private lateinit var cityOrganizationService: CityOrganizationService
 
-    fun getOrganizations(category: String): List<Organization> {
-        return repositoryOrganization.findByCategory(category)
+    fun getOrganizations(city: String): List<Organization> {
+        return repositoryOrganization.findByCity(city)
+    }
+    fun getOrganizationsByCategory(filtercategoryOrg: FiltercategoryOrg): List<Organization> {
+        return repositoryOrganization.findByCategory(filtercategoryOrg.city, filtercategoryOrg.categories)
     }
     fun getCities(): List<String> {
         return repositoryOrganization.getCities()
@@ -104,8 +108,8 @@ class ServiceOrganization {
         organizations.forEach{ organization -> insertOrganization(organization)}
     }
 
-    fun getCategories(): List<String> {
-        return repositoryOrganization.getAllUniqueCategories()
+    fun getCategories(city: String): List<String> {
+        return repositoryOrganization.getAllUniqueCategories(city)
     }
 
     fun insertProduct(idOrg: Long, product: Product, category: String){

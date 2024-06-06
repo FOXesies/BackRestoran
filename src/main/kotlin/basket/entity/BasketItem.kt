@@ -10,7 +10,7 @@ data class BasketItem(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idBasket: Long? = null,
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     var organization: Organization? = null,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude

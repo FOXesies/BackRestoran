@@ -27,7 +27,7 @@ data class Organization(
     @ToString.Exclude
     var locationInCity: MutableList<LocationOrganization> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
     var idImages: MutableList<Image> = mutableListOf(),
 )

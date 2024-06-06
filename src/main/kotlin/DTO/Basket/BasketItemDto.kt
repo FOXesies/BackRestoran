@@ -9,6 +9,6 @@ data class BasketItemDtom(
 )
 
 data class ProductInBasket(
-    var product: Product? = null,
+    var product: Long? = null,
     var count: Int? = 0
 )

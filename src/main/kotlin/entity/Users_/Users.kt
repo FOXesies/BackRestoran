@@ -24,7 +24,7 @@ data class Users(
     var password: String? = null,
     var dateOfCreate: LocalDateTime = LocalDateTime.now(),
     var phone: String? = null,
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     var basketItem: BasketItem = BasketItem(),
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

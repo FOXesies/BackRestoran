@@ -30,6 +30,11 @@ class ControllerBasket {
     fun addProduct(@RequestBody basket: SendBasketProduct){
         basketService.addProduct(basket)
     }
+    @RequestMapping(path = ["/replace_all"], method = [RequestMethod.POST],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun replaceAll(@RequestBody basket: SendBasketProduct){
+        basketService.replaceAll(basket)
+    }
     @RequestMapping(path = ["/delete_product"], method = [RequestMethod.POST],
         produces = [MediaType.APPLICATION_JSON_VALUE])
     fun deleteProduct(@RequestBody product: SendBasketProduct){

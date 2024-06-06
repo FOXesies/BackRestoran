@@ -1,5 +1,6 @@
 package org.example.order.controller
 
+import org.example.order.DTO.ActiveOrderDTO
 import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.service.OrderService
@@ -20,7 +21,7 @@ class OrderController {
 
     @RequestMapping(path = ["/deliveri/add"], method = [RequestMethod.POST],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun addOrder(@RequestBody order: OrderCustomer){
+    fun addOrder(@RequestBody order: ActiveOrderDTO){
         return orderService.sendOrder(order)
     }
 

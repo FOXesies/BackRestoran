@@ -2,6 +2,7 @@ package org.example.organization.controller
 
 import jakarta.servlet.http.HttpServletResponse
 import org.example.feedbacks.service.FeedBacksService
+import org.example.organization.model.DTO.FiltercategoryOrg
 import org.example.organization.model.DTO.OrganizationDTO
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.service.ServiceOrganization
@@ -50,6 +51,19 @@ class ControllerOrganizations {
     }
 
     @RequestMapping(
+        path = ["/filter"], method = [RequestMethod.POST],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getOrganizationsByCategory(@RequestBody filtercategoryOrg: FiltercategoryOrg): List<Long> {
+        val organizations = serviceOrganization.getOrganizationsByCategory(filtercategoryOrg)
+
+        return organizations.map { organization ->
+            organization.idOrganization!!
+        }
+    }
+
+    @RequestMapping(
         path = ["/cities"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
@@ -81,12 +95,12 @@ class ControllerOrganizations {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    fun getCategories(): List<String> {
-        return serviceOrganization.getCategories()
+    fun getCategories(@RequestParam city: String): List<String> {
+        return serviceOrganization.getCategories(city)
     }
 
 
-    @RequestMapping(
+/*    @RequestMapping(
         path = ["organizations_images/{path}"],
         method = [RequestMethod.GET],
         produces = [MediaType.IMAGE_JPEG_VALUE]
@@ -102,5 +116,5 @@ class ControllerOrganizations {
             .ok()
             .contentType(MediaType.IMAGE_JPEG)
             .body(InputStreamResource(imgFile.getInputStream()));
-    }
+    }*/
 }

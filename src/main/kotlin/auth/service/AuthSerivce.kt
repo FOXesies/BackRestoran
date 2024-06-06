@@ -45,7 +45,7 @@ class AuthService(
 
         var users = Users()
 
-        users.phone = singUpRequest.phone
+        users.phone = singUpRequest.phone.replace("+7", "+8")
         users.password = passwordEncoder.encode(singUpRequest.password)
         users.city = singUpRequest.city
         users.name = singUpRequest.name

@@ -5,21 +5,45 @@ import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.repository.active.OrderRepository
 import org.example.order.repository.active.OrderSelfRepository
 import org.example.basket.service.BasketService
+import org.example.order.DTO.ActiveOrderDTO
+import org.example.order.model.StatusOrder
+import org.example.organization.repository.OrganizationRepository
 import org.example.repository.BasicUserRepository
 import org.example.utils.MapperUtils
 import org.example.uuid.model.UUIDCustom
 import org.example.uuid.repository.UUIDRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
 class OrderService {
     fun findOrderById(idOrder: Long): OrderCustomer {
         return repository.findById(idOrder).get()
     }
-    fun sendOrder(order: OrderCustomer) {
-        val products = MapperUtils.mapProductBasketInOrder(basketService.getBasketByUserId(order.user.profileUUID!!).get().productsPick)
+    fun sendOrder(order: ActiveOrderDTO) {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val order =
+            OrderCustomer(
+                user = userRepository.findById(order.idUser).get(),
+                addressUser = order.addressUser,
+                phoneUser = order.phoneUser,
+                fromTimeDelivery = LocalDateTime.parse(order.fromTimeDelivery!!, formatter),
+                toTimeDelivery = LocalDateTime.parse(order.toTimeDelivery!!, formatter),
+                status = StatusOrder.WAIT_ACCEPT,
+                podezd = order.podezd,
+                homephome = order.homephome,
+                appartamnet = order.appartamnet,
+                level = order.level,
+                summ = order.summ,
+                comment = order.comment
+        )
+
+        val basket = basketService.getBasketByUserId(order.user!!.profileUUID!!).get()
+        val products = MapperUtils.mapProductBasketInOrder(basket.productsPick)
         order.productOrder = products
+        order.organization = basket.organization
         order.uuid = UUIDCustom()
         repository.save(order)
     }

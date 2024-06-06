@@ -1,6 +1,7 @@
 package org.example
 
 import org.example.auth.repository.ERoleCustomerRepository
+import org.example.auth.service.UserService
 import org.example.products_category.entity.Category
 import org.example.entity.Image
 import org.example.products.entity.Product
@@ -11,13 +12,16 @@ import org.example.organization.model.Organization
 import org.example.repository.BasicUserRepository
 import org.example.basket.repository.BasketRepository
 import org.example.entity.Users.ERole
+import org.example.entity.Users_.Users
 import org.example.products.repository.ProductRepository
 import org.example.service.ImageSearchUtils
 import org.example.organization.service.ServiceOrganization
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.security.crypto.password.PasswordEncoder
 
 
 @SpringBootApplication
@@ -31,7 +35,8 @@ class Main {
 
     @Bean
     fun commandLineRunner(serviceOrganization: ServiceOrganization, imageService: ImageSearchUtils, productRepository: ProductRepository,
-                          basketRepository: BasketRepository, userRepository: BasicUserRepository, orderRepository: OrderRepository, roleRepository: ERoleCustomerRepository
+                          basketRepository: BasketRepository, userRepository: UserService, orderRepository: OrderRepository,
+                          roleRepository: ERoleCustomerRepository, passwordEncoder: PasswordEncoder
     ): CommandLineRunner {
         return CommandLineRunner {
             roleRepository.save(ERole(nameRole = "CUSTOMER"))
@@ -79,7 +84,9 @@ class Main {
                             address = "улица Длинная 1", lat = 59.652081, lon = 31.238487
                         )
                     ),
-                    idImages = mutableListOf(imageService.imageImpl.findById(1).get()),
+                    idImages = mutableListOf(Image(
+                        value = Main.javaClass.getResource("/organizations_images/1.jpg").readBytes()
+                    )),
                     products = mutableListOf(
                         Product(
                             name = "Пицца с Кока-колой",
@@ -115,7 +122,9 @@ class Main {
                 Organization(
                     name = "Бургер кинг",
                     phoneForUser = "+79205748652",
-                    idImages = mutableListOf(imageService.imageImpl.findById(3).get()),
+                    idImages = mutableListOf(Image(
+                        value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()
+                    )),
                     locationInCity = mutableListOf(
                         LocationOrganization(
                             city = CityOrganization(nameCity = "Санкт-Петербург"),
@@ -165,6 +174,16 @@ class Main {
             )
 
             serviceOrganization.insertOrganization(items)
+
+            userRepository.save(
+                Users(
+                    profileUUID = 1,
+                    city = "Москва",
+                    name = "",
+                    password = passwordEncoder.encode("1"),
+                    phone = "+89308391610"
+            )
+            )
         }
     }
 }

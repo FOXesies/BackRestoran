@@ -7,6 +7,7 @@ import org.example.order.model.AddressUser
 import org.example.order.model.StatusOrder
 import org.example.organization.model.Organization
 import org.example.uuid.model.UUIDCustom
+import java.time.LocalDateTime
 
 @Entity
 data class OrderCustomer(
@@ -14,10 +15,10 @@ data class OrderCustomer(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val orderId: Long = 0,
 
-    @OneToOne
-    var user: Users,
-    @OneToOne
-    var organization: Organization,
+    @OneToOne(cascade = [ CascadeType.MERGE])
+    var user: Users? = null,
+    @OneToOne(cascade = [CascadeType.MERGE])
+    var organization: Organization? = null,
 
     @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     var uuid: UUIDCustom? = null,
@@ -25,8 +26,8 @@ data class OrderCustomer(
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,
     var phoneUser: String? = null,
-    var fromTimeDelivery: String? = "now",
-    var toTimeDelivery: String? = "now",
+    var fromTimeDelivery: LocalDateTime?,
+    var toTimeDelivery: LocalDateTime?,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
     var productOrder: List<ProductInOrder> = mutableListOf(),

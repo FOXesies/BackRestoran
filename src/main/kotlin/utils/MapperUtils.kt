@@ -8,6 +8,7 @@ import org.example.basket.entity.ProductBasket
 import org.example.products_category.entity.Category
 import org.example.entity.Users_.Users
 import org.example.entity.Users_.DTO.UserResponse
+import org.example.order.DTO.ActiveOrderDTO
 import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.model.active.ProductInOrder
@@ -52,8 +53,8 @@ class MapperUtils {
                 organization.idImages,
                 organization.descriptions,
                 organization.products.map { mapCategoryDTO(it.category) }.toSet(),
-                middleStar[0]?.toDouble(),
-                middleStar[1]?.toInt()
+                middleStar[0]?.toDouble()?: -1.0,
+                middleStar[1]?.toInt()?: 0
             )
         }
 
@@ -73,14 +74,14 @@ class MapperUtils {
                     keySelector = { it.category.name },   // Получаем название города в качестве ключа
                     valueTransform = { mapResponseProductInResponseProduct(it) }   // Получаем адрес в качестве значения
                 ).mapValues { entry -> entry.value.toMutableList() },
-                middleStar[0]?.toDouble(),
-                middleStar[1]?.toInt()
+                middleStar[0]?.toDouble()?: -1.0,
+                middleStar[1]?.toInt()?: 0
                 /*if(organization.ratings.isNotEmpty()) organization.ratings.map { it.rating }.average() else 0.0,
                 organization.ratings.size */
             )
         }
         fun mapBasketInDTO(basket: BasketItem, productService: ProductRepository): BasketItemDtom {
-            val item = basket.productsPick.map { ProductInBasket(productService.findById(it.product.idProduct!!).get(), it.count) }.toMutableList()
+            val item = basket.productsPick.map { ProductInBasket(productService.findById(it.product.idProduct!!).get().idProduct, it.count) }.toMutableList()
             return BasketItemDtom(
                 idRestoraunt = basket.organization?.idOrganization,
                 summ = basket.summ,
@@ -103,12 +104,12 @@ class MapperUtils {
         fun mapOrderInComplete(order: OrderCustomer): CompleteOrder {
             return CompleteOrder(
                 orderId = order.orderId,
-                user = order.user,
-                organization = order.organization,
+                user = order.user!!,
+                organization = order.organization!!,
                 addressUser = order.addressUser,
                 phoneUser = order.phoneUser,
-                fromTimeDelivery = order.fromTimeDelivery,
-                toTimeDelivery = order.toTimeDelivery,
+                fromTimeDelivery = order.fromTimeDelivery.toString(),
+                toTimeDelivery = order.toTimeDelivery.toString(),
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,
@@ -171,13 +172,13 @@ class MapperUtils {
             return CanceledOrder(
                 orderId = order.orderId,
                 canceled_comment = comment,
-                user = order.user,
-                organization = order.organization,
+                user = order.user!!,
+                organization = order.organization!!,
                 uuid = order.uuid!!.id,
                 addressUser = order.addressUser,
-                fromTimeCooking = order.fromTimeDelivery,
+                fromTimeCooking = order.fromTimeDelivery.toString(),
                 phoneUser = order.phoneUser,
-                toTimeDelivery = order.toTimeDelivery,
+                toTimeDelivery = order.toTimeDelivery.toString(),
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,

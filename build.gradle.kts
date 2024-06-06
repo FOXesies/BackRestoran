@@ -33,6 +33,8 @@ repositories {
 
 dependencies {
 
+    implementation("org.flywaydb:flyway-core")
+
     // https://mavenlibs.com/maven/dependency/org.springframework.session/spring-session-core
     implementation("org.springframework.session:spring-session-core:3.0.3")
 

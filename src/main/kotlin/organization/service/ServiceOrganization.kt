@@ -51,6 +51,9 @@ class ServiceOrganization {
     fun getCities(): List<String> {
         return repositoryOrganization.getCities()
     }
+    fun getAddresses(city: String, idOrg: Long): List<LocationOrganization>{
+        return repositoryOrganization.findById(idOrg).get().locationInCity.filter { it.city.nameCity == city }
+    }
 
     //FUNC ADMIN
     fun getBasicinfo(idOrg: Long): OrganizationIdDTO {

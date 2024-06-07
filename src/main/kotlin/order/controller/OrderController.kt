@@ -1,6 +1,8 @@
 package org.example.order.controller
 
 import org.example.order.DTO.ActiveOrderDTO
+import org.example.order.DTO.ActiveOrderSelfDTO
+import org.example.order.DTO.sen_response.SendACtiveOrderSelf
 import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.service.OrderService
@@ -39,7 +41,7 @@ class OrderController {
 
     @RequestMapping(path = ["/self_deliveri/add"], method = [RequestMethod.POST],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun addOrderSelf(@RequestBody order: OrderSelfDelivery){
+    fun addOrderSelf(@RequestBody order: ActiveOrderSelfDTO){
         return orderService.sendOrderSelf(order)
     }
 
@@ -51,7 +53,7 @@ class OrderController {
 
     @RequestMapping(path = ["/all_self_deliveri/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOrdersSelf(@PathVariable(value = "id") userId: Long): List<OrderSelfDelivery>{
+    fun getOrdersSelf(@PathVariable(value = "id") userId: Long): List<SendACtiveOrderSelf>{
         return orderService.getOrdersSelf(userId)
     }
 

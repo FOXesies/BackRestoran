@@ -9,6 +9,8 @@ import org.example.products_category.entity.Category
 import org.example.entity.Users_.Users
 import org.example.entity.Users_.DTO.UserResponse
 import org.example.order.DTO.ActiveOrderDTO
+import org.example.order.DTO.sen_response.SendACtiveOrderSelf
+import org.example.order.model.StatusOrder
 import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.model.active.ProductInOrder
@@ -21,14 +23,19 @@ import org.example.organization.model.DTO.*
 import org.example.organization.model.Organization
 import org.example.organization_city.model.DTO.CityOrganization
 import org.example.organization_city.model.DTO.Point
+import org.example.organization_city.model.LocationOrganization
 import org.example.products.entity.Product
 import org.example.products.repository.ProductRepository
+import org.example.uuid.model.UUIDCustom
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
 class MapperUtils {
     companion object {
+        private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
         fun mapUserToDTO(customer: Users): UserResponse {
             return UserResponse(
@@ -85,7 +92,8 @@ class MapperUtils {
             return BasketItemDtom(
                 idRestoraunt = basket.organization?.idOrganization,
                 summ = basket.summ,
-                productsPick = item
+                productsPick = item,
+                city = basket.city
             )
         }
 
@@ -130,10 +138,10 @@ class MapperUtils {
             return CompleteOrderSelf(
                 idOrderSelf = order.idOrderSelf,
                 user = order.user,
-                organization = order.organization,
+                organization = order.organization!!,
                 phoneUser = order.phoneUser,
-                fromTimeCooking = order.fromTimeCooking!!,
-                toTimeCooking = order.toTimeCooking,
+                fromTimeCooking = order.fromTimeCooking!!.toString(),
+                toTimeCooking = order.toTimeCooking.toString(),
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,
@@ -151,11 +159,11 @@ class MapperUtils {
                 idOrderSelf = order.idOrderSelf,
                 canceled_comment = comment,
                 user = order.user,
-                organization = order.organization,
+                organization = order.organization!!,
                 uuid = order.uuid!!.id,
                 phoneUser = order.phoneUser,
-                fromTimeCooking =order.fromTimeCooking,
-                toTimeCooking = order.toTimeCooking,
+                fromTimeCooking = order.fromTimeCooking.toString(),
+                toTimeCooking = order.toTimeCooking.toString(),
                 productOrder = order.productOrder.map {
                     ProductInOrderComplete(
                         it.idProductInOrder,
@@ -208,6 +216,22 @@ class MapperUtils {
                 description = product.description,
                 price = product.price,
                 image = if (product.images.size > 0) product.images[0] else null
+            )
+        }
+
+        fun mapOrderSelfInSend(it: OrderSelfDelivery): SendACtiveOrderSelf {
+            return SendACtiveOrderSelf(
+                idOrderSelf = it.idOrderSelf,
+                organizationId = it.organization!!.idOrganization!!,
+                organizationName = it.organization!!.name,
+                idLocation = it.idLocation,
+                uuid = it.uuid!!,
+                phoneUser = it.phoneUser,
+                fromTimeCooking = it.fromTimeCooking!!.format(formatter),
+                toTimeCooking = it.toTimeCooking!!.format(formatter),
+                summ =  it.summ,
+                status = it.status,
+                comment = it.comment
             )
         }
     }

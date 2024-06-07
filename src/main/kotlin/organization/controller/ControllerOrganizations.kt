@@ -6,6 +6,7 @@ import org.example.organization.model.DTO.FiltercategoryOrg
 import org.example.organization.model.DTO.OrganizationDTO
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.service.ServiceOrganization
+import org.example.organization_city.model.LocationOrganization
 import org.example.utils.MapperUtils.Companion.mapOrganizationIdInDTO
 import org.example.utils.MapperUtils.Companion.mapOrganizationInDTO
 import org.springframework.beans.factory.annotation.Autowired
@@ -97,6 +98,14 @@ class ControllerOrganizations {
     @ResponseBody
     fun getCategories(@RequestParam city: String): List<String> {
         return serviceOrganization.getCategories(city)
+    }
+    @RequestMapping(
+        path = ["/addresses/{id}/"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getAddresses(@PathVariable(value = "id") idOrg: Long, @RequestParam city: String): List<LocationOrganization> {
+        return serviceOrganization.getAddresses(city, idOrg)
     }
 
 

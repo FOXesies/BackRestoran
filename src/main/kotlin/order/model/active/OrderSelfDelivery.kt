@@ -5,7 +5,9 @@ import lombok.ToString
 import org.example.entity.Users_.Users
 import org.example.order.model.StatusOrder
 import org.example.organization.model.Organization
+import org.example.organization_city.model.LocationOrganization
 import org.example.uuid.model.UUIDCustom
+import java.time.LocalDateTime
 
 @Entity
 data class OrderSelfDelivery (
@@ -13,17 +15,22 @@ data class OrderSelfDelivery (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idOrderSelf: Long? = null,
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.MERGE])
+    @JoinColumn(name = "user_profileuuid", unique = false)
     var user: Users,
-    @OneToOne
-    var organization: Organization,
+    @OneToOne(cascade = [CascadeType.MERGE])
+    @JoinColumn(name = "organization_id_organization", unique = false)
+    var organization: Organization? = null,
+    @OneToOne(cascade = [CascadeType.MERGE])
+    @JoinColumn(name = "id_location_id_location", unique = false)
+    var idLocation: LocationOrganization,
 
     @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     var uuid: UUIDCustom? = null,
 
     var phoneUser: String? = null,
-    var fromTimeCooking: String? = "now",
-    var toTimeCooking: String? = "now",
+    var fromTimeCooking: LocalDateTime?,
+    var toTimeCooking: LocalDateTime?,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude

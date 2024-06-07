@@ -13,6 +13,7 @@ data class Product(
     var name: String,
     var price: Double?,
     var weight: Float?,
+    @Column(length = 1024)
     var description: String?,
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     @ToString.Exclude

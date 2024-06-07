@@ -54,6 +54,7 @@ class BasketService {
                     throw IllegalArgumentException("Organization not found")
                 }
             }
+            curBasket_.city = product.city
 
             val productEntity = productRepository.findById(product.productId!!)
             if (productEntity.isPresent) {
@@ -129,6 +130,7 @@ class BasketService {
         val curBasket = basketRepository.findById(product.UserId!!)
         val curBasket_ = curBasket.get()
         curBasket_.organization = organizationService.findById(product.organziationId!!).get()
+        curBasket_.city = product.city
 
         val listProduct = curBasket_.productsPick.toMutableList()
         val newProduct = ProductBasket(product = productRepository.findById(product.productId!!).get(), count = 1)

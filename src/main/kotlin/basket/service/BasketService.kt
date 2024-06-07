@@ -77,11 +77,6 @@ class BasketService {
             throw IllegalArgumentException("Basket not found")
         }
     }
-
-    private fun mathSumm(math: MutableList<ProductBasket>): Double{
-        return math.sumOf { it.count * it.product.price!! }
-    }
-
     fun deleteProduct(body: SendBasketProduct) {
         val curBasket = basketRepository.findById(body.UserId!!)
             .orElseThrow { IllegalArgumentException("Basket not found") }

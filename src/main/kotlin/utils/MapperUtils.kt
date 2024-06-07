@@ -9,27 +9,18 @@ import org.example.products_category.entity.Category
 import org.example.entity.Users_.Users
 import org.example.entity.Users_.DTO.UserResponse
 import org.example.order.DTO.ActiveOrderDTO
-import org.example.order.DTO.sen_response.SendACtiveOrderSelf
+import org.example.order.DTO.sen_response.SendOrderPreview
+import org.example.order.model.AddressUser
 import org.example.order.model.StatusOrder
 import org.example.order.model.active.OrderCustomer
-import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.model.active.ProductInOrder
-import org.example.order.model.canceled.CanceledOrder
-import org.example.order.model.canceled.CanceledOrderSelf
-import org.example.order.model.completed.CompleteOrder
-import org.example.order.model.completed.CompleteOrderSelf
-import org.example.order.model.completed.ProductInOrderComplete
 import org.example.organization.model.DTO.*
 import org.example.organization.model.Organization
 import org.example.organization_city.model.DTO.CityOrganization
 import org.example.organization_city.model.DTO.Point
-import org.example.organization_city.model.LocationOrganization
 import org.example.products.entity.Product
 import org.example.products.repository.ProductRepository
-import org.example.uuid.model.UUIDCustom
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
@@ -109,95 +100,6 @@ class MapperUtils {
                 count = it.count) }
         }
 
-        fun mapOrderInComplete(order: OrderCustomer): CompleteOrder {
-            return CompleteOrder(
-                orderId = order.orderId,
-                user = order.user!!,
-                organization = order.organization!!,
-                addressUser = order.addressUser,
-                phoneUser = order.phoneUser,
-                fromTimeDelivery = order.fromTimeDelivery.toString(),
-                toTimeDelivery = order.toTimeDelivery.toString(),
-                productOrder = order.productOrder.map {
-                    ProductInOrderComplete(
-                        it.idProductInOrder,
-                        it.product,
-                        it.count
-                    )
-                },
-                podezd = order.podezd,
-                homephome = order.homephome,
-                appartamnet = order.appartamnet,
-                level = order.level,
-                summ = order.summ,
-                comment = order.comment
-            )
-        }
-
-        fun mapOrderInCompleteSelf(order: OrderSelfDelivery): CompleteOrderSelf {
-            return CompleteOrderSelf(
-                idOrderSelf = order.idOrderSelf,
-                user = order.user,
-                organization = order.organization!!,
-                phoneUser = order.phoneUser,
-                fromTimeCooking = order.fromTimeCooking!!.toString(),
-                toTimeCooking = order.toTimeCooking.toString(),
-                productOrder = order.productOrder.map {
-                    ProductInOrderComplete(
-                        it.idProductInOrder,
-                        it.product,
-                        it.count
-                    )
-                },
-                summ = order.summ,
-                comment = order.comment
-            )
-        }
-
-        fun mapOrderSelfInCanceled(order: OrderSelfDelivery, comment: String): CanceledOrderSelf {
-            return CanceledOrderSelf(
-                idOrderSelf = order.idOrderSelf,
-                canceled_comment = comment,
-                user = order.user,
-                organization = order.organization!!,
-                uuid = order.uuid!!.id,
-                phoneUser = order.phoneUser,
-                fromTimeCooking = order.fromTimeCooking.toString(),
-                toTimeCooking = order.toTimeCooking.toString(),
-                productOrder = order.productOrder.map {
-                    ProductInOrderComplete(
-                        it.idProductInOrder,
-                        it.product,
-                        it.count
-                    )
-                },
-                summ = order.summ,
-                comment = order.comment
-            )
-        }
-
-        fun mapOrderInCanceled(order: OrderCustomer, comment: String?): CanceledOrder {
-            return CanceledOrder(
-                orderId = order.orderId,
-                canceled_comment = comment,
-                user = order.user!!,
-                organization = order.organization!!,
-                uuid = order.uuid!!.id,
-                addressUser = order.addressUser,
-                fromTimeCooking = order.fromTimeDelivery.toString(),
-                phoneUser = order.phoneUser,
-                toTimeDelivery = order.toTimeDelivery.toString(),
-                productOrder = order.productOrder.map {
-                    ProductInOrderComplete(
-                        it.idProductInOrder,
-                        it.product,
-                        it.count
-                    )
-                },
-                summ = order.summ,
-                comment = order.comment
-            )
-        }
 
         fun mapResponseProductInProduct(product: org.example.products.entity.ResponseProduct, category: Category): Product {
             return Product(
@@ -219,21 +121,19 @@ class MapperUtils {
             )
         }
 
-        fun mapOrderSelfInSend(it: OrderSelfDelivery): SendACtiveOrderSelf {
-            return SendACtiveOrderSelf(
-                idOrderSelf = it.idOrderSelf,
-                organizationId = it.organization!!.idOrganization!!,
-                organizationName = it.organization!!.name,
-                idLocation = it.idLocation,
-                uuid = it.uuid!!,
-                phoneUser = it.phoneUser,
-                fromTimeCooking = it.fromTimeCooking!!.format(formatter),
-                toTimeCooking = it.toTimeCooking!!.format(formatter),
-                summ =  it.summ,
-                status = it.status,
-                comment = it.comment
+        fun mapOrderToPreview(order: OrderCustomer): SendOrderPreview{
+            return SendOrderPreview(
+                idOrder = order.orderId,
+                organizationId = order.organization!!.idOrganization,
+                organizationName = order.organization!!.name,
+                addressUser = order.addressUser,
+                fromTimeCooking = order.fromTimeDelivery!!.format(formatter),
+                toTimeCooking = order.toTimeDelivery!!.format(formatter),
+                status = order.status,
+                summ = order.summ,
             )
         }
+
     }
 
 }

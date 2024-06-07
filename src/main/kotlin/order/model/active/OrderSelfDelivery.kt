@@ -6,9 +6,9 @@ import org.example.entity.Users_.Users
 import org.example.order.model.StatusOrder
 import org.example.organization.model.Organization
 import org.example.organization_city.model.LocationOrganization
-import org.example.uuid.model.UUIDCustom
 import java.time.LocalDateTime
 
+/*
 @Entity
 data class OrderSelfDelivery (
 
@@ -21,9 +21,6 @@ data class OrderSelfDelivery (
     @OneToOne(cascade = [CascadeType.MERGE])
     @JoinColumn(name = "organization_id_organization", unique = false)
     var organization: Organization? = null,
-    @OneToOne(cascade = [CascadeType.MERGE])
-    @JoinColumn(name = "id_location_id_location", unique = false)
-    var idLocation: LocationOrganization,
 
     @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
     var uuid: UUIDCustom? = null,
@@ -39,4 +36,4 @@ data class OrderSelfDelivery (
 
     var summ: Double? = null,
     var comment: String = ""
-)
+)*/

@@ -10,11 +10,8 @@ data class ActiveOrderDTO (
     var phoneUser: String? = null,
     var fromTimeDelivery: String?,
     var toTimeDelivery: String?,
-
-    var podezd: String = "",
-    var homephome: String = "",
-    var appartamnet: String = "",
-    var level: String = "",
+    var isSelf: Boolean = false,
+    var idLocation: Long? = null,
 
     var summ: Double? = null,
     var comment: String = ""

@@ -20,11 +20,6 @@ class ControllerBasket {
     fun getBasketByUser(@PathVariable(value = "id") id: Long): BasketItemDtom? {
         return basketService.getBasketByUserIdDto(id)
     }
-/*    @RequestMapping(path = ["/{id}"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getBasketByUser(@PathVariable(value = "id") id: Long): BasketItem? {
-        return basketService.getBasketByUserId(id).get()
-    }*/
     @RequestMapping(path = ["/add_product"], method = [RequestMethod.POST],
         produces = [MediaType.APPLICATION_JSON_VALUE])
     fun addProduct(@RequestBody basket: SendBasketProduct){

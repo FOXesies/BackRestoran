@@ -1,10 +1,8 @@
 package org.example.order.controller
 
 import org.example.order.DTO.ActiveOrderDTO
-import org.example.order.DTO.ActiveOrderSelfDTO
-import org.example.order.DTO.sen_response.SendACtiveOrderSelf
+import org.example.order.DTO.sen_response.SendOrderPreview
 import org.example.order.model.active.OrderCustomer
-import org.example.order.model.active.OrderSelfDelivery
 import org.example.order.service.OrderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -33,28 +31,11 @@ class OrderController {
         return orderService.getOrderById(idOrder)
     }
 
-    @RequestMapping(path = ["/all_deliveri/{id}"], method = [RequestMethod.GET],
+    @RequestMapping(path = ["/all_deliveri_active/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOrder(@PathVariable(value = "id") userId: Long): List<OrderCustomer>{
-        return orderService.getOrders(userId)
+    fun getOrders(@PathVariable(value = "id") userId: Long): List<SendOrderPreview>{
+        return orderService.getActiveOrders(userId)
     }
 
-    @RequestMapping(path = ["/self_deliveri/add"], method = [RequestMethod.POST],
-        produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun addOrderSelf(@RequestBody order: ActiveOrderSelfDTO){
-        return orderService.sendOrderSelf(order)
-    }
-
-    @RequestMapping(path = ["/self_deliveri/{id}"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOrderSelfById(@PathVariable(value = "id") idOrder: Long): OrderSelfDelivery {
-        return orderService.getOrdeSelfrById(idOrder)
-    }
-
-    @RequestMapping(path = ["/all_self_deliveri/{id}"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOrdersSelf(@PathVariable(value = "id") userId: Long): List<SendACtiveOrderSelf>{
-        return orderService.getOrdersSelf(userId)
-    }
 
 }

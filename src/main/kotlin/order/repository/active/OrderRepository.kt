@@ -2,7 +2,6 @@ package org.example.order.repository.active
 
 import org.example.entity.Users_.Users
 import org.example.order.model.active.OrderCustomer
-import org.example.order.model.active.OrderSelfDelivery
 import org.example.organization.model.Organization
 import org.springframework.data.jpa.repository.JpaRepository
 

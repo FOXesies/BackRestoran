@@ -3,10 +3,11 @@ package org.example.order.model.active
 import jakarta.persistence.*
 import lombok.ToString
 import org.example.entity.Users_.Users
+import org.example.feedbacks.entity.FeedBacks
 import org.example.order.model.AddressUser
 import org.example.order.model.StatusOrder
 import org.example.organization.model.Organization
-import org.example.uuid.model.UUIDCustom
+import org.example.organization_city.model.LocationOrganization
 import java.time.LocalDateTime
 
 @Entity
@@ -20,9 +21,6 @@ data class OrderCustomer(
     @OneToOne(cascade = [CascadeType.MERGE])
     var organization: Organization? = null,
 
-    @OneToOne(cascade = [CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH])
-    var uuid: UUIDCustom? = null,
-
     @OneToOne(cascade = [CascadeType.ALL])
     var addressUser: AddressUser? = null,
     var phoneUser: String? = null,
@@ -32,11 +30,16 @@ data class OrderCustomer(
     @ToString.Exclude
     var productOrder: List<ProductInOrder> = mutableListOf(),
     var status: StatusOrder? = null,
+    var isSelf: Boolean? = null,
+    @OneToOne(cascade = [CascadeType.MERGE])
+    @JoinColumn(name = "id_location_id_location", unique = false)
+    var idLocation: LocationOrganization? = null,
 
-    var podezd: String? = null,
-    var homephome: String? = null,
-    var appartamnet: String? = null,
-    var level: String? = null,
+    @OneToOne(cascade = [CascadeType.MERGE])
+    var canceledInfo: CanceledInfo? = null,
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    var feedBacks: FeedBacks? = null,
 
     var summ: Double? = null,
     var comment: String? = null

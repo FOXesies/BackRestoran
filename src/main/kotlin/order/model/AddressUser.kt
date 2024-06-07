@@ -10,7 +10,12 @@ data class AddressUser(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idAddress: Long? = null,
-    var displayText: String?,
-    var lat: Double?,
-    var lon: Double?
+    var displayText: String? = null,
+    var lat: Double? = null,
+    var lon: Double? = null,
+
+    var podezd: String? = null,
+    var homephome: String? = null,
+    var appartamnet: String? = null,
+    var level: String? = null,
 )

@@ -3,7 +3,6 @@ package org.example.feedbacks.entity
 import jakarta.persistence.*
 import org.example.entity.Users_.Users
 import org.example.organization.model.Organization
-import org.example.uuid.model.UUIDCustom
 
 @Entity
 data class FeedBacks(
@@ -13,8 +12,6 @@ data class FeedBacks(
 
     @OneToOne
     var organization: Organization,
-    @OneToOne
-    var uuidCustom: UUIDCustom,
     @OneToOne
     var user: Users,
 

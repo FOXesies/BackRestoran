@@ -4,10 +4,12 @@ import org.example.order.model.active.OrderCustomer
 import org.example.order.repository.active.OrderRepository
 import org.example.basket.service.BasketService
 import org.example.order.DTO.ActiveOrderDTO
+import org.example.order.DTO.sen_response.SendBasicInfoOrder
 import org.example.order.DTO.sen_response.SendOrderPreview
 import org.example.order.model.StatusOrder
 import org.example.order.util.ResponseCancel
 import org.example.organization_city.repository.LocationOrganizationRepository
+import org.example.products.DTO.ResponseProduct
 import org.example.repository.BasicUserRepository
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,6 +31,7 @@ class OrderService {
                 user = userRepository.findById(order.idUser).get(),
                 addressUser = order.addressUser,
                 phoneUser = order.phoneUser,
+                idLocation = if(order.idLocation != null) repositoryLocationOrganizationRepository.findById(order.idLocation!!).get() else null,
                 fromTimeDelivery = LocalDateTime.parse(order.fromTimeDelivery!!, formatter),
                 toTimeDelivery = LocalDateTime.parse(order.toTimeDelivery!!, formatter),
                 status = StatusOrder.WAIT_ACCEPT,
@@ -42,6 +45,11 @@ class OrderService {
         order.productOrder = products
         order.organization = basket.organization
         repository.save(order)
+    }
+
+    fun getBasicProduct(idOrder: Long): SendBasicInfoOrder {
+        val order = repository.findById(idOrder).get()
+        return MapperUtils.mapOrderInSendFull(order)
     }
 
     fun getOrderById(idOrder: Long): OrderCustomer {

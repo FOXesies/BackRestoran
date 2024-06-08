@@ -1,9 +1,11 @@
 package org.example.order.controller
 
 import org.example.order.DTO.ActiveOrderDTO
+import org.example.order.DTO.sen_response.SendBasicInfoOrder
 import org.example.order.DTO.sen_response.SendOrderPreview
 import org.example.order.model.active.OrderCustomer
 import org.example.order.service.OrderService
+import org.example.products.DTO.ResponseProduct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PathVariable
@@ -35,6 +37,11 @@ class OrderController {
         produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getOrders(@PathVariable(value = "id") userId: Long): List<SendOrderPreview>{
         return orderService.getActiveOrders(userId)
+    }
+    @RequestMapping(path = ["/get_full_info/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getProductsInOrder(@PathVariable(value = "id") orderId: Long): SendBasicInfoOrder {
+        return orderService.getBasicProduct(orderId)
     }
 
 

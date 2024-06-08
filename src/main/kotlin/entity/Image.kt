@@ -10,5 +10,6 @@ data class Image(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    var value: ByteArray? = null
+    var value: ByteArray? = null,
+    var main: Boolean = false
 )

@@ -84,9 +84,14 @@ class Main {
                             address = "улица Длинная 1", lat = 59.652081, lon = 31.238487
                         )
                     ),
-                    idImages = mutableListOf(Image(
-                        value = Main.javaClass.getResource("/organizations_images/1.jpg").readBytes()
-                    )),
+                    idImages = mutableListOf(
+                        Image(
+                            value = Main.javaClass.getResource("/organizations_images/1.jpg").readBytes()
+                        ),
+                        Image(
+                            value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()
+                        )
+                    ),
                     products = mutableListOf(
                         Product(
                             name = "Пицца с Кока-колой",

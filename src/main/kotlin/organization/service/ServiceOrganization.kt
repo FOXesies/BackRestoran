@@ -1,6 +1,7 @@
 package org.example.organization.service
 
 import jakarta.transaction.Transactional
+import org.example.admin.organization.controller.ResponseUpdate
 import org.example.products_category.entity.Category
 import org.example.feedbacks.service.FeedBacksService
 import org.example.organization.model.DTO.FiltercategoryOrg
@@ -11,6 +12,7 @@ import org.example.organization.model.Organization
 import org.example.organization.repository.OrganizationRepository
 import org.example.organization_city.service.CityOrganizationService
 import org.example.organization_city.service.LocationorganizationService
+import org.example.products.DTO.ResponseProduct
 import org.example.products.entity.Product
 import org.example.products.repository.ProductRepository
 import org.example.products.service.ServiceProduct
@@ -45,6 +47,11 @@ class ServiceOrganization {
     fun getOrganizations(city: String): List<Organization> {
         return repositoryOrganization.findByCity(city)
     }
+    fun getinfo(idOrg: Long, city: String): OrganizationIdDTO {
+        return MapperUtils.mapOrganizationIdInDTOHome(
+            repositoryOrganization.findById(idOrg).get(), city, feedBacksService.getMiddleStar(idOrg)
+        )
+    }
     fun getOrganizationsByCategory(filtercategoryOrg: FiltercategoryOrg): List<Organization> {
         return repositoryOrganization.findByCategory(filtercategoryOrg.city, filtercategoryOrg.categories)
     }
@@ -61,37 +68,36 @@ class ServiceOrganization {
             repositoryOrganization.findById(idOrg).get(), feedBacksService.getMiddleStar(idOrg)
         )
     }
-    fun updateBasicinfo(orgUpdate: BasicInfoResponse) {
+    fun getBasicinfoForAdmin(idOrg: Long): BasicInfoResponse {
+        return MapperUtils.mapOrgToBasicInfo(
+            repositoryOrganization.findById(idOrg).get()
+        )
+    }
+    fun updateBasicinfo(orgUpdate: BasicInfoResponse): ResponseUpdate {
         val org = repositoryOrganization.findById(orgUpdate.idOrg).get()
+        if(org.name != orgUpdate.name){
+            val org_test = repositoryOrganization.findByName(orgUpdate.name)
+                if(org_test != null){
+                    return ResponseUpdate("Имя уже занято")
+                }
+        }
         org.name = orgUpdate.name
         org.descriptions = orgUpdate.description
-
-        org.locationInCity = orgUpdate.locationAll.flatMap { entry ->
-            entry.value.map { location ->
-                locationService.insert(LocationOrganization(
-                    city = CityOrganization(nameCity = entry.key),
-                    address = location.address,
-                    lat = location.points!!.latitude,
-                    lon = location.points.longitude
-                ))
-            }
-        }.toMutableList()
-        // Создаем новую изменяемую коллекцию для locationsAll
-        /*org.locationsAll = orgUpdate.locationAll.map { entry ->
-            CityOrganization(
-                nameCity = entry.key,
-                locationInCity = entry.value.map { location ->
-                    LocationOrganization(
-                        address = location.address,
-                        lat = location.points!!.latitude,
-                        lon = location.points.longitude
-                    )
-                }.toMutableList() // Преобразуем в изменяемую коллекцию
-            )
-        }.toMutableList() // Преобразуем в изменяемую коллекцию*/
-
         org.phoneForUser = orgUpdate.phone
+
+        for (cityName in orgUpdate.locationAll!!.keys) {
+            val city = cityOrganizationService.uniqueOrNew(cityName)
+            for (location in orgUpdate.locationAll[cityName]!!) {
+                if (!org.locationInCity.map { OrgCityAnLoc(it.city.nameCity, it.address, it.lat, it.lon) }
+                    .contains(OrgCityAnLoc(city.nameCity, location.address, location.points!!.latitude, location.points.longitude))) {
+
+                    org.locationInCity.add(LocationOrganization(city = city, lat = location.points!!.latitude, lon = location.points.longitude, address = location.address))
+                }
+            }
+        }
+
         repositoryOrganization.save(org)
+        return ResponseUpdate(null)
     }
 
     @Transactional
@@ -115,6 +121,10 @@ class ServiceOrganization {
         return repositoryOrganization.getAllUniqueCategories(city)
     }
 
+    fun getCategoriesByOrg(id: Long): List<String>? {
+        return repositoryOrganization.findById(id).get().products.map { it.category.name }.distinct()
+    }
+
     fun insertProduct(idOrg: Long, product: Product, category: String){
         val organization = repositoryOrganization.findById(idOrg).get()
         product.category = productServiceCategory.uniqueOrNew(product.category.name)
@@ -122,4 +132,18 @@ class ServiceOrganization {
 
         repositoryOrganization.save(organization)
     }
+
+    fun getAllProducts(idOrg: Long): Map<String, List<ResponseProduct>> {
+        return  repositoryOrganization.findById(idOrg).get().products.groupBy(keySelector = {it.category.name},
+            valueTransform = {MapperUtils.mapResponseProductInResponseProduct(it)})
+    }
+
+
 }
+
+data class OrgCityAnLoc(
+    val city: String?,
+    val address: String?,
+    val lat: Double?,
+    val lon: Double?,
+)

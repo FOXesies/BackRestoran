@@ -7,7 +7,7 @@ import org.example.organization.model.DTO.OrganizationDTO
 import org.example.organization.model.DTO.OrganizationIdDTO
 import org.example.organization.service.ServiceOrganization
 import org.example.organization_city.model.LocationOrganization
-import org.example.utils.MapperUtils.Companion.mapOrganizationIdInDTO
+import org.example.products.DTO.ResponseProduct
 import org.example.utils.MapperUtils.Companion.mapOrganizationInDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ClassPathResource
@@ -30,12 +30,12 @@ class ControllerOrganizations {
     lateinit var feedBacksService: FeedBacksService
 
     @RequestMapping(
-        path = ["/{id}"], method = [RequestMethod.GET],
+        path = ["/{id}/"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    fun getOrganizationById(@PathVariable(value = "id") idOrganization: Long): OrganizationIdDTO {
-        return serviceOrganization.getBasicinfo(idOrganization)
+    fun getOrganizationById(@PathVariable(value = "id") idOrganization: Long, @RequestParam city: String): OrganizationIdDTO {
+        return serviceOrganization.getinfo(idOrganization, city)
     }
 
     @RequestMapping(
@@ -79,17 +79,8 @@ class ControllerOrganizations {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    fun getBasicInfo(@PathVariable(value = "id") idOrg: Long): OrganizationIdDTO {
-        return serviceOrganization.getBasicinfo(idOrg)
-    }
-
-    @RequestMapping(
-        path = ["/update_info/"], method = [RequestMethod.POST],
-        produces = [MediaType.APPLICATION_JSON_VALUE]
-    )
-    @ResponseBody
-    fun updateBasicInfo(@RequestBody order: BasicInfoResponse) {
-        return serviceOrganization.updateBasicinfo(order)
+    fun getBasicInfo(@PathVariable(value = "id") idOrg: Long): BasicInfoResponse {
+        return serviceOrganization.getBasicinfoForAdmin(idOrg)
     }
     @RequestMapping(
         path = ["/categories"], method = [RequestMethod.GET],
@@ -100,6 +91,14 @@ class ControllerOrganizations {
         return serviceOrganization.getCategories(city)
     }
     @RequestMapping(
+        path = ["/categories/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getCategoriesInOrg(@PathVariable(value = "id") id: Long): List<String>? {
+        return serviceOrganization.getCategoriesByOrg(id)
+    }
+    @RequestMapping(
         path = ["/addresses/{id}/"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
@@ -107,23 +106,14 @@ class ControllerOrganizations {
     fun getAddresses(@PathVariable(value = "id") idOrg: Long, @RequestParam city: String): List<LocationOrganization> {
         return serviceOrganization.getAddresses(city, idOrg)
     }
-
-
-/*    @RequestMapping(
-        path = ["organizations_images/{path}"],
-        method = [RequestMethod.GET],
-        produces = [MediaType.IMAGE_JPEG_VALUE]
+    @RequestMapping(
+        path = ["/all_products/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun uploadImageByPath(
-        response: HttpServletResponse,
-        @PathVariable(value = "path") pathImage: String
-    ): ResponseEntity<InputStreamResource> {
-        val imgFile = ClassPathResource("organizations_images/$pathImage")
-        StreamUtils.copy(imgFile.inputStream, response.outputStream)
+    @ResponseBody
+    fun getAllProdubct(@PathVariable(value = "id") idOrg: Long): Map<String, List<ResponseProduct>> {
+        return serviceOrganization.getAllProducts(idOrg)
+    }
 
-        return ResponseEntity
-            .ok()
-            .contentType(MediaType.IMAGE_JPEG)
-            .body(InputStreamResource(imgFile.getInputStream()));
-    }*/
+
 }

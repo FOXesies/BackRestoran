@@ -27,6 +27,7 @@ interface OrganizationRepository : JpaRepository<Organization, Long> {
             "INNER JOIN city_organization co ON co.id_city = lo.city_id_city\n" +
             "WHERE co.name_city = :name_city")
     fun findByCity(name_city: String): List<Organization>
+    fun findByName(name: String): Organization?
 
     @Query(nativeQuery = true, value = "select distinct co.name_city from organization o\n" +
             "inner join organization_location_in_city olc on o.id_organization = olc.organization_id_organization\n" +

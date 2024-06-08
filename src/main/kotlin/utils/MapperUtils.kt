@@ -9,6 +9,7 @@ import org.example.products_category.entity.Category
 import org.example.entity.Users_.Users
 import org.example.entity.Users_.DTO.UserResponse
 import org.example.order.DTO.ActiveOrderDTO
+import org.example.order.DTO.sen_response.SendBasicInfoOrder
 import org.example.order.DTO.sen_response.SendOrderPreview
 import org.example.order.model.AddressUser
 import org.example.order.model.StatusOrder
@@ -21,6 +22,8 @@ import org.example.organization_city.model.DTO.Point
 import org.example.products.entity.Product
 import org.example.products.repository.ProductRepository
 import org.springframework.stereotype.Service
+import organization.model.DTO.BasicInfoResponse
+import organization.model.DTO.ImageDTO
 import java.time.format.DateTimeFormatter
 
 @Service
@@ -131,6 +134,60 @@ class MapperUtils {
                 toTimeCooking = order.toTimeDelivery!!.format(formatter),
                 status = order.status,
                 summ = order.summ,
+            )
+        }
+
+        fun mapOrderInSendFull(order: OrderCustomer): SendBasicInfoOrder {
+            return SendBasicInfoOrder(
+                orderId = order.orderId,
+                userName = order.user!!.name,
+                addressUser = order.addressUser,
+                phoneUser = order.phoneUser,
+                fromTimeDelivery = order.fromTimeDelivery!!.format(formatter),
+                toTimeDelivery = order.toTimeDelivery!!.format(formatter),
+                productOrder = order.productOrder.map { mapResponseProductInResponseProduct(it.product!!) },
+                status = order.status,
+                isSelf = order.isSelf,
+                idLocation = order.idLocation,
+                canceledInfo = order.canceledInfo,
+                feedBacks = order.feedBacks,
+                summ = order.summ,
+                comment = order.comment
+            )
+        }
+
+        fun mapOrgToBasicInfo(organization: Organization): BasicInfoResponse {
+            return BasicInfoResponse(
+                idOrg = organization.idOrganization!!,
+                name = organization.name,
+                phone = organization.phoneForUser,
+                description = organization.descriptions,
+                locationAll = organization.locationInCity.groupBy(
+                    keySelector = { it.city.nameCity!! },   // Получаем название города в качестве ключа
+                    valueTransform = { CityOrganization(address = it.address, points = Point(latitude = it.lat!!, longitude = it.lon!!)) }   // Получаем адрес в качестве значения
+                ).mapValues { entry -> entry.value.toMutableList() },
+                idImages = organization.idImages.map { ImageDTO(id = it.id, value = it.value) }
+            )
+        }
+
+        fun mapOrganizationIdInDTOHome(organization: Organization, city: String, middleStar: List<Number?>): OrganizationIdDTO {
+            return OrganizationIdDTO(
+                organization.idOrganization,
+                organization.name,
+                organization.phoneForUser,
+                organization.idImages,
+                organization.descriptions,
+                organization.products.map { it.category.name }.toSet(),
+                organization.locationInCity.filter { it.city.nameCity == city }
+                    .groupBy(keySelector = {it.city.nameCity!!}, valueTransform = { CityOrganization(address = it.address!!, points = Point(it.lat!!, it.lon!!)) }),
+                organization.products.groupBy(
+                    keySelector = { it.category.name },   // Получаем название города в качестве ключа
+                    valueTransform = { mapResponseProductInResponseProduct(it) }   // Получаем адрес в качестве значения
+                ).mapValues { entry -> entry.value.toMutableList() },
+                middleStar[0]?.toDouble()?: -1.0,
+                middleStar[1]?.toInt()?: 0
+                /*if(organization.ratings.isNotEmpty()) organization.ratings.map { it.rating }.average() else 0.0,
+                organization.ratings.size */
             )
         }
 

@@ -4,9 +4,9 @@ import org.example.entity.Image
 import org.example.organization_city.model.DTO.CityOrganization
 
 data class BasicInfoResponse(
-    val idOrg: Long,
-    val name: String,
-    val phone: String,
+    val idOrg: Long? = null,
+    val name: String? = null,
+    val phone: String? = null,
     val description: String? = null,
     val locationAll: Map<String, List<CityOrganization>>? = null,
     var idImages: List<ImageDTO>? = null

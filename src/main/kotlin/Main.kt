@@ -45,19 +45,19 @@ class Main {
             imageService.imageImpl.save(
                 Image(
                     id = 1,
-                    value = Main.javaClass.getResource("/organizations_images/1.jpg").readBytes()
+                    value = Main.javaClass.getResource("/organizations_images/1.jpg").readBytes(), main = true
                 )
             )
             imageService.imageImpl.save(
                 Image(
                     id = 2,
-                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()
+                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes(), main = true
                 )
             )
             imageService.imageImpl.save(
                 Image(
                     id = 3,
-                    value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()
+                    value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes(), main = true
                 )
             )
 
@@ -86,7 +86,7 @@ class Main {
                     ),
                     idImages = mutableListOf(
                         Image(
-                            value = Main.javaClass.getResource("/organizations_images/1.jpg").readBytes()
+                            value = Main.javaClass.getResource("/organizations_images/1.jpg").readBytes(), main = true
                         ),
                         Image(
                             value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()
@@ -116,7 +116,7 @@ class Main {
                                     "Соус может быть приготовлен в различных вариантах. Адаптированный соус карбонара под используемые продукты питания в России содержит свиную грудинку или бекон (подкопченные).",
                             category = Category(name = "Паста"),
                             images = mutableListOf(Image(
-                                value = Main.javaClass.getResource("/organizations_images/карб.jpeg").readBytes()
+                                value = Main.javaClass.getResource("/organizations_images/карб.jpeg").readBytes(), main = true
                             ))
                         ),
                         Product(
@@ -126,7 +126,7 @@ class Main {
                             description = "Креветки и залень",
                             category = Category(name = "Паста"),
                             images = mutableListOf(Image(
-                                value = Main.javaClass.getResource("/organizations_images/ауе.jpg").readBytes()
+                                value = Main.javaClass.getResource("/organizations_images/ауе.jpg").readBytes(), main = true
                             ))
                         )
 
@@ -147,7 +147,7 @@ class Main {
                         )
                     ),
                     idImages = mutableListOf(Image(
-                        value = Main.javaClass.getResource("/organizations_images/4.jpg").readBytes()
+                        value = Main.javaClass.getResource("/organizations_images/4.jpg").readBytes(), main = true
                     )),
                     products = mutableListOf(
                         Product(
@@ -226,7 +226,7 @@ class Main {
                     name = "Бургер кинг",
                     phoneForUser = "+79205748652",
                     idImages = mutableListOf(Image(
-                        value = Main.javaClass.getResource("/organizations_images/6.jpg").readBytes()
+                        value = Main.javaClass.getResource("/organizations_images/6.jpg").readBytes(), main = true
                     )),
                     locationInCity = mutableListOf(
                         LocationOrganization(
@@ -247,7 +247,7 @@ class Main {
                             description = "Сильногазированая",
                             images = mutableListOf(
                                 Image(
-                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()
+                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes(), main = true
                                 )
                             ),
                             category = Category(name = "Пицца")
@@ -259,7 +259,7 @@ class Main {
                             description = "20см диаметр",
                             images = mutableListOf(
                                 Image(
-                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()
+                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes(), main = true
                                 )
                             ),
                             category = Category(name = "Пицца")
@@ -278,7 +278,7 @@ class Main {
                     name = "Франицуская лавка",
                     phoneForUser = "+79205748652",
                     idImages = mutableListOf(Image(
-                        value = Main.javaClass.getResource("/organizations_images/5.jpg").readBytes()
+                        value = Main.javaClass.getResource("/organizations_images/5.jpg").readBytes(), main = true
                     )),
                     locationInCity = mutableListOf(
                         LocationOrganization(
@@ -299,7 +299,7 @@ class Main {
                             description = "Сильногазированая",
                             images = mutableListOf(
                                 Image(
-                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()
+                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes(), main = true
                                 )
                             ),
                             category = Category(name = "Пицца")
@@ -311,7 +311,7 @@ class Main {
                             description = "20см диаметр",
                             images = mutableListOf(
                                 Image(
-                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes()
+                                    value = Main.javaClass.getResource("/organizations_images/2.png").readBytes(), main = true
                                 )
                             ),
                             category = Category(name = "Пицца")

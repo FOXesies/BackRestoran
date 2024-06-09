@@ -8,11 +8,8 @@ import org.example.basket.entity.ProductBasket
 import org.example.products_category.entity.Category
 import org.example.entity.Users_.Users
 import org.example.entity.Users_.DTO.UserResponse
-import org.example.order.DTO.ActiveOrderDTO
 import org.example.order.DTO.sen_response.SendBasicInfoOrder
 import org.example.order.DTO.sen_response.SendOrderPreview
-import org.example.order.model.AddressUser
-import org.example.order.model.StatusOrder
 import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.ProductInOrder
 import org.example.organization.model.DTO.*
@@ -51,9 +48,9 @@ class MapperUtils {
                     keySelector = { it.city.nameCity },   // Получаем название города в качестве ключа
                     valueTransform = { it.address }   // Получаем адрес в качестве значения
                 ).mapValues { entry -> entry.value.toMutableList() },
-                organization.idImages,
+                organization.idImages.first { it.main },
                 organization.descriptions,
-                organization.products.map { mapCategoryDTO(it.category) }.toSet(),
+                organization.products.map { mapCategoryDTO(it.category!!) }.toSet(),
                 middleStar[0]?.toDouble()?: -1.0,
                 middleStar[1]?.toInt()?: 0
             )
@@ -66,13 +63,13 @@ class MapperUtils {
                 organization.phoneForUser,
                 organization.idImages,
                 organization.descriptions,
-                organization.products.map { it.category.name }.toSet(),
+                organization.products.map { it.category!!.name }.toSet(),
                 organization.locationInCity.groupBy(
                     keySelector = { it.city.nameCity!! },   // Получаем название города в качестве ключа
                     valueTransform = { CityOrganization(address = it.address, points = Point(it.lat!!, it.lon!!)) }   // Получаем адрес в качестве значения
                 ).mapValues { entry -> entry.value.toMutableList() },
                 organization.products.groupBy(
-                    keySelector = { it.category.name },   // Получаем название города в качестве ключа
+                    keySelector = { it.category!!.name },   // Получаем название города в качестве ключа
                     valueTransform = { mapResponseProductInResponseProduct(it) }   // Получаем адрес в качестве значения
                 ).mapValues { entry -> entry.value.toMutableList() },
                 middleStar[0]?.toDouble()?: -1.0,
@@ -120,7 +117,7 @@ class MapperUtils {
                 name = product.name,
                 description = product.description,
                 price = product.price,
-                image = if (product.images.size > 0) product.images[0] else null
+                image = if (product.images.size > 0) product.images.first { it.main } else null
             )
         }
 
@@ -166,7 +163,7 @@ class MapperUtils {
                     keySelector = { it.city.nameCity!! },   // Получаем название города в качестве ключа
                     valueTransform = { CityOrganization(address = it.address, points = Point(latitude = it.lat!!, longitude = it.lon!!)) }   // Получаем адрес в качестве значения
                 ).mapValues { entry -> entry.value.toMutableList() },
-                idImages = organization.idImages.map { ImageDTO(id = it.id, value = it.value) }
+                idImages = organization.idImages.map { ImageDTO(id = it.id, value = it.value, main = it.main) }
             )
         }
 
@@ -177,11 +174,11 @@ class MapperUtils {
                 organization.phoneForUser,
                 organization.idImages,
                 organization.descriptions,
-                organization.products.map { it.category.name }.toSet(),
+                organization.products.map { it.category!!.name }.toSet(),
                 organization.locationInCity.filter { it.city.nameCity == city }
                     .groupBy(keySelector = {it.city.nameCity!!}, valueTransform = { CityOrganization(address = it.address!!, points = Point(it.lat!!, it.lon!!)) }),
                 organization.products.groupBy(
-                    keySelector = { it.category.name },   // Получаем название города в качестве ключа
+                    keySelector = { it.category!!.name },   // Получаем название города в качестве ключа
                     valueTransform = { mapResponseProductInResponseProduct(it) }   // Получаем адрес в качестве значения
                 ).mapValues { entry -> entry.value.toMutableList() },
                 middleStar[0]?.toDouble()?: -1.0,

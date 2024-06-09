@@ -7,6 +7,7 @@ import org.example.order.DTO.ActiveOrderDTO
 import org.example.order.DTO.sen_response.SendBasicInfoOrder
 import org.example.order.DTO.sen_response.SendOrderPreview
 import org.example.order.model.StatusOrder
+import org.example.order.model.active.CanceledInfo
 import org.example.order.util.ResponseCancel
 import org.example.organization_city.repository.LocationOrganizationRepository
 import org.example.products.DTO.ResponseProduct
@@ -57,12 +58,20 @@ class OrderService {
     }
     fun getActiveOrders(userId: Long): List<SendOrderPreview> {
         val user = userRepository.findById(userId).get()
-        println(repository.findAllByUser(user).map { MapperUtils.mapOrderToPreview(it) })
-        println(repository.findAllByUser(user)
-            .filter { it.status != StatusOrder.COMPLETE && it.status != StatusOrder.CANCELE }
-            .map { MapperUtils.mapOrderToPreview(it) })
         return repository.findAllByUser(user)
             .filter { it.status != StatusOrder.COMPLETE && it.status != StatusOrder.CANCELE }
+            .map { MapperUtils.mapOrderToPreview(it) }
+    }
+    fun getCancelOrders(userId: Long): List<SendOrderPreview> {
+        val user = userRepository.findById(userId).get()
+        return repository.findAllByUser(user)
+            .filter { it.status == StatusOrder.CANCELE }
+            .map { MapperUtils.mapOrderToPreview(it) }
+    }
+    fun getCompleteOrders(userId: Long): List<SendOrderPreview> {
+        val user = userRepository.findById(userId).get()
+        return repository.findAllByUser(user)
+            .filter { it.status == StatusOrder.CANCELE }
             .map { MapperUtils.mapOrderToPreview(it) }
     }
     /*fun sendOrderSelf(order: ActiveOrderSelfDTO) {
@@ -89,9 +98,10 @@ class OrderService {
         return repositorySelf.findById(idOrder).get()
     }*/
     fun cancelOrder(orderInfo: ResponseCancel) {
-       /* val order = repository.findById(orderInfo.idOrder!!).get()
-        repository.save(MapperUtils.mapOrderInCanceled(order, order.comment))
-        repository.deleteById(order.orderId)*/
+        val order = repository.findById(orderInfo.idOrder!!).get()
+        order.status = StatusOrder.CANCELE
+        order.canceledInfo = CanceledInfo(commnet = orderInfo.comment, timeCancel = LocalDateTime.now())
+        repository.save(order)
     }
 
     @Autowired

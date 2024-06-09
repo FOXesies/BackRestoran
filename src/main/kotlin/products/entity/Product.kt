@@ -17,7 +17,7 @@ data class Product(
     var description: String?,
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     @ToString.Exclude
-    var category: Category,
+    var category: Category? = null,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
     var images: MutableList<Image> = mutableListOf()

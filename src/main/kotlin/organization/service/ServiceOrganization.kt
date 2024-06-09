@@ -1,7 +1,9 @@
 package org.example.organization.service
 
+import jakarta.mail.Multipart
 import jakarta.transaction.Transactional
 import org.example.admin.organization.controller.ResponseUpdate
+import org.example.entity.Image
 import org.example.products_category.entity.Category
 import org.example.feedbacks.service.FeedBacksService
 import org.example.organization.model.DTO.FiltercategoryOrg
@@ -21,6 +23,7 @@ import org.example.products_category.service.ServiceCategory
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import organization.model.DTO.BasicInfoResponse
 
 @Service
@@ -73,17 +76,17 @@ class ServiceOrganization {
             repositoryOrganization.findById(idOrg).get()
         )
     }
-    fun updateBasicinfo(orgUpdate: BasicInfoResponse): ResponseUpdate {
+    fun updateBasicinfo(orgUpdate: BasicInfoResponse, listd: List<MultipartFile>): ResponseUpdate {
         val org = repositoryOrganization.findById(orgUpdate.idOrg).get()
         if(org.name != orgUpdate.name){
-            val org_test = repositoryOrganization.findByName(orgUpdate.name)
+            val org_test = repositoryOrganization.findByName(orgUpdate.name!!)
                 if(org_test != null){
                     return ResponseUpdate("Имя уже занято")
                 }
         }
         org.name = orgUpdate.name
         org.descriptions = orgUpdate.description
-        org.phoneForUser = orgUpdate.phone
+        org.phoneForUser = orgUpdate.phone!!
 
         for (cityName in orgUpdate.locationAll!!.keys) {
             val city = cityOrganizationService.uniqueOrNew(cityName)
@@ -96,6 +99,9 @@ class ServiceOrganization {
             }
         }
 
+        org.idImages.clear()
+        org.idImages.addAll(orgUpdate.idImages?.mapIndexed { index, image -> Image(value = listd[index].bytes, main = image.main) }?.toMutableList()?: mutableListOf())
+
         repositoryOrganization.save(org)
         return ResponseUpdate(null)
     }
@@ -107,7 +113,7 @@ class ServiceOrganization {
             locationService.insert(locationOrganization)
         }
         organization.products.forEach { product ->
-            product.category = productServiceCategory.uniqueOrNew(product.category.name)
+            product.category = productServiceCategory.uniqueOrNew(product.category!!.name)
             productService.insert(product)
         }
 
@@ -122,19 +128,19 @@ class ServiceOrganization {
     }
 
     fun getCategoriesByOrg(id: Long): List<String>? {
-        return repositoryOrganization.findById(id).get().products.map { it.category.name }.distinct()
+        return repositoryOrganization.findById(id).get().products.map { it.category!!.name }.distinct()
     }
 
     fun insertProduct(idOrg: Long, product: Product, category: String){
         val organization = repositoryOrganization.findById(idOrg).get()
-        product.category = productServiceCategory.uniqueOrNew(product.category.name)
+        product.category = productServiceCategory.uniqueOrNew(product.category!!.name)
         organization.products.add(productService.insert(product))
 
         repositoryOrganization.save(organization)
     }
 
     fun getAllProducts(idOrg: Long): Map<String, List<ResponseProduct>> {
-        return  repositoryOrganization.findById(idOrg).get().products.groupBy(keySelector = {it.category.name},
+        return  repositoryOrganization.findById(idOrg).get().products.groupBy(keySelector = {it.category!!.name},
             valueTransform = {MapperUtils.mapResponseProductInResponseProduct(it)})
     }
 

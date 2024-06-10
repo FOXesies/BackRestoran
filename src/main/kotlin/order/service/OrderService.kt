@@ -1,11 +1,12 @@
 package org.example.order.service
 
+import order.repository.active.CanceledInfoRepository
 import org.example.order.model.active.OrderCustomer
 import org.example.order.repository.active.OrderRepository
 import org.example.basket.service.BasketService
+import org.example.feedbacks.entity.FeedBacks
 import org.example.order.DTO.ActiveOrderDTO
-import org.example.order.DTO.sen_response.SendBasicInfoOrder
-import org.example.order.DTO.sen_response.SendOrderPreview
+import org.example.order.DTO.sen_response.*
 import org.example.order.model.StatusOrder
 import org.example.order.model.active.CanceledInfo
 import org.example.order.util.ResponseCancel
@@ -32,9 +33,10 @@ class OrderService {
                 user = userRepository.findById(order.idUser).get(),
                 addressUser = order.addressUser,
                 phoneUser = order.phoneUser,
+                paymentType = order.payment,
                 idLocation = if(order.idLocation != null) repositoryLocationOrganizationRepository.findById(order.idLocation!!).get() else null,
-                fromTimeDelivery = LocalDateTime.parse(order.fromTimeDelivery!!, formatter),
-                toTimeDelivery = LocalDateTime.parse(order.toTimeDelivery!!, formatter),
+                fromTimeDelivery = LocalDateTime.now(),
+                toTimeDelivery = LocalDateTime.parse(order.toTimeDelivery, formatter),
                 status = StatusOrder.WAIT_ACCEPT,
                 isSelf = order.isSelf,
                 summ = order.summ,
@@ -46,11 +48,27 @@ class OrderService {
         order.productOrder = products
         order.organization = basket.organization
         repository.save(order)
+
+        basket.organization = null
+        basket.city = null
+        basket.productsPick.clear()
+        basketService.basketRepository.save(basket)
     }
 
     fun getBasicProduct(idOrder: Long): SendBasicInfoOrder {
         val order = repository.findById(idOrder).get()
         return MapperUtils.mapOrderInSendFull(order)
+    }
+    fun getBasicProductUser(idOrder: Long): SendBasicInfoOrderUser {
+        val order = repository.findById(idOrder).get()
+        return MapperUtils.mapOrderInSendFullUser(order)
+    }
+
+    fun getBasicProductUser(responseFeedbackCreateDTO: FeedbackCreateDTO) {
+        val order = repository.findById(responseFeedbackCreateDTO.idOrder).get()
+        order.feedBacks = FeedBacks(null, order.organization!!, order.user!!,
+            rating = responseFeedbackCreateDTO.rating, comentRating = responseFeedbackCreateDTO.comment, timeComment = LocalDateTime.now())
+        repository.save(order)
     }
 
     fun getOrderById(idOrder: Long): OrderCustomer {
@@ -60,19 +78,19 @@ class OrderService {
         val user = userRepository.findById(userId).get()
         return repository.findAllByUser(user)
             .filter { it.status != StatusOrder.COMPLETE && it.status != StatusOrder.CANCELE }
-            .map { MapperUtils.mapOrderToPreview(it) }
+            .map { MapperUtils.mapOrderToPreview(it) }.sortedBy { it.idOrder }.reversed()
     }
-    fun getCancelOrders(userId: Long): List<SendOrderPreview> {
+    fun getCancelOrders(userId: Long): List<SendCanceledOrderPreview> {
         val user = userRepository.findById(userId).get()
         return repository.findAllByUser(user)
             .filter { it.status == StatusOrder.CANCELE }
-            .map { MapperUtils.mapOrderToPreview(it) }
+            .map { MapperUtils.mapOrderToCancelPreview(it) }.sortedBy { it.orderPreview!!.idOrder }.reversed()
     }
-    fun getCompleteOrders(userId: Long): List<SendOrderPreview> {
+    fun getCompleteOrders(userId: Long): List<SendCompleteOrderDTO> {
         val user = userRepository.findById(userId).get()
         return repository.findAllByUser(user)
-            .filter { it.status == StatusOrder.CANCELE }
-            .map { MapperUtils.mapOrderToPreview(it) }
+            .filter { it.status == StatusOrder.COMPLETE }
+            .map { MapperUtils.mapCompleteOrderToPreview(it) }.sortedBy { it.orderPreview!!.idOrder }.reversed()
     }
     /*fun sendOrderSelf(order: ActiveOrderSelfDTO) {
         val order =

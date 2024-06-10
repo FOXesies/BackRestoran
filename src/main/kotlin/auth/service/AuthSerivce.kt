@@ -1,5 +1,6 @@
 package org.example.auth.service
 
+import com.wayplaner.learn_room.home.domain.model.UpdateCityDTO
 import jakarta.servlet.http.HttpSession
 import org.example.auth.entity.Sessions
 import org.example.auth.repository.ERoleCustomerRepository
@@ -36,6 +37,17 @@ class AuthService(
 
     @Autowired
     private lateinit var repositoryERole: ERoleCustomerRepository
+
+    fun getUser(idUser: Long): UserResponse {
+        return MapperUtils.mapUserToDTO(userDetailsServiceIml.userService.findById(idUser))
+    }
+
+    fun updateCity(city: UpdateCityDTO){
+        val users = userDetailsServiceIml.userService.findById(city.idUser!!)
+        users.city = city.city
+        userDetailsServiceIml.userService.save(users)
+    }
+
 
     fun singUp(singUpRequest: SingUpRequest, session: HttpSession): ResponseAuth {
 
@@ -99,5 +111,21 @@ class AuthService(
         sessionService.save(sessions)
 
         return ResponseAuth(userResponse = MapperUtils.mapUserToDTO(users))
+    }
+
+    fun updateInfo(userResponse: UserResponse): ResponseAuth{
+        val user = userDetailsServiceIml.userService.findById(userResponse.profileUUID)
+        if (user.phone != userResponse.phone){
+            val checkUser = userDetailsServiceIml.userService.findByPhone(userResponse.phone!!)
+            if(checkUser != null){
+                return ResponseAuth(message = "Номер уже занят")
+            }
+
+            user.phone = userResponse.phone
+        }
+        user.name = userResponse.name
+
+        userDetailsServiceIml.userService.save(user)
+        return ResponseAuth()
     }
 }

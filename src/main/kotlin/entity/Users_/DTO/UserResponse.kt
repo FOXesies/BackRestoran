@@ -7,11 +7,11 @@ import org.example.favorite.entity.FavoriteProduct
 import java.time.LocalDateTime
 
 data class UserResponse(
-    var profileUUID: Long,
-    var city: String,
-    var name: String,
-    var favoriteProducts: MutableList<FavoriteProduct>,
-    var dateOfCreate: LocalDateTime,
+    var profileUUID: Long? = null,
+    var city: String? = null,
+    var name: String? = null,
+    var favoriteProducts: MutableList<FavoriteProduct> = mutableListOf(),
+    var dateOfCreate: LocalDateTime? = null,
     var phone: String?,
-    var roles: Set<ERole>
+    var roles: Set<ERole>? = setOf(),
 )

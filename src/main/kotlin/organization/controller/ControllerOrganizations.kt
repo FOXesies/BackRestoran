@@ -1,6 +1,8 @@
 package org.example.organization.controller
 
 import jakarta.servlet.http.HttpServletResponse
+import org.example.feedbacks.entity.FeedBacks
+import org.example.feedbacks.entity.FeedbacksDTO
 import org.example.feedbacks.service.FeedBacksService
 import org.example.organization.model.DTO.FiltercategoryOrg
 import org.example.organization.model.DTO.OrganizationDTO
@@ -65,6 +67,15 @@ class ControllerOrganizations {
     }
 
     @RequestMapping(
+        path = ["/feedbacks/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getFeedbacks(@PathVariable(value = "id") idOrganization: Long): List<FeedbacksDTO> {
+        return feedBacksService.getAllfeedbacksByOrg(idOrganization)
+    }
+
+    @RequestMapping(
         path = ["/cities"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
@@ -89,6 +100,14 @@ class ControllerOrganizations {
     @ResponseBody
     fun getCategories(@RequestParam city: String): List<String> {
         return serviceOrganization.getCategories(city)
+    }
+    @RequestMapping(
+        path = ["/get_org_user/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getOrgByUser(@PathVariable(value = "id") id: Long): Long? {
+        return serviceOrganization.getByUserOrg(id)
     }
     @RequestMapping(
         path = ["/categories/{id}"], method = [RequestMethod.GET],

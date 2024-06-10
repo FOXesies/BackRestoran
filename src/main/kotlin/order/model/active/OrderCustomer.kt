@@ -6,6 +6,7 @@ import org.example.entity.Users_.Users
 import org.example.feedbacks.entity.FeedBacks
 import org.example.order.model.AddressUser
 import org.example.order.model.StatusOrder
+import org.example.order.model.StatusPayment
 import org.example.organization.model.Organization
 import org.example.organization_city.model.LocationOrganization
 import java.time.LocalDateTime
@@ -30,12 +31,13 @@ data class OrderCustomer(
     @ToString.Exclude
     var productOrder: List<ProductInOrder> = mutableListOf(),
     var status: StatusOrder? = null,
+    var paymentType: StatusPayment? = null,
     var isSelf: Boolean? = null,
     @OneToOne(cascade = [CascadeType.MERGE])
     @JoinColumn(name = "id_location_id_location", unique = false)
     var idLocation: LocationOrganization? = null,
 
-    @OneToOne(cascade = [CascadeType.MERGE])
+    @OneToOne(cascade = [CascadeType.ALL])
     var canceledInfo: CanceledInfo? = null,
 
     @OneToOne(cascade = [CascadeType.ALL])

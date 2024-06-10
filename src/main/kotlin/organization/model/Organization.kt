@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import lombok.*
 import org.example.entity.Image
+import org.example.entity.Users_.Users
 import org.example.organization_city.model.LocationOrganization
 import org.example.products.entity.Product
 
@@ -17,6 +18,9 @@ data class Organization(
     var name: String,
     var phoneForUser: String,
     var descriptions: String?,
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
+    var user: Users,
 
     //@OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])

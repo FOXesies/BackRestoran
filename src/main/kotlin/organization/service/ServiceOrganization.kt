@@ -1,25 +1,23 @@
 package org.example.organization.service
 
-import jakarta.mail.Multipart
+import entity.Users_.UsersRepository
 import jakarta.transaction.Transactional
 import org.example.admin.organization.controller.ResponseUpdate
+import org.example.admin.products.model.BasicInfoResponseADD
 import org.example.entity.Image
-import org.example.products_category.entity.Category
 import org.example.feedbacks.service.FeedBacksService
 import org.example.organization.model.DTO.FiltercategoryOrg
-import org.example.organization_city.model.CityOrganization
 import org.example.organization.model.DTO.OrganizationIdDTO
-import org.example.organization_city.model.LocationOrganization
 import org.example.organization.model.Organization
 import org.example.organization.repository.OrganizationRepository
+import org.example.organization_city.model.LocationOrganization
 import org.example.organization_city.service.CityOrganizationService
 import org.example.organization_city.service.LocationorganizationService
 import org.example.products.DTO.ResponseProduct
 import org.example.products.entity.Product
-import org.example.products.repository.ProductRepository
 import org.example.products.service.ServiceProduct
-import org.example.products_category.repository.CategoryRepository
 import org.example.products_category.service.ServiceCategory
+import org.example.repository.BasicUserRepository
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -30,7 +28,7 @@ import organization.model.DTO.BasicInfoResponse
 class ServiceOrganization {
 
     @Autowired
-    private lateinit var repositoryOrganization: OrganizationRepository
+    lateinit var repositoryOrganization: OrganizationRepository
 
     @Autowired
     private lateinit var productServiceCategory: ServiceCategory
@@ -46,6 +44,8 @@ class ServiceOrganization {
 
     @Autowired
     private lateinit var cityOrganizationService: CityOrganizationService
+    @Autowired
+    private lateinit var usersRepository: BasicUserRepository
 
     fun getOrganizations(city: String): List<Organization> {
         return repositoryOrganization.findByCity(city)
@@ -63,6 +63,11 @@ class ServiceOrganization {
     }
     fun getAddresses(city: String, idOrg: Long): List<LocationOrganization>{
         return repositoryOrganization.findById(idOrg).get().locationInCity.filter { it.city.nameCity == city }
+    }
+    fun getByUserOrg(idUser: Long): Long?{
+        return repositoryOrganization.findAll().first{
+            it.user.profileUUID == idUser
+        }.idOrganization!!
     }
 
     //FUNC ADMIN
@@ -87,6 +92,37 @@ class ServiceOrganization {
         org.name = orgUpdate.name
         org.descriptions = orgUpdate.description
         org.phoneForUser = orgUpdate.phone!!
+
+        for (cityName in orgUpdate.locationAll!!.keys) {
+            val city = cityOrganizationService.uniqueOrNew(cityName)
+            for (location in orgUpdate.locationAll[cityName]!!) {
+                if (!org.locationInCity.map { OrgCityAnLoc(it.city.nameCity, it.address, it.lat, it.lon) }
+                    .contains(OrgCityAnLoc(city.nameCity, location.address, location.points!!.latitude, location.points.longitude))) {
+
+                    org.locationInCity.add(LocationOrganization(city = city, lat = location.points!!.latitude, lon = location.points.longitude, address = location.address))
+                }
+            }
+        }
+
+        org.idImages.clear()
+        org.idImages.addAll(orgUpdate.idImages?.mapIndexed { index, image -> Image(value = listd[index].bytes, main = image.main) }?.toMutableList()?: mutableListOf())
+
+        repositoryOrganization.save(org)
+        return ResponseUpdate(null)
+    }
+     fun addBasicinfo(orgUpdate: BasicInfoResponseADD, listd: List<MultipartFile>): ResponseUpdate {
+         val org_test = repositoryOrganization.findByName(orgUpdate.name!!)
+         if(org_test != null){
+             return ResponseUpdate("Имя уже занято")
+         }
+
+        val org = Organization(
+            name = orgUpdate.name,
+            products = mutableListOf(),
+            phoneForUser = orgUpdate.phone,
+            user = usersRepository.findById(orgUpdate.idUser).get(),
+            descriptions = orgUpdate.description,
+        )
 
         for (cityName in orgUpdate.locationAll!!.keys) {
             val city = cityOrganizationService.uniqueOrNew(cityName)

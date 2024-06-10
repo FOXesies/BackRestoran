@@ -13,6 +13,7 @@ data class SendOrderPreview(
 
     var fromTimeCooking: String?,
     var toTimeCooking: String?,
+    var isSelf: Boolean?,
 
     var status: StatusOrder? = null,
 

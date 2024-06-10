@@ -1,8 +1,7 @@
 package org.example.order.controller
 
 import org.example.order.DTO.ActiveOrderDTO
-import org.example.order.DTO.sen_response.SendBasicInfoOrder
-import org.example.order.DTO.sen_response.SendOrderPreview
+import org.example.order.DTO.sen_response.*
 import org.example.order.model.active.OrderCustomer
 import org.example.order.service.OrderService
 import org.example.order.util.ResponseCancel
@@ -47,18 +46,28 @@ class OrderController {
     }
     @RequestMapping(path = ["/all_deliveri_cancele/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOrdersCancele(@PathVariable(value = "id") userId: Long): List<SendOrderPreview>{
+    fun getOrdersCancele(@PathVariable(value = "id") userId: Long): List<SendCanceledOrderPreview>{
         return orderService.getCancelOrders(userId)
     }
     @RequestMapping(path = ["/all_deliveri_complete/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOrdersComplete(@PathVariable(value = "id") userId: Long): List<SendOrderPreview>{
+    fun getOrdersComplete(@PathVariable(value = "id") userId: Long): List<SendCompleteOrderDTO>{
         return orderService.getCompleteOrders(userId)
     }
     @RequestMapping(path = ["/get_full_info/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getProductsInOrder(@PathVariable(value = "id") orderId: Long): SendBasicInfoOrder {
         return orderService.getBasicProduct(orderId)
+    }
+    @RequestMapping(path = ["/get_full_info_user/{id}"], method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getProductsInOrderUser(@PathVariable(value = "id") orderId: Long): SendBasicInfoOrderUser {
+        return orderService.getBasicProductUser(orderId)
+    }
+    @RequestMapping(path = ["/createfeedback"], method = [RequestMethod.POST],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun createfeedback(@RequestBody respons: FeedbackCreateDTO) {
+        return orderService.getBasicProductUser(respons)
     }
 
 

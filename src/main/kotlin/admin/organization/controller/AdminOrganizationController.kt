@@ -31,6 +31,23 @@ class AdminOrganizationController(private val organizationService: ServiceOrgani
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
         }
     }
+
+    @PostMapping("/add_info/")
+    fun addOrgImage(@RequestParam("image") file: List<MultipartFile>,
+                       @RequestParam("organization") organization: String): ResponseEntity<Any> {
+        try {
+            println(organization)
+            val objectMapper = ObjectMapper()
+            val product: BasicInfoResponse = objectMapper.readValue(organization, BasicInfoResponse::class.java)
+            println(product.name)
+            organizationService.updateBasicinfo(product, file)
+            return ResponseEntity.ok().build()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        }
+    }
+
 }
 
 data class ResponseUpdate(

@@ -50,8 +50,13 @@ class BasketService {
                 if (organization.isPresent) {
                     curBasket_.organization = organization.get()
                 } else {
+                    val user = userRepository.findById(product.UserId!!).get()
+                    curBasket_.organization = organizationService.findAll()
+                        .first { organization1 -> organization1.products
+                            .map { it.idProduct }.contains(product.productId!!) }
+                    /*
                     // Обработка случая, когда организация не найдена
-                    throw IllegalArgumentException("Organization not found")
+                    throw IllegalArgumentException("Organization not found")*/
                 }
             }
             curBasket_.city = product.city
@@ -88,7 +93,7 @@ class BasketService {
         listProduct.remove(productToRemove)
 
         curBasket.productsPick = listProduct
-        curBasket.summ = listProduct.sumOf { it.product.price ?: 0.0 }
+        curBasket.summ = listProduct.sumOf { if(it.product.price != null) it.product.price!! * it.count  else (0.0) }
 
         // Если корзина пустая после удаления последнего продукта
         if (curBasket.productsPick.isEmpty()) {

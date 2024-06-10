@@ -3,13 +3,15 @@ package org.example.utils
 import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.ProductInBasket
 import org.example.DTO.Category.CategoryDTO
+import org.example.admin.products.controller.ProductDToUpdate
 import org.example.basket.entity.BasketItem
 import org.example.basket.entity.ProductBasket
 import org.example.products_category.entity.Category
 import org.example.entity.Users_.Users
 import org.example.entity.Users_.DTO.UserResponse
-import org.example.order.DTO.sen_response.SendBasicInfoOrder
-import org.example.order.DTO.sen_response.SendOrderPreview
+import org.example.feedbacks.entity.FeedBacks
+import org.example.feedbacks.entity.FeedbacksDTO
+import org.example.order.DTO.sen_response.*
 import org.example.order.model.active.OrderCustomer
 import org.example.order.model.active.ProductInOrder
 import org.example.organization.model.DTO.*
@@ -101,16 +103,6 @@ class MapperUtils {
         }
 
 
-        fun mapResponseProductInProduct(product: org.example.products.entity.ResponseProduct, category: Category): Product {
-            return Product(
-                name = product.product.name,
-                description = product.product.description,
-                price = product.product.price,
-                weight = product.product.weight,
-                category = category,
-                images = product.image?.map { org.example.entity.Image(value = it) }?.toMutableList()?: mutableListOf()
-            )
-        }
         fun mapResponseProductInResponseProduct(product: Product): org.example.products.DTO.ResponseProduct {
             return org.example.products.DTO.ResponseProduct(
                 id = product.idProduct!!,
@@ -127,11 +119,28 @@ class MapperUtils {
                 organizationId = order.organization!!.idOrganization,
                 organizationName = order.organization!!.name,
                 addressUser = order.addressUser,
+                idLocation = order.idLocation,
                 fromTimeCooking = order.fromTimeDelivery!!.format(formatter),
                 toTimeCooking = order.toTimeDelivery!!.format(formatter),
                 status = order.status,
                 summ = order.summ,
+                isSelf = order.isSelf
             )
+        }
+
+        fun mapCompleteOrderToPreview(order: OrderCustomer): SendCompleteOrderDTO {
+            return SendCompleteOrderDTO(
+                rating = order.feedBacks?.rating,
+                orderPreview = mapOrderToPreview(order),
+            )
+        }
+
+        fun mapOrderToCancelPreview(order: OrderCustomer): SendCanceledOrderPreview {
+            return SendCanceledOrderPreview(
+                orderPreview = mapOrderToPreview(order),
+                comment = order.canceledInfo!!.commnet,
+                timeCandeled = order.canceledInfo!!.timeCancel!!.format(formatter),
+                )
         }
 
         fun mapOrderInSendFull(order: OrderCustomer): SendBasicInfoOrder {
@@ -140,14 +149,44 @@ class MapperUtils {
                 userName = order.user!!.name,
                 addressUser = order.addressUser,
                 phoneUser = order.phoneUser,
+                idLocation = order.idLocation,
                 fromTimeDelivery = order.fromTimeDelivery!!.format(formatter),
                 toTimeDelivery = order.toTimeDelivery!!.format(formatter),
                 productOrder = order.productOrder.map { mapResponseProductInResponseProduct(it.product!!) },
+                counts = order.productOrder.map { it.count!! },
+                status = order.status,
+                payment = order.paymentType,
+                isSelf = order.isSelf,
+                canceledTime = order.canceledInfo?.timeCancel?.format(formatter),
+                canceledInfo = order.canceledInfo?.commnet,
+                timeComment = order.feedBacks?.timeComment?.format(formatter),
+                feedBacksRating = order.feedBacks?.rating,
+                feedBacksComment = order.feedBacks?.comentRating,
+                summ = order.summ,
+                comment = order.comment
+            )
+        }
+
+        fun mapOrderInSendFullUser(order: OrderCustomer): SendBasicInfoOrderUser {
+            return SendBasicInfoOrderUser(
+                orderId = order.orderId,
+                orgName = order.organization!!.name,
+                orgPhone = order.organization!!.phoneForUser,
+                addressUser = order.addressUser,
+                phoneUser = order.phoneUser,
+                fromTimeDelivery = order.fromTimeDelivery!!.format(formatter),
+                toTimeDelivery = order.toTimeDelivery!!.format(formatter),
+                productOrder = order.productOrder.map { mapResponseProductInResponseProduct(it.product!!) },
+                counts = order.productOrder.map { it.count!! },
                 status = order.status,
                 isSelf = order.isSelf,
+                payment = order.paymentType,
                 idLocation = order.idLocation,
-                canceledInfo = order.canceledInfo,
-                feedBacks = order.feedBacks,
+                canceledTime = order.canceledInfo?.timeCancel?.format(formatter),
+                canceledInfo = order.canceledInfo?.commnet,
+                timeComment = order.feedBacks?.timeComment?.format(formatter),
+                feedBacksRating = order.feedBacks?.rating,
+                feedBacksComment = order.feedBacks?.comentRating,
                 summ = order.summ,
                 comment = order.comment
             )
@@ -164,6 +203,16 @@ class MapperUtils {
                     valueTransform = { CityOrganization(address = it.address, points = Point(latitude = it.lat!!, longitude = it.lon!!)) }   // Получаем адрес в качестве значения
                 ).mapValues { entry -> entry.value.toMutableList() },
                 idImages = organization.idImages.map { ImageDTO(id = it.id, value = it.value, main = it.main) }
+            )
+        }
+
+        fun mapFeedbackToDTO(feed: FeedBacks): FeedbacksDTO {
+            return FeedbacksDTO(
+                idFeedback = feed.idFeedback!!,
+                userName = feed.user.name!!,
+                rating = feed.rating!!,
+                comment = feed.comentRating,
+                dateCreate = feed.timeComment!!.format(formatter)
             )
         }
 
@@ -187,6 +236,7 @@ class MapperUtils {
                 organization.ratings.size */
             )
         }
+
 
     }
 

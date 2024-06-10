@@ -14,7 +14,7 @@ data class BasketItem(
     var organization: Organization? = null,
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @ToString.Exclude
-    var productsPick: List<ProductBasket> = listOf(),
+    var productsPick: MutableList<ProductBasket> = mutableListOf(),
     var city: String? = null,
     var summ: Double = 0.0
 )

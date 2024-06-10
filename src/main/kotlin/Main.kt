@@ -42,6 +42,30 @@ class Main {
             roleRepository.save(ERole(nameRole = "CUSTOMER"))
             roleRepository.save(ERole(nameRole = "ORGANIZATION"))
 
+            val user1 = userRepository.save(Users(
+                city = "Москва",
+                name = "Никитос",
+                password = passwordEncoder.encode("1"),
+                phone = "89308391610"))
+
+            val user2 = userRepository.save(Users(
+                city = "Москва",
+                name = "Никитос",
+                password = passwordEncoder.encode("1"),
+                phone = "89308391611"))
+
+            val user3 = userRepository.save(Users(
+                city = "Москва",
+                name = "Никитос",
+                password = passwordEncoder.encode("1"),
+                phone = "89308391612"))
+
+            val user4 = userRepository.save(Users(
+                city = "Москва",
+                name = "Никитос",
+                password = passwordEncoder.encode("1"),
+                phone = "89308391613"))
+
             imageService.imageImpl.save(
                 Image(
                     id = 1,
@@ -92,6 +116,7 @@ class Main {
                             value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()
                         )
                     ),
+                    user = user1,
                     products = mutableListOf(
                         Product(
                             name = "Пицца с Кока-колой",
@@ -133,6 +158,7 @@ class Main {
                     ),
                 ),
                 Organization(
+                    user = user2,
                     name = "Итальянская кухня",
                     phoneForUser = "+79123456789",
                     descriptions = "Ресторан итальянской кухни",
@@ -223,6 +249,7 @@ class Main {
                     )
                 ),
                 Organization(
+                    user = user3,
                     name = "Бургер кинг",
                     phoneForUser = "+79205748652",
                     idImages = mutableListOf(Image(
@@ -275,6 +302,7 @@ class Main {
                     )
                 ),
                 Organization(
+                    user = user4,
                     name = "Франицуская лавка",
                     phoneForUser = "+79205748652",
                     idImages = mutableListOf(Image(
@@ -334,9 +362,9 @@ class Main {
                 Users(
                     profileUUID = 1,
                     city = "Москва",
-                    name = "",
+                    name = "Никитос",
                     password = passwordEncoder.encode("1"),
-                    phone = "+89308391610"
+                    phone = "89308391610"
             )
             )
         }

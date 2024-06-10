@@ -8,6 +8,7 @@ import org.example.products.entity.Product
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.json.GsonJsonParser
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -19,13 +20,23 @@ class AdminProducts {
 
     @PostMapping("/upload_foto/")
     fun updateOrgImage(@RequestParam("image") file: List<MultipartFile>,
-                       @RequestParam("product") product: String): ResponseEntity<Any> {
-        try {
+                       @RequestParam("product") product: String) {
             println(product)
             val objectMapper = ObjectMapper()
             val product: ProductDToUpdate = objectMapper.readValue(product, ProductDToUpdate::class.java)
             println(product.name)
             serviseProduct.updateProduct(file, product)
+    }
+
+    @RequestMapping(
+        path = ["/upload_info"], method = [RequestMethod.POST],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun getOrganizationsByCategory(@RequestBody product: ProductDToUpdate) : ResponseEntity<Any>  {
+        try {
+            println(product)
+            serviseProduct.updateProduct(product)
             return ResponseEntity.ok().build()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -44,5 +55,6 @@ data class ProductDToUpdate(
     var weight: Float? = null,
     var image: List<Image>? = null,
     var description: String? = null,
-    val category: String = ""
+    val category: String = "",
+    val idOrg: Long? = null,
 )

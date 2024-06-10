@@ -88,6 +88,7 @@ class Main {
             val items = listOf(
                 Organization(
                     name = "Ромашка",
+                    password = passwordEncoder.encode("sdfs"),
                     phoneForUser = "+79008005522",
                     descriptions = "Лучший ресторан под названием \"Ромашка\"",
                     locationInCity = mutableListOf(
@@ -116,7 +117,6 @@ class Main {
                             value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()
                         )
                     ),
-                    user = user1,
                     products = mutableListOf(
                         Product(
                             name = "Пицца с Кока-колой",
@@ -158,9 +158,9 @@ class Main {
                     ),
                 ),
                 Organization(
-                    user = user2,
                     name = "Итальянская кухня",
                     phoneForUser = "+79123456789",
+                    password = passwordEncoder.encode("sdfs"),
                     descriptions = "Ресторан итальянской кухни",
                     locationInCity = mutableListOf(
                         LocationOrganization(
@@ -249,7 +249,7 @@ class Main {
                     )
                 ),
                 Organization(
-                    user = user3,
+                    password = passwordEncoder.encode("sdfs"),
                     name = "Бургер кинг",
                     phoneForUser = "+79205748652",
                     idImages = mutableListOf(Image(
@@ -302,7 +302,7 @@ class Main {
                     )
                 ),
                 Organization(
-                    user = user4,
+                    password = passwordEncoder.encode("sdfs"),
                     name = "Франицуская лавка",
                     phoneForUser = "+79205748652",
                     idImages = mutableListOf(Image(

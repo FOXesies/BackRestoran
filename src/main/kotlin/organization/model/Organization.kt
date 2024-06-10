@@ -18,9 +18,7 @@ data class Organization(
     var name: String,
     var phoneForUser: String,
     var descriptions: String?,
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
-    var user: Users,
+    var password: String?,
 
     //@OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])

@@ -102,14 +102,6 @@ class ControllerOrganizations {
         return serviceOrganization.getCategories(city)
     }
     @RequestMapping(
-        path = ["/get_org_user/{id}"], method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_VALUE]
-    )
-    @ResponseBody
-    fun getOrgByUser(@PathVariable(value = "id") id: Long): Long? {
-        return serviceOrganization.getByUserOrg(id)
-    }
-    @RequestMapping(
         path = ["/categories/{id}"], method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )

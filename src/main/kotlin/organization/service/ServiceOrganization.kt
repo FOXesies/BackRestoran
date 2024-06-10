@@ -2,9 +2,14 @@ package org.example.organization.service
 
 import entity.Users_.UsersRepository
 import jakarta.transaction.Transactional
+import org.example.admin.auth.model.ResponseOrgAuth
+import org.example.admin.auth.model.SingInOrgRequest
+import org.example.admin.auth.model.SingUpOrgRequest
 import org.example.admin.organization.controller.ResponseUpdate
 import org.example.admin.products.model.BasicInfoResponseADD
 import org.example.entity.Image
+import org.example.entity.Users_.DTO.ResponseAuth
+import org.example.entity.Users_.DTO.SingInRequest
 import org.example.feedbacks.service.FeedBacksService
 import org.example.organization.model.DTO.FiltercategoryOrg
 import org.example.organization.model.DTO.OrganizationIdDTO
@@ -20,12 +25,16 @@ import org.example.products_category.service.ServiceCategory
 import org.example.repository.BasicUserRepository
 import org.example.utils.MapperUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import organization.model.DTO.BasicInfoResponse
 
 @Service
 class ServiceOrganization {
+
+    @Autowired
+    private lateinit var passwordEncoder: PasswordEncoder
 
     @Autowired
     lateinit var repositoryOrganization: OrganizationRepository
@@ -63,11 +72,6 @@ class ServiceOrganization {
     }
     fun getAddresses(city: String, idOrg: Long): List<LocationOrganization>{
         return repositoryOrganization.findById(idOrg).get().locationInCity.filter { it.city.nameCity == city }
-    }
-    fun getByUserOrg(idUser: Long): Long?{
-        return repositoryOrganization.findAll().first{
-            it.user.profileUUID == idUser
-        }.idOrganization!!
     }
 
     //FUNC ADMIN
@@ -110,36 +114,51 @@ class ServiceOrganization {
         repositoryOrganization.save(org)
         return ResponseUpdate(null)
     }
-     fun addBasicinfo(orgUpdate: BasicInfoResponseADD, listd: List<MultipartFile>): ResponseUpdate {
-         val org_test = repositoryOrganization.findByName(orgUpdate.name!!)
-         if(org_test != null){
-             return ResponseUpdate("Имя уже занято")
-         }
 
-        val org = Organization(
-            name = orgUpdate.name,
-            products = mutableListOf(),
-            phoneForUser = orgUpdate.phone,
-            user = usersRepository.findById(orgUpdate.idUser).get(),
-            descriptions = orgUpdate.description,
-        )
-
-        for (cityName in orgUpdate.locationAll!!.keys) {
-            val city = cityOrganizationService.uniqueOrNew(cityName)
-            for (location in orgUpdate.locationAll[cityName]!!) {
-                if (!org.locationInCity.map { OrgCityAnLoc(it.city.nameCity, it.address, it.lat, it.lon) }
-                    .contains(OrgCityAnLoc(city.nameCity, location.address, location.points!!.latitude, location.points.longitude))) {
-
-                    org.locationInCity.add(LocationOrganization(city = city, lat = location.points!!.latitude, lon = location.points.longitude, address = location.address))
-                }
-            }
+    fun singUp(organization: SingUpOrgRequest): ResponseOrgAuth {
+        if(repositoryOrganization.findByName(organization.name!!) != null){
+            return ResponseOrgAuth(message = "Название ресторана занято")
         }
 
-        org.idImages.clear()
-        org.idImages.addAll(orgUpdate.idImages?.mapIndexed { index, image -> Image(value = listd[index].bytes, main = image.main) }?.toMutableList()?: mutableListOf())
+        val createOrg = Organization(
+            name = organization.name!!,
+            phoneForUser = organization.phoneUser!!,
+            locationInCity = mutableListOf(
+                /*LocationOrganization(
+                    city = cityOrganizationService.uniqueOrNew(organization.city!!),
+                    address = organization.address!!.address!!,
+                    lon = organization.address!!.points!!.longitude,
+                    lat = organization.address!!.points!!.latitude
+                )*/
+            ),
+            descriptions = null,
+            password = passwordEncoder.encode(organization.password),
+            products = mutableListOf()
+        )
 
-        repositoryOrganization.save(org)
-        return ResponseUpdate(null)
+        val city = cityOrganizationService.uniqueOrNew(organization.city!!)
+        val item = locationService.insert(LocationOrganization(
+            city = city,
+            address = organization.address!!.address,
+            lat = organization.address!!.points!!.latitude,
+            lon = organization.address!!.points!!.longitude)
+        )
+
+        createOrg.locationInCity.add(item)
+        repositoryOrganization.save(createOrg)
+
+        return ResponseOrgAuth(idOrg = createOrg.idOrganization)
+    }
+
+    fun singIn(organization: SingInOrgRequest): ResponseOrgAuth {
+        val org = repositoryOrganization.findByPhoneForUser(organization.phone)
+            ?: return ResponseOrgAuth(message = "Неверный логин или пароль")
+
+        if (!passwordEncoder.matches(organization.password, organization.password)){
+            return ResponseOrgAuth(message = "Неверный логин или пароль")
+        }
+
+        return ResponseOrgAuth(idOrg = org.idOrganization)
     }
 
     @Transactional

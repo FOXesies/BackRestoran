@@ -3,6 +3,7 @@ package org.example.utils
 import org.example.DTO.Basket.BasketItemDtom
 import org.example.DTO.Basket.ProductInBasket
 import org.example.DTO.Category.CategoryDTO
+import org.example.admin.auth.model.OrganizationResponse
 import org.example.admin.products.controller.ProductDToUpdate
 import org.example.basket.entity.BasketItem
 import org.example.basket.entity.ProductBasket

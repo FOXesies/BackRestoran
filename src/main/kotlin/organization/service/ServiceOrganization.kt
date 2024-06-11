@@ -120,6 +120,10 @@ class ServiceOrganization {
             return ResponseOrgAuth(message = "Название ресторана занято")
         }
 
+        if(repositoryOrganization.findByLogin(organization.login!!) != null){
+            return ResponseOrgAuth(message = "Такой логин уже существует")
+        }
+
         val createOrg = Organization(
             name = organization.name!!,
             phoneForUser = organization.phoneUser!!,
@@ -131,9 +135,10 @@ class ServiceOrganization {
                     lat = organization.address!!.points!!.latitude
                 )*/
             ),
-            descriptions = null,
+            descriptions = "",
             password = passwordEncoder.encode(organization.password),
-            products = mutableListOf()
+            products = mutableListOf(),
+            login = organization.login
         )
 
         val city = cityOrganizationService.uniqueOrNew(organization.city!!)
@@ -151,10 +156,12 @@ class ServiceOrganization {
     }
 
     fun singIn(organization: SingInOrgRequest): ResponseOrgAuth {
-        val org = repositoryOrganization.findByPhoneForUser(organization.phone)
-            ?: return ResponseOrgAuth(message = "Неверный логин или пароль")
+        val org = repositoryOrganization.findByLogin(organization.login)
 
-        if (!passwordEncoder.matches(organization.password, organization.password)){
+        if(org == null)
+            return ResponseOrgAuth(message = "Неверный логин или пароль")
+
+        if (!passwordEncoder.matches(organization.password, org.password)){
             return ResponseOrgAuth(message = "Неверный логин или пароль")
         }
 

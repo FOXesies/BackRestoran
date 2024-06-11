@@ -42,30 +42,6 @@ class Main {
             roleRepository.save(ERole(nameRole = "CUSTOMER"))
             roleRepository.save(ERole(nameRole = "ORGANIZATION"))
 
-            val user1 = userRepository.save(Users(
-                city = "Москва",
-                name = "Никитос",
-                password = passwordEncoder.encode("1"),
-                phone = "89308391610"))
-
-            val user2 = userRepository.save(Users(
-                city = "Москва",
-                name = "Никитос",
-                password = passwordEncoder.encode("1"),
-                phone = "89308391611"))
-
-            val user3 = userRepository.save(Users(
-                city = "Москва",
-                name = "Никитос",
-                password = passwordEncoder.encode("1"),
-                phone = "89308391612"))
-
-            val user4 = userRepository.save(Users(
-                city = "Москва",
-                name = "Никитос",
-                password = passwordEncoder.encode("1"),
-                phone = "89308391613"))
-
             imageService.imageImpl.save(
                 Image(
                     id = 1,
@@ -117,6 +93,7 @@ class Main {
                             value = Main.javaClass.getResource("/organizations_images/3.jpg").readBytes()
                         )
                     ),
+                    login = "login1",
                     products = mutableListOf(
                         Product(
                             name = "Пицца с Кока-колой",
@@ -175,6 +152,7 @@ class Main {
                     idImages = mutableListOf(Image(
                         value = Main.javaClass.getResource("/organizations_images/4.jpg").readBytes(), main = true
                     )),
+                    login = "login2",
                     products = mutableListOf(
                         Product(
                             name = "Маргарита",
@@ -265,6 +243,7 @@ class Main {
                             address = "проспект Проспекта 8", lat = 59.852081, lon = 30.238487
                         )
                     ),
+                    login = "login3",
                     descriptions = "Маркетнг - это не для нас",
                     products = mutableListOf(
                         Product(
@@ -319,6 +298,7 @@ class Main {
                         )
                     ),
                     descriptions = "Маркетнг - это не для нас",
+                    login = "login4",
                     products = mutableListOf(
                         Product(
                             name = "Пицца без Кока-колой",

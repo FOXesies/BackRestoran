@@ -4,6 +4,7 @@ import org.example.organization_city.model.DTO.CityOrganization
 
 data class SingUpOrgRequest(
     var city: String? = null,
+    var login: String? = null,
     var password: String? = null,
     var address: CityOrganization?,
     var name: String? = null,

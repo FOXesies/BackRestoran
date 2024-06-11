@@ -29,7 +29,7 @@ interface OrganizationRepository : JpaRepository<Organization, Long> {
     fun findByCity(name_city: String): List<Organization>
 
     fun findByName(name: String): Organization?
-    fun findByPhoneForUser(phoneForUser: String): Organization?
+    fun findByLogin(login: String): Organization?
 
     @Query(nativeQuery = true, value = "select distinct co.name_city from organization o\n" +
             "inner join organization_location_in_city olc on o.id_organization = olc.organization_id_organization\n" +

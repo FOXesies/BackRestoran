@@ -1,6 +1,6 @@
 package org.example.admin.auth.model
 
 data class SingInOrgRequest (
-    var phone: String,
+    var login: String,
     var password: String
 )
